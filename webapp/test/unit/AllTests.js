@@ -1,0 +1,1 @@
+sap.ui.define(["ZFIO_POP_MAL_KABUL/popmalkabul/test/unit/controller/Detail.controller"],function(){"use strict"});

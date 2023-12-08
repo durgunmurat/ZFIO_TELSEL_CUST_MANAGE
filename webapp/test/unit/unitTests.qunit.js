@@ -1,0 +1,1 @@
+QUnit.config.autostart=false;sap.ui.getCore().attachInit(function(){"use strict";sap.ui.require(["ZFIO_POP_MAL_KABUL/popmalkabul/test/unit/AllTests"],function(){QUnit.start()})});

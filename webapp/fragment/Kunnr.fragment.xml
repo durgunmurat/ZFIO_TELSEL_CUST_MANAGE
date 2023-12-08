@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="_IDGenSelectDialog2" title="Müşteri" class="sapUiPopupWithPadding" items="{/MusteriSet}"
+		search="onValueHelpSearchKunnr" confirm="onValueHelpCloseKunnr" cancel="onValueHelpCloseKunnr">
+		<StandardListItem id="_IDGenStandardListItem2" title="{idMusteri}" description="{Name}" /> 
+	</SelectDialog>
+</core:FragmentDefinition>

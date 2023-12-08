@@ -1,0 +1,13 @@
+/*Enter your custom styles here */
+
+ .smallLabel {
+ font-size: 9px !important;
+ }
+
+ .sapMListTblCell {
+ border-left: 1px solid #ccc;
+ }
+
+.sapMListTbl .sapMText,.sapMListTbl .sapMLabel {
+    font-size: 9px !important;
+} 

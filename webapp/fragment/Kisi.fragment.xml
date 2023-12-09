@@ -1,0 +1,24 @@
+<core:FragmentDefinition xmlns="sap.m"
+	xmlns:l="sap.ui.layout" 
+	xmlns:core="sap.ui.core">
+	<Dialog title="Kişi Ekle"  id="KisiDialog" afterClose="onExit" afterOpen="_onDialogAfterOpen" >
+
+            <InputListItem id="_IDGenInputListItem1" label="Ad-Soyad">
+                <Input  width="auto" id="idAd" placeholder="Ad Soyad" showSuggestion="true" type="Text" /> 
+            </InputListItem>
+            <InputListItem id="_IDGenInputListItem2" label="Mail">
+                <Input  width="auto" id="idMail" placeholder="abc@ornek.com" showSuggestion="true" type="Text"  /> 
+            </InputListItem>
+            <InputListItem id="_IDGenInputListItem3" label="Telefon">
+                <Input  width="auto" id="idTelefon" placeholder="+90(5xx)xxxxxxx" showSuggestion="true" type="Text"  />
+            </InputListItem>
+
+		<beginButton>
+			<Button id="_IDGenButton1"  type="Accept" press="onKisiEkle" text="Ekle" />
+		</beginButton>
+		<endButton>
+			<Button id="_IDGenButton2"  type="Reject" press="closeKisiEkle" text="Kapat" />
+		</endButton>
+	</Dialog>
+
+</core:FragmentDefinition>

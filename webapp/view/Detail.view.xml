@@ -76,6 +76,18 @@
                 width="auto"
                 visible="{selectionModel>/UrunPanelVisible}"
             >
+            <Toolbar id="idBilgiToolbar">
+                <ToolbarSpacer id="_IDGenToolbarSpacerx" />
+            <Button
+                visible="{selectionModel>/UrunPanelVisible}"
+                id="_IDTelEkle"
+                text="İletişim Bilgilerine Kişi Ekle"
+                type="Accept"
+                press="openKisiEkle"
+                class="sapUiSmallMarginEnd"
+                icon="sap-icon://phone"
+            />
+            </Toolbar>
                 <VBox
                     id="_IDGenVBox2"
                     class="sapUiSmallMargin"
@@ -97,7 +109,8 @@
                         columnsL="2"
                         columnsM="1"
                         singleContainerFullSize="false"
-                    >
+                    > 
+
                         <f:content>
                             <core:Title
                                 id="_IDGenTitle3"
@@ -250,7 +263,7 @@
                                 id="tableHeader"
                                 text="{worklistView>/worklistTableTitle}"
                             />
-                            <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                            <!-- <ToolbarSpacer id="_IDGenToolbarSpacer2" /> -->
                             <Button
                             id="_IDsimulate"
                             text="Fiyat Göster"
@@ -537,6 +550,7 @@
             <Toolbar id="_IDGenToolbar1">
                 <content>
                     <Button
+                        visible="{selectionModel>/UrunPanelVisible}"
                         id="_IDGenButton5"
                         text="Kaydet"
                         type="Accept"
@@ -544,17 +558,19 @@
                         class="sapUiSmallMarginEnd"
                         icon="sap-icon://accept"
                     />
-                    <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                    <!-- <ToolbarSpacer id="_IDGenToolbarSpacer3" />
                     <Button
+                        visible="{selectionModel>/UrunPanelVisible}"
                         id="_IDTelEkle"
                         text="İletişim Bilgilerine Kişi Ekle"
                         type="Accept"
-                        press="onTelEkle"
+                        press="openKisiEkle"
                         class="sapUiSmallMarginEnd"
                         icon="sap-icon://phone"
-                    />
+                    /> -->
                     <ToolbarSpacer id="_IDGenToolbarSpacer1" />
                     <Button
+                        visible="{selectionModel>/UrunPanelVisible}"
                         id="_IDGenButton6"
                         text="Ödeme Linki Gönder"
                         type="Accept"

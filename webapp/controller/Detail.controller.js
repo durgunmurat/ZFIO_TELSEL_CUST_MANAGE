@@ -347,6 +347,30 @@ sap.ui.define(
 
       },
 
+      
+      openKisiEkle: function(e){
+      
+        var t = this.getModel("selectionModel");
+        if (!this._valueHelpDialogKisi) {
+          this._valueHelpDialogKisi = sap.ui.xmlfragment(
+            "zfiotelselkokpit.fragment.Kisi",
+            this
+          );
+          this.getView().addDependent(this._valueHelpDialogKisi);
+        }
+        var a = [];
+        // this._valueHelpDialogKunnr.getBinding("items").filter(a);
+        this._valueHelpDialogKisi.open();
+      
+      },
+
+      closeKisiEkle: function () { 
+				this._valueHelpDialogKisi.close();
+			  },
+
+        onKisiEkle: function(){
+          // iletişim create yapacagız
+        },
 
       onHelpRequestedKunnr: function (e) {
         var t = this.getModel("selectionModel");
@@ -442,6 +466,16 @@ sap.ui.define(
         //   )
         // );
         // filter binding
+
+        var idMusteri = this.getView().byId("_id6").getValue(); 
+        aFilter.push(
+          new sap.ui.model.Filter(
+            "idMusteri",
+            sap.ui.model.FilterOperator.EQ,
+            idMusteri
+          )
+        );
+
         var oTable = this.byId("lineItemsList");
         var oBinding = oTable.getBinding("items");
         oBinding.filter(aFilter);

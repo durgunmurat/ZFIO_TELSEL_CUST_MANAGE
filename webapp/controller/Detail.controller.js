@@ -201,6 +201,7 @@ sap.ui.define(
                 siparisResult.Menge = adet;
                 siparisResult.Meins = birim;
                 siparisResult.SiparisTutar = "0";
+                siparisResult.Kdv = "0";
 
                 siparisItem.push(siparisResult);
               }
@@ -289,6 +290,7 @@ sap.ui.define(
                 siparisResult.Menge = adet;
                 siparisResult.Meins = birim;
                 siparisResult.SiparisTutar = "1";
+                siparisResult.Kdv = "0";
 
                 siparisItem.push(siparisResult);
               }
@@ -298,10 +300,24 @@ sap.ui.define(
 
               oModel.create("/MusteriSet", data, {
                 success: function(oData, oResponse) {
-
                   var oTableRefresh = that.byId("lineItemsList");
-                  for (var i = 0; i < oTableRefresh.getItems().length; i++) {
-                    oTableRefresh.getItems()[i].getCells()[6].setValue("0");
+                  for(var y = 0; y < oData.musteriToSiparis.results.length; y++){
+                    var material2 = oData.musteriToSiparis.results[y].Matnr;
+                    var mengeout = oData.musteriToSiparis.results[y].Menge;
+
+                    if(mengeout > 0){
+                      for (var i = 0; i < oTableRefresh.getItems().length; i++) {
+                        var material = oTableRefresh.getItems()[i].getCells()[0].getText();
+  
+                        if(material == material2){ 
+                          var siptutar = oData.musteriToSiparis.results[y].SiparisTutar;
+                          var kdvtutar = oData.musteriToSiparis.results[y].Kdv;  
+                          oTableRefresh.getItems()[i].getCells()[9].setText(siptutar);  
+                          break;
+                        }
+  
+                      }
+                    } 
                   }
                   sap.ui.core.BusyIndicator.hide(0);
                   // MessageToast.show("Sipariş Başarıyla Yaratıldı");

@@ -56,6 +56,10 @@ sap.ui.define(
           ToplamSiparisKdv:"",
           SyUname: sap.ushell.Container.getService("UserInfo").getId(),
           SelectionScreenPanelExpanded: true,
+          Panel1:false,
+          Panel2:false,
+          Panel3:false,
+          Panel4:false,
           UrunPanelExpanded: false,
           UrunPanelVisible: false,
           Enabled: false,
@@ -135,8 +139,12 @@ sap.ui.define(
           s.refresh();
 
           l.setProperty("/UrunPanelExpanded", true);
+          l.setProperty("/Panel1", true);
+          l.setProperty("/Panel2", true);
+          l.setProperty("/Panel3", true);
+          l.setProperty("/Panel4", true);
           l.setProperty("/UrunPanelVisible", true);
-          l.setProperty("/SelectionScreenPanelExpanded", false);
+          l.setProperty("/SelectionScreenPanelExpanded", true);
 
           jQuery.sap.delayedCall(1500, this, function () {
             var updR = this.byId("lineItemsList").getItems();
@@ -549,6 +557,49 @@ sap.ui.define(
       onMessagePopoverPress: function (e) {
         this._getMessagePopover().openBy(e.getSource());
       },
+      onSearch3:function(e){
+    //     var ugrp = this.getView().byId('_IDGenComboBox2').getSelectedItem().getKey();
+    //     var oTable = this.byId("lineItemsList");
+    //     var oBinding = oTable.getBinding("items");
+    //     var oItems = this.byId("lineItemsList").getItems();
+
+    //     for (var i = 0; i < oItems.length; i++) {
+    //       if(oItems[i].getBindingContext().getProperty("UrunGrp").match(ugrp))
+    //        {
+    //         oItems[i].getBindingContext().setVisible(true);
+    //        } 
+    //        else
+    //        {
+    //         oItems[i].getBindingContext().setVisible(false);
+    //        }
+    //  }
+    //  oTable.rerender();
+
+
+        var aFilter = [];
+
+        var idMusteri = this.getView().byId("_id6").getValue();
+        aFilter.push(
+          new sap.ui.model.Filter(
+            "idMusteri",
+            sap.ui.model.FilterOperator.EQ,
+            idMusteri
+          )
+        );  
+        // var ugrp = this.getView().byId('_IDGenComboBox2').getSelectedItem().getKey();
+        // aFilter.push(
+        //   new sap.ui.model.Filter(
+        //     "UrunGrp",
+        //     sap.ui.model.FilterOperator.EQ,
+        //     ugrp
+        //   )
+        // );  
+        var oTable = this.byId("lineItemsList");
+        var oBinding = oTable.getBinding("items");
+        oBinding.filter(aFilter, sap.ui.model.FilterType.Application);  
+
+
+      },
       onFilterPosts: function (e) {
 
         // build filter array
@@ -591,6 +642,34 @@ sap.ui.define(
         }
         return this._oMessagePopover;
       },
+
+      onSearch2: function (oEvent) {
+        if (oEvent.getParameters().refreshButtonPressed) {
+            // Search field's 'refresh' button has been pressed.
+            // This is visible if you select any main list item.
+            // In this case no new search is triggered, we only
+            // refresh the list binding.
+            this.onRefresh();
+        } else {
+            var aFilters = this.getView().byId("smartFilterBar").getFilters();
+            var oMultiComboBox = this.getView().byId("multiComboBox");
+            var aCountKeys = oMultiComboBox.getSelectedKeys();
+            for (var i = 0; i < aCountKeys.length; i++) {
+                var newFilter = new sap.ui.model.Filter("UrunGrp", sap.ui.model.FilterOperator.EQ, aCountKeys[i]);
+                if (aCountKeys.length > 0) {
+                    aFilters.push(newFilter);
+                }
+            }
+            this.getView().byId("lineItemsList").getBinding("items").filter(new sap.ui.model.Filter(aFilters, true));
+            // this.getView().byId("lineItemsList").getBinding("items").filter(aFilters);
+        }
+
+    },
+
+
+
+
+
       _fixUtcProblem: function (t) {
         if (t) {
           return new Date(e.getTime() - e.getTimezoneOffset() * 60 * 1e3);
@@ -598,6 +677,47 @@ sap.ui.define(
           return t;
         }
       },
-    });
+
+ /**
+         * Event handler for refresh event. Keeps filter, sort
+         * and group settings and refreshes the list binding.
+         * @public
+         */
+ onRefresh: function () {
+  var oTable = this.byId("idPalletsTable");
+  oTable.getBinding("items").refresh();
+},
+
+/* =========================================================== */
+/* internal methods                                            */
+/* =========================================================== */
+
+/**
+* Shows the selected item on the object page
+* @param {sap.m.ObjectListItem} oItem selected Item
+* @private
+*/
+_showObject: function (oItem) {
+  this.getRouter().navTo("object", {
+      objectId: oItem.getBindingContext().getPath().substring("/SiparisSet".length)
+  });
+},
+
+/**
+* Internal helper method to apply both filter and search state together on the list binding
+* @param {sap.ui.model.Filter[]} aTableSearchState An array of filters for the search
+* @private
+*/
+_applySearch: function (aTableSearchState) {
+  var oTable = this.byId("lineItemsList"),
+      oViewModel = this.getModel("worklistView");
+  oTable.getBinding("items").filter(aTableSearchState, "Application");
+  // changes the noDataText of the list in case there are no filter results
+  if (aTableSearchState.length !== 0) {
+      oViewModel.setProperty("/tableNoDataText", this.getResourceBundle().getText("worklistNoDataWithSearchText"));
   }
-);
+}
+
+
+    });
+  });

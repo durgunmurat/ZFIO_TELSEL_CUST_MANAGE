@@ -1,0 +1,608 @@
+<mvc:View
+    xmlns:vbm="sap.ui.vbm"
+    xmlns:core="sap.ui.core"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    controllerName="zfiotelselkokpit.controller.Detail"
+>
+    <Page
+        id="_IDGenPage1"
+        title="{i18n>SipYarat}"
+        class="myApp"
+    >
+        <content>
+            <Panel
+                id="_IDGenPanel1"
+                expandable="true"
+                class="myApp"
+                expanded="{selectionModel>/SelectionScreenPanelExpanded}"
+                headerText="{i18n>secimKriterleri}"
+                width="auto"
+            >
+                <f:SimpleForm
+                    id="_IDGenSimpleForm1"
+                    editable="false"
+                    layout="ResponsiveGridLayout"
+                    labelSpanXL="4"
+                    labelSpanL="3"
+                    labelSpanM="4"
+                    labelSpanS="12"
+                    adjustLabelSpan="false"
+                    emptySpanXL="0"
+                    emptySpanL="4"
+                    emptySpanM="0"
+                    emptySpanS="0"
+                    columnsXL="2"
+                    columnsL="1"
+                    columnsM="1"
+                    singleContainerFullSize="false"
+                >
+                    <f:content>
+                        <Label
+                            id="_id5"
+                            text="Müşteri No"
+                            required="true"
+                        />
+                        <Input
+                            id="_id6"
+                            value="{selectionModel>/Kunnr}"
+                            description="{selectionModel>/Name}"
+                            showValueHelp="true"
+                            valueHelpOnly="true"
+                            valueHelpRequest="onHelpRequestedKunnr"
+                            width="auto"
+                        />
+
+                        <Button
+                            id="_idBtnList"
+                            text="Listele"
+                            enabled="{= ${selectionModel>/AgEnabled} }"
+                            press="onPressMalzemeListesi"
+                            class="sapUiSmallMarginEnd"
+                            icon="sap-icon://display"
+                        />
+                    </f:content>
+                </f:SimpleForm>
+            </Panel>
+
+            <Panel
+                id="_IDGenPanel4"
+                expandable="true"
+                expanded="{selectionModel>/UrunPanelExpanded}"
+                headerText="Bilgiler"
+                width="auto"
+                visible="{selectionModel>/UrunPanelVisible}"
+            >
+            <Toolbar id="idBilgiToolbar">
+                <ToolbarSpacer id="_IDGenToolbarSpacerx" />
+            <Button
+                visible="{selectionModel>/UrunPanelVisible}"
+                id="_IDTelEkle"
+                text="İletişim Bilgilerine Kişi Ekle"
+                type="Accept"
+                press="openKisiEkle"
+                class="sapUiSmallMarginEnd"
+                icon="sap-icon://phone"
+            />
+            </Toolbar>
+                <VBox
+                    id="_IDGenVBox2"
+                    class="sapUiSmallMargin"
+                >
+                    <f:SimpleForm
+                        id="_IDGenSimpleForm2"
+                        editable="false"
+                        layout="ResponsiveGridLayout"
+                        labelSpanXL="4"
+                        labelSpanL="4"
+                        labelSpanM="12"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="1"
+                        singleContainerFullSize="false"
+                    > 
+
+                        <f:content>
+                            <core:Title
+                                id="_IDGenTitle3"
+                                text="Cari Hesap Bilgileri"
+                            />
+                            <List id="_IDGenList1">
+                                <DisplayListItem
+                                    id="_IDGenDisplayListItem1"
+                                    label="Toplam Bakiye"
+                                    value="{selectionModel>/ToplamBakiye}"
+                                />
+                                <DisplayListItem
+                                    id="_IDGenDisplayListItem2"
+                                    label="Email"
+                                    value="{selectionModel>/Email}"
+                                />
+                                <DisplayListItem
+                                    id="_IDGenDisplayListItem3"
+                                    label="Telefon"
+                                    value="{selectionModel>/Telefon}"
+                                />
+                            </List>
+
+                            <core:Title
+                                id="_IDGenTitle2"
+                                text="İletişim Bilgileri"
+                            />
+
+                            <List
+                                id="_IDGenList2"
+                                items="{/IletisimSet}"
+                                mode="Delete"
+                                delete="onKisiSil"
+                            >
+                                <StandardListItem
+                                    id="_IDObjectList2"
+                                    title="{Name}"
+                                    icon="sap-icon://call"
+                                    type="Active"
+                                    description="{Email}"
+                                    info="{Telefon}"
+                                    activeIcon="sap-icon://call"
+                                    press="onListItemPress"
+                                />
+                                <!-- <headerToolbar>
+                                    <Toolbar id="_IDGenToolbar3">
+                                        <Button
+                                            id="_IDTelEkle"
+                                            text="Ekle"
+                                            type="Accept"
+                                            press="onKaydet"
+                                            class="sapUiSmallMarginEnd"
+                                            icon="sap-icon://accept"
+                                        />
+                                    </Toolbar>
+                                </headerToolbar> -->
+                            </List>
+                        </f:content>
+                    </f:SimpleForm>
+                    <f:SimpleForm
+                        id="SimpleFormDisplay480_12120-2"
+                        editable="false"
+                        layout="ResponsiveGridLayout"
+                        labelSpanXL="4"
+                        labelSpanL="4"
+                        labelSpanM="12"
+                        labelSpanS="12"
+                        adjustLabelSpan="false"
+                        emptySpanXL="0"
+                        emptySpanL="0"
+                        emptySpanM="0"
+                        emptySpanS="0"
+                        columnsXL="2"
+                        columnsL="2"
+                        columnsM="1"
+                        singleContainerFullSize="false"
+                    >
+                        <f:content>
+                            <core:Title
+                                id="_IDGenTitle1"
+                                text="Sevkiyat Günleri"
+                            />
+                            <List
+                                id="_IDGenList3"
+                                items="{
+                        path: '/SevkiyatSet',
+                        sorter: {
+                            path: 'Gun'
+                        }
+                    }"
+                            >
+                                <items>
+                                    <StandardListItem
+                                        id="_IDGenStandardListItem1"
+                                        title="{Gun}"
+                                        description=""
+                                        icon="sap-icon://inventory"
+                                    />
+                                </items>
+                            </List>
+
+                            <core:Title
+                                id="_IDGenTitle4"
+                                text="Notlar"
+                            />
+                            <Label
+                                id="_IDGenLabel9"
+                                text="İlgili Kişi"
+                                class="sapUiSmallMarginTop sapUiTinyMarginBottom"
+                            />
+                            <Input id="idIlgili" />
+                            <Label
+                                id="_IDGenLabel10"
+                                text="Geri Bildirim"
+                                class="sapUiSmallMarginTop sapUiTinyMarginBottom"
+                            />
+                            <FeedInput
+                                id="_IDGenFeedInput1"
+                                post="onPost"
+                                showIcon="false"
+                            />
+                        </f:content>
+                    </f:SimpleForm>
+                </VBox>
+            </Panel>
+
+            <Panel
+                id="_IDGenPanel2"
+                expandable="true"
+                expanded="{selectionModel>/UrunPanelExpanded}"
+                headerText="{i18n>urunListesi}"
+                width="auto"
+                visible="{selectionModel>/UrunPanelVisible}"
+            >
+                <Table
+                    id="lineItemsList"
+                    width="auto"
+                    items="{/SiparisSet}"
+                    noDataText="{worklistView>/tableNoDataText}"
+                    busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+                    growing="true"
+                    growingScrollToLoad="true"
+                    updateFinished=".onUpdateFinished"
+                    fixedLayout="true"
+                    showSeparators="All"
+                >
+                    <headerToolbar>
+                        <Toolbar id="_IDGenToolbar2">
+                            <Label
+                                id="tableHeader"
+                                text="{worklistView>/worklistTableTitle}"
+                            />
+                           
+
+                        <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                        <Label
+                                id="_IDLblComboBox2"
+                                text="Ürün Kategorisi"
+                            />
+                        <ComboBox 
+                        id="_IDGenComboBox2"
+                        enabled="{= ${selectionModel>/AgEnabled} }"
+                        items="{
+                            path: '/UrunGrupSet',
+                            sorter: { path: 'UrunGrp' }
+                        }"
+                    >
+                        <core:Item
+                            id="_IDGenItem2"
+                            key="{UrunGrp}"
+                            text="{UrunGrpTxt}"
+                        />
+                          </ComboBox>   
+                            <SearchField
+                                id="searchField"
+                                width="auto"
+                                placeholder="Ürün Adı veya Kodu Giriniz"
+                                search=".onFilterPosts"
+                            />
+                            <Button
+                            id="_IDsimulate"
+                            text="Fiyat Göster"
+                            type="Accept"
+                            press="doSimulation"
+                            class="sapUiSmallMarginEnd"
+                            icon="sap-icon://simulate"
+                        />
+                        </Toolbar>
+                    </headerToolbar>
+
+                    <columns>
+                        <Column
+                            id="column0"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="Ürün Kodu"
+                                id="label0"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column1"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="Ürün Adı"
+                                id="label1"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column2"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="{selectionModel>/FirstDay}"
+                                id="label2"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column3"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="{selectionModel>/SecondDay}"
+                                id="label3"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column4"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="{selectionModel>/ThirdDay}"
+                                id="label4"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column5"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="Önerilen"
+                                id="label5"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column6"
+                            width="20%"
+                        >
+                            <Label
+                                text="Alınan Sipariş Miktarı"
+                                id="label6"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column7"
+                            width="20%"
+                        >
+                            <Label
+                                text="Koli İçi"
+                                id="label7"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column8"
+                            width="10%"
+                        >
+                            <Label
+                                text="Birim"
+                                id="label8"
+                                class="smallLabel"
+                            />
+                        </Column>
+                        <Column
+                            id="column9"
+                            width="20%"
+                        >
+                            <Label
+                                text="Sipariş Tutarı"
+                                id="label9"
+                                class="smallLabel"
+                            />
+                        </Column>
+                    </columns>
+
+                    <items>
+                        <ColumnListItem
+                            id="_IDGenColumnListItem1"
+                            type="Inactive"
+                            press=".onPress"
+                        >
+                        <customData>
+                            <core:CustomData key="mydata" value="{Onerilen}" writeToDom="true"></core:CustomData>
+                          </customData>
+                            <cells>
+                                <Text
+                                    text="{= parseFloat(${Matnr}) }"
+                                    id="idMatnr"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{Maktx}"
+                                    id="idMaktx"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{FirstDayAdet}"
+                                    id="idFirstDay"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{SecondDayAdet}"
+                                    id="idSecondDay"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{ThirdDayAdet}"
+                                    id="idThirdDay"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{Onerilen}"
+                                    id="idOnerilen"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <StepInput
+                                    id="idMenge"
+                                    value="{path: 'Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
+                                   
+                                    visible="true"
+                                    
+                                    required="false"
+                                    valueStateText="Invalid entry"
+                                    
+                                   
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{Koli}"
+                                    id="idKoli"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{Meins}"
+                                    id="idMeins"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                                <Text
+                                    text="{SiparisTutar}"
+                                    id="idSiparisTutar"
+                                    visible="true"
+                                    class="smallLabel"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </Panel>
+            <Panel
+                id="_IDGenPanel3"
+                expandable="true"
+                expanded="{selectionModel>/UrunPanelExpanded}"
+                headerText="Özet Bilgiler"
+                width="auto"
+                visible="{selectionModel>/UrunPanelVisible}"
+            >
+                <VBox id="_IDGenVBox1">
+                    <!-- <Label
+                        width="auto"
+                        id="_id15"
+                        text="Açıklama"
+                    />
+                    <Input
+                        id="_id17"
+                        value="{selectionModel>/Aciklama}"
+                        enabled="false"
+                        width="500px"
+                    />
+                    <Label
+                        id="_id19"
+                        text="Belge Açıklama"
+                        width="auto"
+                    />
+                    <Input
+                        id="_id20"
+                        value="{selectionModel>/MusSip} {selectionModel>/BelAcik1} {selectionModel>/AdSoyad} {selectionModel>/BelAcik2} {selectionModel>/SyUname} {selectionModel>/BelAcik3}"
+                        enabled="false"
+                        width="750px"
+                    /> -->
+
+                    <Label
+                        id="_id21"
+                        text="Toplam Sipariş Tutarı(TRY)"
+                        required="false"
+                        width="auto"
+                    />
+                    <Input
+                        id="_id22"
+                        value="{path: 'selectionModel>/ToplamSiparis', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                        enabled="false"
+                        width="500px"
+                    />
+                    <Label
+                        id="_id23"
+                        text="KDV"
+                        required="false"
+                        width="auto"
+                    />
+                    <Input
+                        id="_id24"
+                        value="{path: 'selectionModel>/Kdv', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                        enabled="false"
+                        width="500px"
+                    />
+                    <Label
+                        id="_id25"
+                        text="KDV'li Toplam Sipariş Tutarı(TRY)"
+                        required="false"
+                        width="auto"
+                    />
+                    <Input
+                        id="_id26"
+                        value="{path: 'selectionModel>/ToplamSiparisKdv', type: '.Unit', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                        enabled="false"
+                        width="500px"
+                    />
+                </VBox>
+            </Panel>
+        </content>
+
+        <footer>
+            <Toolbar id="_IDGenToolbar1">
+                <content>
+                    <Button
+                        visible="{selectionModel>/UrunPanelVisible}"
+                        id="_IDGenButton5"
+                        text="Kaydet"
+                        type="Accept"
+                        press="saveInput"
+                        class="sapUiSmallMarginEnd"
+                        icon="sap-icon://accept"
+                    />
+                    <!-- <ToolbarSpacer id="_IDGenToolbarSpacer3" />
+                    <Button
+                        visible="{selectionModel>/UrunPanelVisible}"
+                        id="_IDTelEkle"
+                        text="İletişim Bilgilerine Kişi Ekle"
+                        type="Accept"
+                        press="openKisiEkle"
+                        class="sapUiSmallMarginEnd"
+                        icon="sap-icon://phone"
+                    /> -->
+                    <ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                    <Button
+                        visible="{selectionModel>/UrunPanelVisible}"
+                        id="_IDGenButton6"
+                        text="Ödeme Linki Gönder"
+                        type="Accept"
+                        press="onGonder"
+                        class="sapUiSmallMarginEnd"
+                        icon="sap-icon://customer-and-supplier"
+                    />
+                </content>
+            </Toolbar>
+        </footer>
+    </Page>
+</mvc:View>

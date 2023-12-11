@@ -11,3 +11,9 @@
 .sapMListTbl .sapMText,.sapMListTbl .sapMLabel {
     font-size: 9px !important;
 } 
+
+          
+  tr[data-mydata="0"]{
+    background: #ff3333!important;
+  }
+  

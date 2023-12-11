@@ -143,7 +143,7 @@
                                 id="_IDGenList2"
                                 items="{/IletisimSet}"
                                 mode="Delete"
-                                delete="deleteRow"
+                                delete="onKisiSil"
                             >
                                 <StandardListItem
                                     id="_IDObjectList2"
@@ -263,7 +263,33 @@
                                 id="tableHeader"
                                 text="{worklistView>/worklistTableTitle}"
                             />
-                            <!-- <ToolbarSpacer id="_IDGenToolbarSpacer2" /> -->
+                           
+
+                        <ToolbarSpacer id="_IDGenToolbarSpacer2" />
+                        <Label
+                                id="_IDLblComboBox2"
+                                text="Ürün Kategorisi"
+                            />
+                        <ComboBox 
+                        id="_IDGenComboBox2"
+                        enabled="{= ${selectionModel>/AgEnabled} }"
+                        items="{
+                            path: '/UrunGrupSet',
+                            sorter: { path: 'UrunGrp' }
+                        }"
+                    >
+                        <core:Item
+                            id="_IDGenItem2"
+                            key="{UrunGrp}"
+                            text="{UrunGrpTxt}"
+                        />
+                          </ComboBox>   
+                            <SearchField
+                                id="searchField"
+                                width="auto"
+                                placeholder="Ürün Adı veya Kodu Giriniz"
+                                search=".onFilterPosts"
+                            />
                             <Button
                             id="_IDsimulate"
                             text="Fiyat Göster"
@@ -272,12 +298,6 @@
                             class="sapUiSmallMarginEnd"
                             icon="sap-icon://simulate"
                         />
-                            <ToolbarSpacer id="_IDGenToolbarSpacer0" />
-                            <SearchField
-                                id="searchField"
-                                width="auto"
-                                search=".onFilterPosts"
-                            />
                         </Toolbar>
                     </headerToolbar>
 
@@ -402,6 +422,9 @@
                             type="Inactive"
                             press=".onPress"
                         >
+                        <customData>
+                            <core:CustomData key="mydata" value="{Onerilen}" writeToDom="true"></core:CustomData>
+                          </customData>
                             <cells>
                                 <Text
                                     text="{= parseFloat(${Matnr}) }"
@@ -483,7 +506,7 @@
                 visible="{selectionModel>/UrunPanelVisible}"
             >
                 <VBox id="_IDGenVBox1">
-                    <Label
+                    <!-- <Label
                         width="auto"
                         id="_id15"
                         text="Açıklama"
@@ -504,23 +527,23 @@
                         value="{selectionModel>/MusSip} {selectionModel>/BelAcik1} {selectionModel>/AdSoyad} {selectionModel>/BelAcik2} {selectionModel>/SyUname} {selectionModel>/BelAcik3}"
                         enabled="false"
                         width="750px"
-                    />
+                    /> -->
 
                     <Label
                         id="_id21"
-                        text="Net Değer (TRY)"
+                        text="Toplam Sipariş Tutarı(TRY)"
                         required="false"
                         width="auto"
                     />
                     <Input
                         id="_id22"
-                        value="{path: 'selectionModel>/Net', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                        value="{path: 'selectionModel>/ToplamSiparis', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
                         enabled="false"
                         width="500px"
                     />
                     <Label
                         id="_id23"
-                        text="KDV'li Değer (TRY)"
+                        text="KDV"
                         required="false"
                         width="auto"
                     />
@@ -532,13 +555,13 @@
                     />
                     <Label
                         id="_id25"
-                        text="Toplam Ağırlık(KG)"
+                        text="KDV'li Toplam Sipariş Tutarı(TRY)"
                         required="false"
                         width="auto"
                     />
                     <Input
                         id="_id26"
-                        value="{path: 'selectionModel>/Agirlik', type: '.Unit', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                        value="{path: 'selectionModel>/ToplamSiparisKdv', type: '.Unit', formatOptions:{style : 'long', showMeasure:'false' }  }"
                         enabled="false"
                         width="500px"
                     />

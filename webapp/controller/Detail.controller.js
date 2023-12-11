@@ -47,11 +47,13 @@ sap.ui.define(
           Currency: "TRY",
           Uom: "KG",
           Agirlik: "",
-          Aciklama:"",
-          BelgeAciklama:"",
-          BelAcik1:" no'lu sipariş ",
-          BelAcik2:" onayı ",
-          BelAcik3:" tarafından alınmıştır.",
+          Aciklama: "",
+          BelgeAciklama: "",
+          BelAcik1: " no'lu sipariş ",
+          BelAcik2: " onayı ",
+          BelAcik3: " tarafından alınmıştır.",
+          ToplamSiparis:"",
+          ToplamSiparisKdv:"",
           SyUname: sap.ushell.Container.getService("UserInfo").getId(),
           SelectionScreenPanelExpanded: true,
           UrunPanelExpanded: false,
@@ -136,7 +138,7 @@ sap.ui.define(
           l.setProperty("/UrunPanelVisible", true);
           l.setProperty("/SelectionScreenPanelExpanded", false);
 
-          jQuery.sap.delayedCall(1000, this, function () {
+          jQuery.sap.delayedCall(1500, this, function () {
             var updR = this.byId("lineItemsList").getItems();
             for (var o = 0; o < updR.length; o++) {
               var updR2 = updR[o];
@@ -173,13 +175,13 @@ sap.ui.define(
       saveInput: function () {
         var that = this;
         sap.m.MessageBox.confirm("Sipariş yaratılıyor, emin misiniz?", {
-          title:"Bilgilendirme",
+          title: "Bilgilendirme",
           actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
           styleClass: "messageBoxError",
           onClose: function (e) {
             if (e === sap.m.MessageBox.Action.YES) {
 
-              
+
               var oModel = that.getView().getModel();
               var oTable = that.byId("lineItemsList");
               // var idMusteri = that.byId("_id6").getText();
@@ -206,11 +208,13 @@ sap.ui.define(
                 siparisItem.push(siparisResult);
               }
 
-              data.idMusteri = idMusteri; 
-              data.musteriToSiparis   = siparisItem;
-
+              data.idMusteri        = idMusteri;
+              data.musteriToSiparis = siparisItem;
+              data.ToplamSiparis    = "0";
+              data.ToplamKdv        = "0";
+              data.ToplamSiparisKdv = "0";
               oModel.create("/MusteriSet", data, {
-                success: function(oData, oResponse) {
+                success: function (oData, oResponse) {
                   // that.clearInputs();
                   // sap.m.MessageToast.show(oResponse.data.Mesaj);
 
@@ -218,12 +222,12 @@ sap.ui.define(
                     title: "Bilgilendirme",
                     id: "messageBoxId1",
                     details: "<p><strong>This can happen if:</strong></p>" +
-                    "<ul>" +
-                    "<li>You are not connected to the internet</li>" +
-                    "<li>a backend component is not <em>available</em></li>" +
-                    "<li>or an underlying system is down</li>" +
-                    "</ul>" +
-                    "<p>Get more help <a href='//www.sap.com' target='_top'>here</a>.",
+                      "<ul>" +
+                      "<li>You are not connected to the internet</li>" +
+                      "<li>a backend component is not <em>available</em></li>" +
+                      "<li>or an underlying system is down</li>" +
+                      "</ul>" +
+                      "<p>Get more help <a href='//www.sap.com' target='_top'>here</a>.",
                     contentWidth: "100px"
                   });
                   // var oModelRefresh = that.getView().getModel();
@@ -234,16 +238,16 @@ sap.ui.define(
                   sap.ui.core.BusyIndicator.hide(0);
                   // MessageToast.show("Sipariş Başarıyla Yaratıldı");
                 },
-                error: function(err) {
+                error: function (err) {
                   // this._showServiceError($(err.response.responseText).find("message").first().text());
                   // var message = $(err.responseText).find('message').first().text();
                   var errorObj1 = JSON.parse(err.responseText);
                   // sap.m.MessageBox.error(errorObj1.error.message.value,  {
-                  sap.m.MessageBox.error(errorObj1.error.innererror.errordetails[0].message,  {
+                  sap.m.MessageBox.error(errorObj1.error.innererror.errordetails[0].message, {
                     title: "HATA",
                     id: "messageBoxId2",
                     contentWidth: "100px"
-                  }); 
+                  });
                 }
               });
 
@@ -259,16 +263,16 @@ sap.ui.define(
 
       },
 
-       doSimulation: function () {
+      doSimulation: function () {
         var that = this;
         sap.m.MessageBox.confirm("Fiyat hesaplaması yapılacak, emin misiniz?", {
-          title:"Bilgilendirme",
+          title: "Bilgilendirme",
           actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
           styleClass: "messageBoxError",
           onClose: function (e) {
             if (e === sap.m.MessageBox.Action.YES) {
 
-              
+
               var oModel = that.getView().getModel();
               var oTable = that.byId("lineItemsList");
               // var idMusteri = that.byId("_id6").getText();
@@ -290,48 +294,62 @@ sap.ui.define(
                 siparisResult.Menge = adet;
                 siparisResult.Meins = birim;
                 siparisResult.SiparisTutar = "1";
-                siparisResult.Kdv = "0";
+                siparisResult.Kdv = "0"; 
 
                 siparisItem.push(siparisResult);
               }
 
-              data.idMusteri = idMusteri; 
-              data.musteriToSiparis   = siparisItem;
+              data.idMusteri        = idMusteri;
+              data.musteriToSiparis = siparisItem;
+              data.ToplamSiparis    = "0";
+              data.ToplamKdv        = "0";
+              data.ToplamSiparisKdv = "0";
 
+              var a = that.getModel("selectionModel"); 
               oModel.create("/MusteriSet", data, {
-                success: function(oData, oResponse) {
-                  var oTableRefresh = that.byId("lineItemsList");
-                  for(var y = 0; y < oData.musteriToSiparis.results.length; y++){
-                    var material2 = oData.musteriToSiparis.results[y].Matnr;
-                    var mengeout = oData.musteriToSiparis.results[y].Menge;
+                success: function (oData, oResponse) {
 
-                    if(mengeout > 0){
+                  a.setProperty("/ToplamSiparis", oData.ToplamSiparis);
+                  a.setProperty("/Kdv", oData.ToplamKdv);
+                  a.setProperty("/ToplamSiparisKdv", oData.ToplamSiparisKdv);
+                  var oTableRefresh = that.byId("lineItemsList");
+                  for (var y = 0; y < oData.musteriToSiparis.results.length; y++) {
+                    var material2 = oData.musteriToSiparis.results[y].Matnr;
+                    var mengeout = oData.musteriToSiparis.results[y].Menge; 
+
+                    if (mengeout > 0) {
                       for (var i = 0; i < oTableRefresh.getItems().length; i++) {
                         var material = oTableRefresh.getItems()[i].getCells()[0].getText();
-  
-                        if(material == material2){ 
+
+                        if (material == material2) {
                           var siptutar = oData.musteriToSiparis.results[y].SiparisTutar;
-                          var kdvtutar = oData.musteriToSiparis.results[y].Kdv;  
-                          oTableRefresh.getItems()[i].getCells()[9].setText(siptutar);  
+                          // var kdvtutar = oData.musteriToSiparis.results[y].Kdv;
+                          oTableRefresh.getItems()[i].getCells()[9].setText(siptutar);
+ 
+                          
+
                           break;
                         }
-  
+
                       }
-                    } 
+                    }
                   }
+
+
+   
                   sap.ui.core.BusyIndicator.hide(0);
                   // MessageToast.show("Sipariş Başarıyla Yaratıldı");
                 },
-                error: function(err) {
+                error: function (err) {
                   // this._showServiceError($(err.response.responseText).find("message").first().text());
                   // var message = $(err.responseText).find('message').first().text();
                   var errorObj1 = JSON.parse(err.responseText);
                   // sap.m.MessageBox.error(errorObj1.error.message.value,  {
-                  sap.m.MessageBox.error(errorObj1.error.innererror.errordetails[0].message,  {
+                  sap.m.MessageBox.error(errorObj1.error.innererror.errordetails[0].message, {
                     title: "HATA",
                     id: "messageBoxId2",
                     contentWidth: "100px"
-                  }); 
+                  });
                 }
               });
 
@@ -347,9 +365,9 @@ sap.ui.define(
 
       },
 
-      
-      openKisiEkle: function(e){
-      
+
+      openKisiEkle: function (e) {
+
         var t = this.getModel("selectionModel");
         if (!this._valueHelpDialogKisi) {
           this._valueHelpDialogKisi = sap.ui.xmlfragment(
@@ -361,16 +379,98 @@ sap.ui.define(
         var a = [];
         // this._valueHelpDialogKunnr.getBinding("items").filter(a);
         this._valueHelpDialogKisi.open();
-      
+
       },
 
-      closeKisiEkle: function () { 
-				this._valueHelpDialogKisi.close();
-			  },
+      closeKisiEkle: function () {
+        this._valueHelpDialogKisi.close();
+      },
 
-        onKisiEkle: function(){
-          // iletişim create yapacagız
-        },
+      onKisiSil:function(oEvent){ 
+        var oList = oEvent.getSource(),
+				oItem = oEvent.getParameter("listItem"),
+				sPath = oItem.getBindingContext().getPath();
+        var oModel = this.getView().getModel();
+			// after deletion put the focus back to the list
+			oList.attachEventOnce("updateFinished", oList.focus, oList); 
+			// send a delete request to the odata service
+		 	oModel.remove(sPath); 
+
+        sap.ui.core.BusyIndicator.hide(0); 
+              sap.m.MessageToast.show("Kişi Silindi");
+      },
+
+      onKisiEkle: function () {
+        var that = this;
+        var oModel = this.getView().getModel();
+        var data = {};
+
+        var idMusteri = this.getView().byId("_id6").getValue();
+        var ad        = sap.ui.getCore().byId("idAd").getValue();
+        var mail      = sap.ui.getCore().byId("idMail").getValue();
+        var telefon   = sap.ui.getCore().byId("idTelefon").getValue();
+
+
+        if (ad == "") {
+          var i = "Ad soyad giriniz";
+          sap.m.MessageToast.show(i);
+          sap.ui.core.BusyIndicator.hide(0);
+        }
+        else if (telefon == "") {
+          i = "Telefon giriniz";
+          sap.m.MessageToast.show(i);
+          sap.ui.core.BusyIndicator.hide(0);
+        }
+        else {
+
+          data.idMusteri = idMusteri;
+          data.Name = ad;
+          data.Email = mail;
+          data.Telefon = telefon;
+          data.Type = "I";
+
+
+          oModel.create("/IletisimSet", data, {
+            success: function (oData, oResponse) {
+
+
+              
+              var p = that.byId("_IDGenList2").getBinding("items");
+              var n = []; 
+              n.push(
+                new sap.ui.model.Filter(
+                  "idMusteri",
+                  sap.ui.model.FilterOperator.EQ,
+                  idMusteri
+                )
+              );
+              p.filter(new sap.ui.model.Filter(n, true));
+              p.refresh(); 
+
+              
+              sap.ui.core.BusyIndicator.hide(0); 
+              sap.m.MessageToast.show("Kişi Eklendi");
+              that._valueHelpDialogKisi.close();
+
+
+            },
+            error: function (err) {
+              // this._showServiceError($(err.response.responseText).find("message").first().text());
+              // var message = $(err.responseText).find('message').first().text();
+              var errorObj1 = JSON.parse(err.responseText);
+              // sap.m.MessageBox.error(errorObj1.error.message.value,  {
+              sap.m.MessageBox.error(errorObj1.error.innererror.errordetails[0].message, {
+                title: "HATA",
+                id: "messageBoxId2",
+                contentWidth: "100px"
+              });
+            }
+          });
+
+        }
+
+
+      },
 
       onHelpRequestedKunnr: function (e) {
         var t = this.getModel("selectionModel");
@@ -467,7 +567,7 @@ sap.ui.define(
         // );
         // filter binding
 
-        var idMusteri = this.getView().byId("_id6").getValue(); 
+        var idMusteri = this.getView().byId("_id6").getValue();
         aFilter.push(
           new sap.ui.model.Filter(
             "idMusteri",

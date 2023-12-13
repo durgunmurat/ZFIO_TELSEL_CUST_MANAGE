@@ -1,19 +1,17 @@
 /*Enter your custom styles here */
-
- .smallLabel {
- font-size: 9px !important;
- }
-
- .sapMListTblCell {
- border-left: 1px solid #ccc;
- }
-
-.sapMListTbl .sapMText,.sapMListTbl .sapMLabel {
-    font-size: 9px !important;
-} 
-
-          
-  tr[data-mydata="0"]{
-    background: #ebbb39f3!important;
+.smallLabel2 {
+  font-size: 12px !important;
+  }
+.smallLabel {
+  font-size: 9px !important;
   }
   
+  .sapMListTblCell {
+  border-left: 1px solid #ccc;
+  }
+ 
+  .sapMListTbl .sapMText,.sapMListTbl .sapMLabel {
+     font-size: 9px !important;
+ }  
+   
+ 

@@ -7,6 +7,21 @@ sap.ui.define([], function () {
       }
       return parseFloat(e).toFixed(0);
     },
+    convertCurr : function (value) {
+
+      try {
+      
+      value = value.replace(",",".");
+      
+      return(value);
+      
+      } catch (e) {
+      
+      // TODO: handle exception
+      
+      }
+      
+      },
     showErrorStatu: function (e, r, n, t, i) {
       var u;
       if (i === "sd") {

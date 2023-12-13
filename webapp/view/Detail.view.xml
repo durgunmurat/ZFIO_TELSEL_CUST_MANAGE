@@ -1,4 +1,4 @@
-<mvc:View
+<mvc:View xmlns:internal="sap.landvisz.internal" 
     xmlns:vbm="sap.ui.vbm"
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
@@ -9,109 +9,192 @@
     xmlns:html="http://www.w3.org/1999/xhtml"
     controllerName="zfiotelselkokpit.controller.Detail"
     xmlns:ui="sap.ui.table"
+    height="100%" 
 >
     <Page
         id="_IDGenPage1"
         title="{i18n>SipYarat}"
-        class="myApp"
     >
         <content>
             <Panel
                 id="_IDGenPanel1"
                 expandable="true"
-                class="myApp"
+                accessibleRole="Form"
                 expanded="{selectionModel>/SelectionScreenPanelExpanded}"
-                headerText="{i18n>secimKriterleri}"
-                width="auto"
-            >
-                <VBox
-                    id="_IDGenVBox0"
-                    class="sapUiSmallMargin"
+                headerText="Genel Bilgiler"
+                width="auto"  
+            > 
+                <f:SimpleForm
+                    id="_IDGenSimpleForm1"
+                    editable="false"
+                    layout="ResponsiveGridLayout" 
+                    columnsXL="4"
+                    columnsM="2"
+                    columnsL="3" 
                 >
-                    <f:SimpleForm
-                        id="_IDGenSimpleForm1"
-                        editable="false"
-                        layout="ResponsiveGridLayout"
-                        columnsM="2"
-                        columnsL="3"
-                        columnsXL="4"
-                    >
-                        <f:content>
-                            <core:Title
-                                id="_IDGenTitle5"
-                                text="Müşteri No"
+                    <f:content >
+                        <core:Title
+                            id="_IDGenTitle5"
+                            text="Müşteri No"   
+                            
+                        />
+                        <VBox id="_IDGenVBox11" >
+                        <HBox
+                            id="_IDVBox0"
+                            alignItems="Start" 
+                        >
+                            <Input
+                                id="_id6"
+                                value="{selectionModel>/Kunnr}" 
+                                showValueHelp="true"
+                                valueHelpOnly="true"
+                                valueHelpRequest="onHelpRequestedKunnr"
+                                width="auto" 
+                            /> 
+                            <Button
+                                id="_idBtnList"
+                                text="Listele"
+                                enabled="{= ${selectionModel>/AgEnabled} }"
+                                press="onPressMalzemeListesi" 
+                                icon="sap-icon://display"
+                                
                             />
-                            <!-- <Label
-                            id="_id5"
-                            text="Müşteri No"
-                            required="true"
-                        /> -->
-                            <VBox id="_IDVBox0">
-                                <Input
-                                    id="_id6"
-                                    value="{selectionModel>/Kunnr}"
-                                    description="{selectionModel>/Name}"
-                                    showValueHelp="true"
-                                    valueHelpOnly="true"
-                                    valueHelpRequest="onHelpRequestedKunnr"
-                                    width="auto"
-                                />
-
-                                <Button
-                                    id="_idBtnList"
-                                    text="Listele"
-                                    enabled="{= ${selectionModel>/AgEnabled} }"
-                                    press="onPressMalzemeListesi"
-                                    class="sapUiSmallMarginEnd"
-                                    icon="sap-icon://display"
-                                />
-                            </VBox>
-                            <core:Title
-                                id="_IDGenTitle3"
-                                text="Cari Hesap Bilgileri"
-                            />
-                            <List id="_IDGenList1">
-                                <DisplayListItem
-                                    id="_IDGenDisplayListItem1"
-                                    label="Toplam Bakiye"
-                                    value="{selectionModel>/ToplamBakiye}"
-                                />
-                                <DisplayListItem
-                                    id="_IDGenDisplayListItem2"
-                                    label="Email"
-                                    value="{selectionModel>/Email}"
-                                />
-                                <DisplayListItem
-                                    id="_IDGenDisplayListItem3"
-                                    label="Telefon"
-                                    value="{selectionModel>/Telefon}"
-                                />
-                            </List>
-                            <core:Title
-                                id="_IDGenTitle1"
-                                text="Sevkiyat Günleri"
-                            />
-                            <List
-                                id="_IDGenList3"
-                                items="{
+                        </HBox>
+                        <Text id="_idTxt6" text="{selectionModel>/Name}" />
+                        </VBox>
+                        <core:Title
+                            id="_IDGenTitle3"
+                            text="Cari Hesap Bilgileri"
+                            
+                        />
+                        <List
+                            id="_IDGenList1"
+                            backgroundDesign="Transparent"
+                            showSeparators="All"
+                            
+                        >
+                            <CustomListItem id="_idCLI1" >
+                                <FlexBox id="_IDGenFlexBox1">
+                                    <VBox
+                                        id="_IDGenVBox3"
+                                        width="50%"
+                                    >
+                                        <HBox id="_IDGenHBox1">
+                                            <Label
+                                                id="_idLbl1"
+                                                text="Toplam Bakiye:"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox id="_IDGenVBox4">
+                                        <HBox id="_IDGenHBox2"> 
+                                            <Text
+                                                id="_idTxt1"
+                                                text="{path: 'selectionModel>/ToplamBakiye', formatter: '.formatter.convertCurr'   }" 
+    
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem>
+                            <CustomListItem id="_idCLI2">
+                                <FlexBox id="_IDGenFlexBox2">
+                                    <VBox
+                                        id="_IDGenVBox5"
+                                        width="50%"
+                                    >
+                                        <HBox id="_IDGenHBox3">
+                                            <Label
+                                                id="_idLbl2"
+                                                text="Email:" 
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox
+                                        id="_IDGenVBox6"
+                                        width="50%"
+                                    >
+                                        <HBox id="_IDGenHBox4">
+                                            <Text
+                                                id="_idTxt2"
+                                                text="{selectionModel>/Email}" 
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem>
+                            <CustomListItem id="_idCLI3">
+                                <FlexBox id="_IDGenFlexBox3">
+                                    <VBox
+                                        id="_IDGenVBox7"
+                                        width="50%"
+                                    >
+                                        <HBox id="_IDGenHBox5">
+                                            <Label
+                                                id="_idLbl3"
+                                                text="Telefon:"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox
+                                        id="_IDGenVBox8"
+                                        width="50%"
+                                    >
+                                        <HBox id="_IDGenHBox6">
+                                            <Text
+                                                id="_idTxt3"
+                                                text="{selectionModel>/Telefon}"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem> 
+                        </List>
+                        <core:Title
+                            id="_IDGenTitle1"
+                            text="Sevkiyat Günleri"
+                        />
+                        <List
+                            backgroundDesign="Transparent"
+                            id="_IDGenList3"
+                            items="{
             path: '/SevkiyatSet',
             sorter: {
                 path: 'Gun'
             }
         }"
-                            >
-                                <items>
-                                    <StandardListItem
-                                        id="_IDGenStandardListItem1"
-                                        title="{Gun}"
-                                        description=""
-                                        icon="sap-icon://inventory"
-                                    />
-                                </items>
-                            </List>
-                        </f:content>
-                    </f:SimpleForm>
-                </VBox>
+                        >
+                            <items>
+                                <CustomListItem id="_idCLI4">
+                                    <FlexBox id="_IDGenFlexBox4">
+                                        <VBox
+                                            id="_IDGenVBox9"
+                                            width="10%"
+                                        >
+                                            <HBox id="_IDGenHBox7">
+                                                <core:Icon
+                                                    id="_idIcon1"
+                                                    src="sap-icon://inventory"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox
+                                            id="_IDGenVBox10"
+                                            width="50%"
+                                        >
+                                            <HBox id="_IDGenHBox8">
+                                                <Text
+                                                    id="_idTxt5"
+                                                    text="{Gun}"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
+                                </CustomListItem> 
+                            </items>
+                        </List>
+                    </f:content>
+                </f:SimpleForm> 
             </Panel>
 
             <Panel
@@ -190,18 +273,19 @@
                             />
 
                             <ToolbarSpacer id="_IDGenToolbarSpacer2" />
-                            <Button
+                            <!-- <Button
                                 id="_IDBtnAra"
                                 type="Accept"
                                 press="onSearch3"
                                 class="sapUiSmallMarginEnd"
                                 icon="sap-icon://search"
-                            />
+                            /> -->
                             <Label
                                 id="_IDLblComboBox2"
                                 text="Ürün Kategorisi"
                             />
                             <ComboBox
+                                selectionChange="onSearch3"
                                 id="_IDGenComboBox2"
                                 enabled="{= ${selectionModel>/AgEnabled} }"
                                 items="{
@@ -320,7 +404,7 @@
                             width="20%"
                         >
                             <Label
-                                text="Koli İçi"
+                                text="Koli İçi Adet"
                                 id="label7"
                                 class="smallLabel"
                             />
@@ -366,14 +450,7 @@
                             id="_IDGenColumnListItem1"
                             type="Inactive"
                             press=".onPress"
-                        >
-                            <customData>
-                                <core:CustomData
-                                    key="mydata"
-                                    value="{Onerilen}"
-                                    writeToDom="true"
-                                />
-                            </customData>
+                        > 
                             <cells>
                                 <Text
                                     text="{= parseFloat(${Matnr}) }"
@@ -405,12 +482,17 @@
                                     visible="true"
                                     class="smallLabel"
                                 />
-                                <Text
+                                <ObjectStatus id="_IDGenObjectStatus1"
+                                class="sapUiSmallMarginBottom"
+                                text="{Onerilen}"
+                                state="{= ${Onerilen} === '0' ? 'Error' : 'Warning'}"
+                                 /> 
+                                <!-- <Text
                                     text="{Onerilen}"
                                     id="idOnerilen"
                                     visible="true"
                                     class="smallLabel"
-                                />
+                                /> -->
                                 <StepInput
                                     id="idMenge"
                                     value="{path: 'Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
@@ -507,17 +589,21 @@
                                 items="{/IletisimSet}"
                                 mode="Delete"
                                 delete="onKisiSil"
-                            >
-                                <StandardListItem
-                                    id="_IDObjectList2"
+                            > 
+                                <ObjectListItem  id="_IDObjectList2"
                                     title="{Name}"
                                     icon="sap-icon://call"
                                     type="Active"
-                                    description="{Email}"
-                                    info="{Telefon}"
+                                    showMarkers="true"
+                                    markFavorite="{= ${Fav} === 'X' ? true : false}"
+                                    number="{Telefon}" 
                                     activeIcon="sap-icon://call"
-                                    press="onListItemPress"
-                                />
+                                    press="onFavPress" > 
+                                    <firstStatus>
+                                        <ObjectStatus id="_IDGenObjectStatus2" text="{Email}" />
+                                    </firstStatus>
+                                    <ObjectAttribute id="_IDGenObjectAttribute1" text="{Parnr}" visible="false"/>
+                                </ObjectListItem>  
                                 <!-- <headerToolbar>
                                 <Toolbar id="_IDGenToolbar3">
                                     <Button
@@ -535,12 +621,12 @@
                                 id="_IDGenTitle4"
                                 text="Notlar"
                             />
-                            <Label
+                            <!-- <Label
                                 id="_IDGenLabel9"
                                 text="İlgili Kişi"
                                 class="sapUiSmallMarginTop sapUiTinyMarginBottom"
                             />
-                            <Input id="idIlgili" />
+                            <Input id="idIlgili" /> -->
                             <Label
                                 id="_IDGenLabel10"
                                 text="Geri Bildirim"
@@ -548,7 +634,8 @@
                             />
                             <FeedInput
                                 id="_IDGenFeedInput1"
-                                post="onPost"
+                                maxLength="1200"
+                                post="onSendNote"
                                 showIcon="false"
                                 placeholder="Not giriniz..."
                             />
@@ -613,15 +700,15 @@
                 >
                     <l:content>
                         <List
-                            id="_IDGenList4" 
+                            id="_IDGenList4"
                             items="{/NotSet}"
                         >
                             <FeedListItem
                                 id="_IDGenFeedListItem1"
-                                icon="sap-icon://accelerated"
+                                icon="sap-icon://marketing-campaign"
                                 iconDensityAware="true"
                                 info="{Description}"
-                                text="{= parseFloat(${KampanyaNo}) }" 
+                                text="{= parseFloat(${KampanyaNo}) }"
                             />
                         </List>
                     </l:content>

@@ -204,59 +204,11 @@
                 headerText="{i18n>urunListesi}"
                 width="auto"
                 visible="{selectionModel>/UrunPanelVisible}"
-            >
-                <!-- <fb:FilterBar id="filterbar" 
-                        persistencyKey="myPersKey" 
-                        useToolbar="false" 
-                        search=".onSearch2" 
-                        >
-                        <fb:filterGroupItems>
-                            <fb:FilterGroupItem id="_IDGenFilterGroupItem1" name="Name" label="Ürün Kategorisi" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <MultiComboBox id="_IDGenMultiComboBox1"
-                                        name="Name"
-                                        selectionChange=".onSelectionChange"
-                                        items="{
-                                            path: '/UrunGrupSet',
-                                            templateShareable: true
-                                        }"
-                                    >
-                                        <core:Item id="_IDGenItem3" key="{UrunGrp}" text="{UrunGrpTxt}"/>
-                                    </MultiComboBox>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            </fb:filterGroupItems>
-            </fb:FilterBar> -->
-
-                <!-- <smartFilterBar:SmartFilterBar 
-            entitySet="SiparisSet"
-            id="smartFilterBar" 
-            useToolbar="false" 
-            class="sapContrastPlus"  
-            enableBasicSearch="false"
-            hSpacing="0"  
-            search="onSearch2">      
-					<smartFilterBar:controlConfiguration> 
-                        <smartFilterBar:ControlConfiguration id="_IDGenControlConfiguration3" key="UrunGrp" visibleInAdvancedArea="true" label="Ürün Grup">
-		                <smartFilterBar:customControl>
-                            <MultiComboBox id="multiComboBox" 
-                                          selectionChange="customFieldChange"
-                            items="{
-                                path: '/UrunGrupSet',
-                                templateShareable: true
-                            }"
-                        >
-                            <core:Item id="_IDGenItem3" key="{UrunGrp}" text="{UrunGrpTxt}"/>
-                        </MultiComboBox>
-		                </smartFilterBar:customControl> 
-						</smartFilterBar:ControlConfiguration>  
-					</smartFilterBar:controlConfiguration> 
-            </smartFilterBar:SmartFilterBar>  -->
-
+            > 
                 <Table
                     id="lineItemsList"
                     width="auto"
-                    items="{/SiparisSet}"
+                    items="{SiparisList>/results}"
                     noDataText="{worklistView>/tableNoDataText}"
                     busyIndicatorDelay="{worklistView>/tableBusyDelay}"
                     growing="true"
@@ -304,6 +256,7 @@
                                 width="auto"
                                 placeholder="Ürün Adı veya Kodu Giriniz"
                                 search=".onFilterPosts"
+                                liveChange=".onSearchFieldLiveChange"
                             />
                             <Button
                                 id="_IDsimulate"
@@ -453,39 +406,39 @@
                         > 
                             <cells>
                                 <Text
-                                    text="{= parseFloat(${Matnr}) }"
+                                    text="{= parseFloat(${SiparisList>Matnr}) }"
                                     id="idMatnr"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{Maktx}"
+                                    text="{SiparisList>Maktx}"
                                     id="idMaktx"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{FirstDayAdet}"
+                                    text="{SiparisList>FirstDayAdet}"
                                     id="idFirstDay"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{SecondDayAdet}"
+                                    text="{SiparisList>SecondDayAdet}"
                                     id="idSecondDay"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{ThirdDayAdet}"
+                                    text="{SiparisList>ThirdDayAdet}"
                                     id="idThirdDay"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <ObjectStatus id="_IDGenObjectStatus1"
                                 class="sapUiSmallMarginBottom"
-                                text="{Onerilen}"
-                                state="{= ${Onerilen} === '0' ? 'Error' : 'Warning'}"
+                                text="{SiparisList>Onerilen}"
+                                state="{= ${SiparisList>Onerilen} === '0' ? 'Error' : 'Warning'}"
                                  /> 
                                 <!-- <Text
                                     text="{Onerilen}"
@@ -495,39 +448,40 @@
                                 /> -->
                                 <StepInput
                                     id="idMenge"
-                                    value="{path: 'Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
+                                    value="{path: 'SiparisList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
                                     visible="true"
                                     min="0"
                                     required="false"
+                                    change="onChange"
                                     valueStateText="Invalid entry"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{Koli}"
+                                    text="{SiparisList>Koli}"
                                     id="idKoli"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{Meins}"
+                                    text="{SiparisList>Meins}"
                                     id="idMeins"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{SiparisTutar}"
+                                    text="{SiparisList>SiparisTutar}"
                                     id="idSiparisTutar"
                                     visible="true"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{UrunGrp}"
+                                    text="{SiparisList>UrunGrp}"
                                     id="idUrunGrp"
                                     visible="false"
                                     class="smallLabel"
                                 />
                                 <Text
-                                    text="{UrunGrpTxt}"
+                                    text="{SiparisList>UrunGrpTxt}"
                                     id="idUrunGrpTxt"
                                     visible="false"
                                     class="smallLabel"

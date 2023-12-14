@@ -452,7 +452,7 @@
                                     visible="true"
                                     min="0"
                                     required="false"
-                                    change="onChange"
+                                    	change="onChange"
                                     valueStateText="Invalid entry"
                                     class="smallLabel"
                                 />

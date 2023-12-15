@@ -1,0 +1,50 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="idSumList" title="Sipariş Özeti">
+
+        <List id="idFragList1"
+            class="sapUiResponsiveMargin"
+            width="auto"
+            items="{OzetList>/results}">
+            <items>
+                <CustomListItem id="_IDGenStandardListItem1">
+                <HBox id="_IDGenHBox1">
+                    <Label id="_IDGenLabel1" text="{OzetList>Maktx}"/>
+                    <Label id="_IDGenLabel2" text="{= parseFloat(${OzetList>Matnr}) }"/>
+                    <Label id="_IDGenLabel3" text="{OzetList>SiparisTutar}"/>
+                    <Label id="_IDGenLabel4" text="{OzetList>Currency}"/>
+                    <Label id="_IDGenLabel5" text="{OzetList>Menge}"/>
+                    <Label id="_IDGenLabel6" text="{OzetList>Meins}"/>
+                </HBox> 
+                </CustomListItem>
+                <!-- <ObjectListItem id="idFragList2"
+                
+                    title="{OzetList>Maktx}" 
+                    number="{  
+                        parts:[{path:'OzetList>SiparisTutar'},{path:'OzetList>Currency'}],
+                        type: 'sap.ui.model.type.Currency',
+                        formatOptions: {showMeasure: false}
+                    }"
+                    numberUnit="{OzetList>Currency}" > 
+                
+                    <ObjectAttribute id="_IDGenObjectAttribute1" text="{= parseFloat(${OzetList>Matnr}) }" />
+                    <ObjectAttribute id="_IDGenObjectAttribute2" text="{OzetList>Menge} - {OzetList>Meins} " /> 
+                </ObjectListItem> -->
+            </items>
+        </List>
+
+        <beginButton>
+            <Button type="Reject" id="idFragBtn1" text="Kapat" press="closeSum" />
+        </beginButton>
+        <endButton>
+            <Button
+                visible="{selectionModel>/UrunPanelVisible}"
+                id="idFragBtn2"
+                text="Kaydet"
+                type="Accept"
+                press="saveInput"
+                class="sapUiSmallMarginEnd"
+                icon="sap-icon://accept"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition> 

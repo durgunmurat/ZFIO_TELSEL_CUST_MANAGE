@@ -1,0 +1,119 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
+
+	<TableSelectDialog 
+        id="lineSumList"
+        title="Sipariş Özeti"
+        contentWidth="30%"
+        contentHeight="20%"
+        confirm="saveInput"
+        cancel="handleClose"
+        search=".handleSearch" 
+        resizable="true"
+		noDataText="Bulunamadı" 
+		items="{OzetList>/results}" >  
+
+    <columns>
+        <Column 
+            id="column0"
+            visible="true"
+            width="5em"
+            hAlign="Center"
+        >
+            <Text
+                text="Ürün Kodu"
+                id="label0"
+                class="smallLabel"
+            />
+        </Column>
+        <Column
+            id="column1"
+            visible="true"
+            width="8em"
+            hAlign="Center"
+        >
+            <Text
+                text="Ürün Adı"
+                id="label1"
+                class="smallLabel"
+            />
+        </Column> 
+        <Column
+            id="column6"
+            width="4em"
+        >
+            <Label
+                text="Alınan Sipariş Miktarı"
+                id="label6"
+                class="smallLabel"
+            />
+        </Column>
+        
+        <Column
+            id="column8"
+            width="3em"
+        >
+            <Label
+                text="Birim"
+                id="label8"
+                class="smallLabel"
+            />
+        </Column>
+        <Column
+            id="column9"
+            width="5em"
+        >
+            <Label
+                text="Sipariş Tutarı"
+                id="label9"
+                class="smallLabel"
+            />
+        </Column> 
+
+    </columns>
+
+        <ColumnListItem
+            id="_IDGenColumnListItem1"
+            type="Inactive"
+            press=".onPress"
+        > 
+            <cells>
+                <Text
+                    text="{= parseFloat(${OzetList>Matnr}) }"
+                    id="idMatnr"
+                    visible="true"
+                    class="smallLabel"
+                />
+                <Text
+                    text="{OzetList>Maktx}"
+                    id="idMaktx"
+                    visible="true"
+                    class="smallLabel"
+                /> 
+                <Input
+                    id="idMenge"
+                    value="{path: 'OzetList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
+                    visible="true" 
+                    editable="false"
+                    required="false" 
+                    valueStateText="Invalid entry"
+                    class="smallLabel"
+                />
+
+                <Text
+                    text="{OzetList>Meins}"
+                    id="idMeins"
+                    visible="true"
+                    class="smallLabel"
+                />
+                <Text
+                    text="{OzetList>SiparisTutar}  ₺"
+                    id="idSiparisTutar"
+                    visible="true"
+                    class="smallLabel"
+                /> 
+            </cells>
+               
+
+        </ColumnListItem>
+    </TableSelectDialog>  
+</core:FragmentDefinition>

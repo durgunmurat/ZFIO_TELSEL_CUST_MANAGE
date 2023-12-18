@@ -209,6 +209,7 @@
                     noDataText="{worklistView>/tableNoDataText}"
                     busyIndicatorDelay="{worklistView>/tableBusyDelay}"
                     growing="true"
+                    growingThreshold="40"
                     growingScrollToLoad="false"
                     updateFinished=".onUpdateFinished"
                     fixedLayout="true"
@@ -450,8 +451,8 @@
                                     min="0"
                                     required="false"
                                     change="onChange"
-                                    valueState="None"
-                                    valueStateText="Geçersiz"
+                                    
+                                    
                                     class="smallLabel"
                                 />
                                 <Text
@@ -487,7 +488,7 @@
                             </cells>
                         </ColumnListItem>
                     </items>
-                </Table>
+                </Table> 
             </Panel>
 
 
@@ -577,12 +578,26 @@
                                 id="_IDGenTitle4"
                                 text="Notlar"
                             />
-                            <!-- <Label
+                            <Label
                                 id="_IDGenLabel9"
-                                text="İlgili Kişi"
+                                text="Görüşülen Kişi"
                                 class="sapUiSmallMarginTop sapUiTinyMarginBottom"
                             />
-                            <Input id="idIlgili" /> -->
+                            <!-- <Input id="idIlgili" /> --> 
+                            <ComboBox 
+                                id="_idCBoxPerson"
+                                enabled="{= ${selectionModel>/AgEnabled} }"
+                                items="{
+                            path: '/IletisimSet',
+                            sorter: { path: 'Parnr' }
+                        }"
+                            >
+                                <core:Item
+                                    id="_IDGenItem3"
+                                    key="{Parnr}" 
+                                    text="{Name}"
+                                />
+                            </ComboBox>
                             <Label
                                 id="_IDGenLabel10"
                                 text="Geri Bildirim"
@@ -659,13 +674,14 @@
                             id="_IDGenList4"
                             items="{/NotSet}"
                         >
-                            <FeedListItem
+                        <StandardListItem id="idStList" title="{Description}" icon="sap-icon://marketing-campaign"/>
+                            <!-- <FeedListItem
                                 id="_IDGenFeedListItem1"
                                 icon="sap-icon://marketing-campaign"
                                 iconDensityAware="true"
                                 info="{Description}"
                                 text="{= parseFloat(${KampanyaNo}) }"
-                            />
+                            /> -->
                         </List>
                     </l:content>
                 </l:VerticalLayout>
@@ -675,7 +691,7 @@
                 id="_IDGenPanel3"
                 expandable="true"
                 expanded="{selectionModel>/Panel4}"
-                headerText="Özet Bilgiler"
+                headerText="Sipariş Özeti"
                 width="auto"
                 visible="{selectionModel>/UrunPanelVisible}"
             >
@@ -687,7 +703,7 @@
                     noDataText="{worklistView>/tableNoDataText}"
                     busyIndicatorDelay="{worklistView>/tableBusyDelay}"
                     growing="true"
-                    growingScrollToLoad="false"
+                    growingScrollToLoad="false" 
                     updateFinished=".onUpdateFinished"
                     fixedLayout="true"
                     showSeparators="All"

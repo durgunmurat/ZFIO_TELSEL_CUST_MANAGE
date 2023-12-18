@@ -224,6 +224,7 @@ sap.ui.define(
         } else {
           var o = this;
           // var r = this.byId("lineItemsList").getBinding("items");
+          var r = this.byId("_idCBoxPerson").getBinding("items");
           var p = this.byId("_IDGenList2").getBinding("items");
           var s = this.byId("_IDGenList3").getBinding("items");
 
@@ -245,7 +246,7 @@ sap.ui.define(
             true
           );
 
-          // r.filter(new sap.ui.model.Filter(n, true));
+          r.filter(new sap.ui.model.Filter(n, true));
           p.filter(new sap.ui.model.Filter(n, true));
           s.filter(new sap.ui.model.Filter(n, true));
           oModel.read("/CariSet('" + cari + "')", {
@@ -259,7 +260,7 @@ sap.ui.define(
             },
           });
           sap.ui.core.BusyIndicator.show(0);
-          // r.refresh();
+          r.refresh();
           p.refresh();
           s.refresh();
 
@@ -358,6 +359,10 @@ sap.ui.define(
           styleClass: "messageBoxError",
           onClose: function (e) {
             if (e === sap.m.MessageBox.Action.YES) {
+              // var oGlobalBusyDialog = new sap.m.BusyDialog();
+              // oGlobalBusyDialog.setProperty("text", "Sipariş Yaratılıyor...");
+              // oGlobalBusyDialog.open();
+              sap.ui.core.BusyIndicator.show(0); 
               var oModel = that.getView().getModel();
               var oTable = that.byId("lineItemsList");
 
@@ -392,25 +397,7 @@ sap.ui.define(
                   siparisItem.push(siparisResult);
                 }
 
-              }
-
-              // for (var i = 0; i < oTable.getItems().length; i++) { 
-              //   var material = oTable.getItems()[i].getCells()[0].getText();
-              //   var adet = parseFloat(
-              //     oTable.getItems()[i].getCells()[6].getValue()
-              //   ).toFixed(2);
-              //   var birim = oTable.getItems()[i].getCells()[8].getText();
-
-              //   var siparisResult = {};
-              //   siparisResult.idMusteri = idMusteri;
-              //   siparisResult.Matnr = material.toString();
-              //   siparisResult.Menge = adet;
-              //   siparisResult.Meins = birim;
-              //   siparisResult.SiparisTutar = "0";
-              //   siparisResult.Kdv = "0";
-
-              //   siparisItem.push(siparisResult);
-              // }
+              } 
 
               data.idMusteri = idMusteri;
               data.musteriToSiparis = siparisItem;
@@ -418,37 +405,24 @@ sap.ui.define(
               data.ToplamKdv = "0";
               data.ToplamSiparisKdv = "0";
               oModel.create("/MusteriSet", data, {
-                success: function (oData, oResponse) {
-                  // that.clearInputs();
-                  // sap.m.MessageToast.show(oResponse.data.Mesaj);
+                success: function (oData, oResponse) { 
 
                   sap.m.MessageBox.information(oResponse.data.Mesaj, {
                     title: "Bilgilendirme",
-                    id: "messageBoxId1",
-                    // details:
-                    //   "<p><strong>This can happen if:</strong></p>" +
-                    //   "<ul>" +
-                    //   "<li>You are not connected to the internet</li>" +
-                    //   "<li>a backend component is not <em>available</em></li>" +
-                    //   "<li>or an underlying system is down</li>" +
-                    //   "</ul>" +
-                    //   "<p>Get more help <a href='//www.sap.com' target='_top'>here</a>.",
+                    id: "messageBoxId1", 
                     contentWidth: "100px",
-                  }); 
-                  // var oTableRefresh = that.byId("lineItemsList");
-                  // for (var i = 0; i < oTableRefresh.getItems().length; i++) {
-                  //   oTableRefresh.getItems()[i].getCells()[6].setValue("0");
-                  // }
+                  });  
 
                   var oTableSum = that.byId("lineSumList");    
                   var oModelSum = oTableSum.getModel("OzetList");    
                   oModelSum.setData(null);
-                  sap.ui.getCore().byId("_id22").setValue("");
-                  sap.ui.getCore().byId("_id24").setValue("");
-                  sap.ui.getCore().byId("_id26").setValue("");
+                  that.byId("_id22").setValue("0");
+                  that.byId("_id24").setValue("0");
+                  that.byId("_id26").setValue("0");
                   that.getSiparisList();
-                  // that.closeSum();
+                  
                   sap.ui.core.BusyIndicator.hide(0); 
+                  // oGlobalBusyDialog.close();
                 },
                 error: function (err) {
                   // this._showServiceError($(err.response.responseText).find("message").first().text());
@@ -759,7 +733,17 @@ sap.ui.define(
       },
 
       onSendNote:function(){
-
+        var ad = this.getView()
+          .byId("_idCBoxPerson")
+          .getSelectedItem()
+          .getText();
+          if(ad == "")
+          { 
+            var i = "Görüşülen kişiyi seçiniz!";
+            sap.m.MessageToast.show(i);
+            sap.ui.core.BusyIndicator.hide(0);    
+            return false;      
+          }
 
         var that = this; 
         var data = {};
@@ -768,6 +752,7 @@ sap.ui.define(
         var not = this.byId("_IDGenFeedInput1").getValue();
         data.idMusteri = idMusteri;
         data.Not = not;
+        data.Ad = ad;
 
         sap.m.MessageBox.confirm("Mail gönderilecek, emin misiniz?", {
           title: "Bilgilendirme",

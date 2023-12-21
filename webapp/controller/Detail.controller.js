@@ -15,6 +15,7 @@ sap.ui.define(
   ],
   function (t, a, i, o, r, l, s, n, d, u, p, g) {
     "use strict";
+    var oController;
     return t.extend("zfiotelselkokpit.controller.Detail", {
       formatter: i,
       onInit: function () {
@@ -27,89 +28,166 @@ sap.ui.define(
 
         this.onSetSelectionModel();
         this.onSetDetailModel();
-        
+
+        var complete_url = window.location.href;
+        var pieces = complete_url.split("?");
+        if (pieces.length > 0) {
+          // var params = pieces[1].split("&");
+          var idMusteri = "";
+          idMusteri = window.location.href.split("?")[1];
+          // $.each( params, function( key, value ) {
+          //   idMusteri = value;
+          // });
+
+          // oController = this;
+          // oController.getRouter().getRoute("RouteDetail").attachMatched(this._onRouteMatched, this);
+          // oController.getRouter().navTo("RouteDetail",
+          // {
+          //   _idMusteri: idMusteri
+          //   }
+          // );
+          // oController.getRouter().getRoute("RouteDetail").destroy();
+
+          this.byId("_idMusteri").setValue(idMusteri);
+          this.getMusteri();
+        }
+      },
+      _onRouteMatched: function (oEvent) {
+        oController = this;
       },
 
-      getSiparisList: function() { 
-        var cari = this.getView().byId("_id6").getValue(); 
-        var that = this; 
+      onAfterRendering: function () {
+        oController = this;
+      },
+      getMusteri: function () {
+        var cari = this.getView().byId("_idMusteri").getValue();
+        var newKunnr = cari.replace(/^0+/, "");
+        var oButton = this.byId("_idBtnList");
+        var that = this;
         var SAPoData = new sap.ui.model.odata.v2.ODataModel(
-          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV/",
+          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
           true
         );
-  
+
+        var l = this.getModel("selectionModel");
         sap.ui.core.BusyIndicator.show(0);
         var jsonData = new sap.ui.model.json.JSONModel();
-          jsonData.setSizeLimit("10000000"); 
-          SAPoData.read("/SiparisSet", {
-            filters: [
-              new sap.ui.model.Filter("idMusteri", sap.ui.model.FilterOperator.EQ, cari), 
-  
-            ],
-            success: function(oData, oResponse) {
-              sap.ui.core.BusyIndicator.hide(0);
-              if (oData.results && oData.results.length > 0) {
-                jsonData.setData(oData);
-                that.getView().setModel(jsonData, "SiparisList");
-              } else {
-                      jsonData.setData([]);
-                that.getView().setModel(jsonData, "SiparisList"); 
-              }
-            },
-            error: function(oError) {
-              try {
-                var errMessage = JSON.parse(oError.responseText);
-                errMessage = errMessage.error.message.value;
-              } catch (e) {
-                errMessage = oError.message;
-              }
-              sap.m.MessageBox.alert(errMessage, {
-                icon: sap.m.MessageBox.Icon.ERROR,
-                title: this.getView().getModel("i18n").getResourceBundle().getText("hataUyari")
+        jsonData.setSizeLimit("10000000");
+        SAPoData.read("/MusteriSet('" + cari + "')", {
+          success: function (oData, oResponse) {
+            sap.ui.core.BusyIndicator.hide(0);
+            if (oData.Name !== "") {
+              l.setProperty("/AgEnabled", true);
+              l.setProperty("/KunnrEdit", false);
+              l.setProperty("/Kunnr", newKunnr);
+              l.setProperty("/Name", oData.Name);
+
+              oButton.attachPress(function (oEvent) {
+                console.log("Pressed!");
               });
-              sap.ui.core.BusyIndicator.hide(0);
+
+              oButton.firePress();
+            } else {
+              //       jsonData.setData([]);
+              // that.getView().setModel(jsonData, "SiparisList");
             }
-          });
-       
+          },
+          error: function (oError) {
+            // try {
+            //   var errMessage = JSON.parse(oError.responseText);
+            //   errMessage = errMessage.error.message.value;
+            // } catch (e) {
+            //   errMessage = oError.message;
+            // }
+            // sap.m.MessageBox.alert(errMessage, {
+            //   icon: sap.m.MessageBox.Icon.ERROR,
+            //   title: this.getView().getModel("i18n").getResourceBundle().getText("hataUyari")
+            // });
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
       },
 
+      getSiparisList: function () {
+        var cari = this.getView().byId("_idMusteri").getValue();
+        var that = this;
+        var SAPoData = new sap.ui.model.odata.v2.ODataModel(
+          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
+          true
+        );
 
-      onSetSiparisList: function(){  
+        sap.ui.core.BusyIndicator.show(0);
+        var jsonData = new sap.ui.model.json.JSONModel();
+        jsonData.setSizeLimit("10000000");
+        SAPoData.read("/SiparisSet", {
+          filters: [
+            new sap.ui.model.Filter(
+              "idMusteri",
+              sap.ui.model.FilterOperator.EQ,
+              cari
+            ),
+          ],
+          success: function (oData, oResponse) {
+            sap.ui.core.BusyIndicator.hide(0);
+            if (oData.results && oData.results.length > 0) {
+              jsonData.setData(oData);
+              that.getView().setModel(jsonData, "SiparisList");
+            } else {
+              jsonData.setData([]);
+              that.getView().setModel(jsonData, "SiparisList");
+            }
+          },
+          error: function (oError) {
+            try {
+              var errMessage = JSON.parse(oError.responseText);
+              errMessage = errMessage.error.message.value;
+            } catch (e) {
+              errMessage = oError.message;
+            }
+            sap.m.MessageBox.alert(errMessage, {
+              icon: sap.m.MessageBox.Icon.ERROR,
+              title: this.getView()
+                .getModel("i18n")
+                .getResourceBundle()
+                .getText("hataUyari"),
+            });
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
+      },
 
-
+      onSetSiparisList: function () {
         var data = [
-          { 
-            idMusteri:"",
-            idTemsilci:"",
-            Matnr:"",
-            Maktx:"",
-            Menge:0,
-            Meins:"",
-            UrunGrp:"",
-            UrunGrpTxt:"",
-            Search:"",
-            FirstDay:"",
-            SecondDay:"",
-            ThirdDay:"",
-            Onerilen:"",
-            Koli:"",
-            SiparisTutar:0,
-            FirstDayAdet:"",
-            SecondDayAdet:"",
-            ThirdDayAdet:"",
-            Mesaj:"",
-            Kdv:0
-      }
-      
-      ];
-
-
+          {
+            idMusteri: "",
+            idTemsilci: "",
+            Matnr: "",
+            Maktx: "",
+            Menge: 0,
+            Meins: "",
+            UrunGrp: "",
+            UrunGrpTxt: "",
+            Search: "",
+            FirstDay: "",
+            SecondDay: "",
+            ThirdDay: "",
+            Onerilen: "",
+            Koli: "",
+            SiparisTutar: 0,
+            FirstDayAdet: "",
+            SecondDayAdet: "",
+            ThirdDayAdet: "",
+            Mesaj: "",
+            Kdv: 0,
+          },
+        ];
       },
 
       onSetSelectionModel: function () {
         this.selectionModel = new sap.ui.model.json.JSONModel({
           // cari hesap bilgileri
           ToplamBakiye: "",
+          
           Email: "",
           Tel: "",
           UrunGrp: "",
@@ -133,6 +211,9 @@ sap.ui.define(
           BelAcik3: " tarafından alınmıştır.",
           ToplamSiparis: "",
           ToplamSiparisKdv: "",
+          ToplamBak:0.00,
+          DigerTutar: 0.00,
+          VadeBorc:0.00,
           SyUname: sap.ushell.Container.getService("UserInfo").getId(),
           SelectionScreenPanelExpanded: true,
           Panel1: false,
@@ -143,7 +224,8 @@ sap.ui.define(
           UrunPanelVisible: false,
           Enabled: false,
           AgEnabled: false,
-          SipTamam:false,
+          SipTamam: false,
+          KunnrEdit: true,
         });
         this.getView().setModel(this.selectionModel, "selectionModel");
       },
@@ -159,61 +241,84 @@ sap.ui.define(
         });
         this.getView().setModel(e, "detailModel");
       },
-      onPressMalzemeListesi: function (e) {  
-
+      onPressMalzemeListesi: function (e) {
         var l = this.getModel("selectionModel");
         l.setProperty("/Enabled", false);
 
-
-        var cari = this.getView().byId("_id6").getValue(); 
-        var that = this; 
+        var cari = this.getView().byId("_idMusteri").getValue();
+        var that = this;
         var SAPoData = new sap.ui.model.odata.v2.ODataModel(
-          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV/",
+          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
           true
         );
 
         sap.ui.core.BusyIndicator.show(0);
         var jsonData = new sap.ui.model.json.JSONModel();
-          jsonData.setSizeLimit("10000000"); 
-          SAPoData.read("/SiparisSet", {
-            filters: [
-              new sap.ui.model.Filter("idMusteri", sap.ui.model.FilterOperator.EQ, cari), 
-  
-            ],
-            success: function(oData, oResponse) {
-              sap.ui.core.BusyIndicator.hide(0);
-              if (oData.results && oData.results.length > 0) {
-                jsonData.setData(oData);
-                that.getView().setModel(jsonData, "SiparisList");
-
+        jsonData.setSizeLimit("10000000");
+        SAPoData.read("/SiparisSet", {
+          filters: [
+            new sap.ui.model.Filter(
+              "idMusteri",
+              sap.ui.model.FilterOperator.EQ,
+              cari
+            ),
+          ],
+          success: function (oData, oResponse) {
+            sap.ui.core.BusyIndicator.hide(0);
+            if (oData.results && oData.results.length > 0) {
+              jsonData.setData(oData);
+              that.getView().setModel(jsonData, "SiparisList");
 
               l.setProperty("/FirstDay", oData.results[0].FirstDay);
               l.setProperty("/SecondDay", oData.results[0].FirstDay);
               l.setProperty("/ThirdDay", oData.results[0].FirstDay);
-
-              } else {
-                      jsonData.setData([]);
-                that.getView().setModel(jsonData, "SiparisList"); 
-              }
-            },
-            error: function(oError) {
-              try {
-                var errMessage = JSON.parse(oError.responseText);
-                errMessage = errMessage.error.message.value;
-              } catch (e) {
-                errMessage = oError.message;
-              }
-              sap.m.MessageBox.alert(errMessage, {
-                icon: sap.m.MessageBox.Icon.ERROR,
-                title: this.getView().getModel("i18n").getResourceBundle().getText("hataUyari")
-              });
-              sap.ui.core.BusyIndicator.hide(0);
+            } else {
+              jsonData.setData([]);
+              that.getView().setModel(jsonData, "SiparisList");
             }
-          });
+          },
+          error: function (oError) {
+            try {
+              var errMessage = JSON.parse(oError.responseText);
+              errMessage = errMessage.error.message.value;
+            } catch (e) {
+              errMessage = oError.message;
+            }
+            sap.m.MessageBox.alert(errMessage, {
+              icon: sap.m.MessageBox.Icon.ERROR,
+              title: this.getView()
+                .getModel("i18n")
+                .getResourceBundle()
+                .getText("hataUyari"),
+            });
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
 
-
-
-
+        var jsonDataPaym = new sap.ui.model.json.JSONModel();
+        jsonDataPaym.setSizeLimit("10000000");
+        SAPoData.read("/OdemeSet", {
+          filters: [
+            new sap.ui.model.Filter(
+              "idMusteri",
+              sap.ui.model.FilterOperator.EQ,
+              cari
+            ),
+          ],
+          success: function (oDataPaym, oResponsePaym) {
+            sap.ui.core.BusyIndicator.hide(0);
+            if (oDataPaym.results && oDataPaym.results.length > 0) {
+              jsonDataPaym.setData(oDataPaym);
+              that.getView().setModel(jsonDataPaym, "OdemeList");
+            } else {
+              jsonDataPaym.setData([]);
+              that.getView().setModel(jsonDataPaym, "OdemeList");
+            }
+          },
+          error: function (oErrorPaym) {
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
 
         var that = this;
         var a = true;
@@ -224,15 +329,13 @@ sap.ui.define(
         } else {
           var o = this;
           // var r = this.byId("lineItemsList").getBinding("items");
-          var r = this.byId("_idCBoxPerson").getBinding("items");
-          var p = this.byId("_IDGenList2").getBinding("items");
-          var s = this.byId("_IDGenList3").getBinding("items");
-
-
+          var r = that.byId("_idCBoxPerson").getBinding("items");
+          var p = that.byId("_IDGenList2").getBinding("items");
+          var s = that.byId("_IDGenList3").getBinding("items");
 
           var n = [];
 
-          var cari = o.getView().byId("_id6").getValue(); 
+          var cari = o.getView().byId("_idMusteri").getValue();
           n.push(
             new sap.ui.model.Filter(
               "idMusteri",
@@ -240,9 +343,9 @@ sap.ui.define(
               cari
             )
           );
- 
+
           var oModel = new sap.ui.model.odata.v2.ODataModel(
-            "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV/",
+            "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
             true
           );
 
@@ -252,6 +355,8 @@ sap.ui.define(
           oModel.read("/CariSet('" + cari + "')", {
             success: function (oData, oResponse) {
               l.setProperty("/ToplamBakiye", oData.ToplamBakiye);
+              l.setProperty("/ToplamBak", oData.ToplamBakiye);
+              l.setProperty("/VadeBorc", oData.VadeBorc);
               l.setProperty("/Email", oData.Email);
               l.setProperty("/Telefon", oData.Telefon);
             },
@@ -265,7 +370,7 @@ sap.ui.define(
           s.refresh();
 
           l.setProperty("/UrunPanelExpanded", true);
-          l.setProperty("/Panel1", true);
+          l.setProperty("/Panel1", false);
           l.setProperty("/Panel2", true);
           l.setProperty("/Panel3", true);
           l.setProperty("/Panel4", true);
@@ -291,65 +396,60 @@ sap.ui.define(
         );
       },
 
-
-      onKaydet:function(e){ 
-
-
+      onKaydet: function (e) {
         var results = [];
-        var aData = {}; 
+        var aData = {};
 
         var that = this;
-        var jsonData = new sap.ui.model.json.JSONModel(); 
-        var oTable = that.byId("lineItemsList");    
-        var oModel = oTable.getModel("SiparisList");    
-        var aTmp   = oModel.getData(); 
-        for (var i = 0; i < aTmp.results.length; i++) { 
-          if(aTmp.results[i].Menge > 0){
-
+        var jsonData = new sap.ui.model.json.JSONModel();
+        var oTable = that.byId("lineItemsList");
+        var oModel = oTable.getModel("SiparisList");
+        var aTmp = oModel.getData();
+        for (var i = 0; i < aTmp.results.length; i++) {
+          if (aTmp.results[i].Menge > 0) {
             var siparisResult = {};
             siparisResult.Maktx = aTmp.results[i].Maktx;
             siparisResult.Matnr = aTmp.results[i].Matnr;
             siparisResult.Menge = aTmp.results[i].Menge;
             siparisResult.Meins = aTmp.results[i].Meins;
-            siparisResult.SiparisTutar = aTmp.results[i].SiparisTutar; 
-            siparisResult.Currency = "TRY";  
-            results.push(siparisResult);                
-          } 
+            siparisResult.SiparisTutar = aTmp.results[i].SiparisTutar;
+            siparisResult.Currency = "TRY";
+            results.push(siparisResult);
+          }
         }
-        aData.results = results; 
-              // for (var i = 0; i < oTable.getItems().length; i++) { 
-              //   if(oTable.getItems()[i].getCells()[6].getValue() > 0){
-      
-              //     var siparisResult = {};
-              //     siparisResult.Maktx = oTable.getItems()[i].getCells()[1].getText();
-              //     siparisResult.Matnr = oTable.getItems()[i].getCells()[0].getText();
-              //     siparisResult.Menge = oTable.getItems()[i].getCells()[6].getValue();
-              //     siparisResult.Meins = oTable.getItems()[i].getCells()[8].getText();
-              //     siparisResult.SiparisTutar = oTable.getItems()[i].getCells()[9].getText(); 
-        
-              //     aData.results.push(siparisResult);                
-              //   } 
-              // }
-              jsonData.setData(aData);
-              this.getView().setModel(jsonData, "OzetList"); 
+        aData.results = results;
+        // for (var i = 0; i < oTable.getItems().length; i++) {
+        //   if(oTable.getItems()[i].getCells()[6].getValue() > 0){
 
-              // if (!this._valueHelpDialogSum) {
-              //   this._valueHelpDialogSum = sap.ui.xmlfragment(
-              //     "zfiotelselkokpit.fragment.Sum",
-              //     this
-              //   );
-              //   this._valueHelpDialogSum.setMultiSelect(true);
-              //   this.getView().addDependent(this._valueHelpDialogSum);
-              // } 
- 
-              // sap.ui.getCore().byId("lineSumList")._getOkButton().setText("Kaydet"); 
-              // sap.ui.getCore().byId("lineSumList")._getCancelButton().setText("Kapat"); 
-              // this._valueHelpDialogSum.open(); 
+        //     var siparisResult = {};
+        //     siparisResult.Maktx = oTable.getItems()[i].getCells()[1].getText();
+        //     siparisResult.Matnr = oTable.getItems()[i].getCells()[0].getText();
+        //     siparisResult.Menge = oTable.getItems()[i].getCells()[6].getValue();
+        //     siparisResult.Meins = oTable.getItems()[i].getCells()[8].getText();
+        //     siparisResult.SiparisTutar = oTable.getItems()[i].getCells()[9].getText();
 
+        //     aData.results.push(siparisResult);
+        //   }
+        // }
+        jsonData.setData(aData);
+        this.getView().setModel(jsonData, "OzetList");
+
+        // if (!this._valueHelpDialogSum) {
+        //   this._valueHelpDialogSum = sap.ui.xmlfragment(
+        //     "zfiotelselkokpit.fragment.Sum",
+        //     this
+        //   );
+        //   this._valueHelpDialogSum.setMultiSelect(true);
+        //   this.getView().addDependent(this._valueHelpDialogSum);
+        // }
+
+        // sap.ui.getCore().byId("lineSumList")._getOkButton().setText("Kaydet");
+        // sap.ui.getCore().byId("lineSumList")._getCancelButton().setText("Kapat");
+        // this._valueHelpDialogSum.open();
       },
       closeSum: function () {
         this._valueHelpDialogSum.close();
-      },      
+      },
 
       saveInput: function () {
         var that = this;
@@ -359,33 +459,33 @@ sap.ui.define(
           styleClass: "messageBoxError",
           onClose: function (e) {
             if (e === sap.m.MessageBox.Action.YES) {
+              var dialog = new sap.m.BusyDialog({
+                text: "Sipariş Yaratılıyor...",
+              });
+
+              dialog.open();
+
               // var oGlobalBusyDialog = new sap.m.BusyDialog();
               // oGlobalBusyDialog.setProperty("text", "Sipariş Yaratılıyor...");
               // oGlobalBusyDialog.open();
-              sap.ui.core.BusyIndicator.show(0); 
+              // sap.ui.core.BusyIndicator.show(0);
               var oModel = that.getView().getModel();
               var oTable = that.byId("lineItemsList");
 
-
-
-              var oModel2 = oTable.getModel("SiparisList");    
-              var aData   = oModel2.getData();
-
-
+              var oModel2 = oTable.getModel("SiparisList");
+              var aData = oModel2.getData();
 
               var idMusteri = that.selectionModel.oData.Kunnr;
 
               var siparisItem = [];
-              var data = {}; 
+              var data = {};
 
-              for (var i = 0; i < aData.results.length; i++) { 
-                if(aData.results[i].Menge > 0){
+              for (var i = 0; i < aData.results.length; i++) {
+                if (aData.results[i].Menge > 0) {
                   var material = aData.results[i].Matnr;
-                  var adet = parseFloat(
-                    aData.results[i].Menge
-                  ).toFixed(2);
+                  var adet = parseFloat(aData.results[i].Menge).toFixed(2);
                   var birim = aData.results[i].Meins;
-  
+
                   var siparisResult = {};
                   siparisResult.idMusteri = idMusteri;
                   siparisResult.Matnr = material.toString();
@@ -393,11 +493,10 @@ sap.ui.define(
                   siparisResult.Meins = birim;
                   siparisResult.SiparisTutar = "0";
                   siparisResult.Kdv = "0";
-  
+
                   siparisItem.push(siparisResult);
                 }
-
-              } 
+              }
 
               data.idMusteri = idMusteri;
               data.musteriToSiparis = siparisItem;
@@ -405,23 +504,25 @@ sap.ui.define(
               data.ToplamKdv = "0";
               data.ToplamSiparisKdv = "0";
               oModel.create("/MusteriSet", data, {
-                success: function (oData, oResponse) { 
-
+                success: function (oData, oResponse) {
                   sap.m.MessageBox.information(oResponse.data.Mesaj, {
                     title: "Bilgilendirme",
-                    id: "messageBoxId1", 
+                    id: "messageBoxId1",
                     contentWidth: "100px",
-                  });  
+                  });
+                  dialog.close();
 
-                  var oTableSum = that.byId("lineSumList");    
-                  var oModelSum = oTableSum.getModel("OzetList");    
-                  oModelSum.setData(null);
                   that.byId("_id22").setValue("0");
                   that.byId("_id24").setValue("0");
                   that.byId("_id26").setValue("0");
                   that.getSiparisList();
-                  
-                  sap.ui.core.BusyIndicator.hide(0); 
+
+                  sap.ui.core.BusyIndicator.hide(0);
+
+                  // var oTableSum = that.byId("lineSumList");
+                  // var oModelSum = oTableSum.getModel("OzetList");
+                  // oModelSum.setData(null);
+
                   // oGlobalBusyDialog.close();
                 },
                 error: function (err) {
@@ -437,6 +538,7 @@ sap.ui.define(
                       contentWidth: "100px",
                     }
                   );
+                  dialog.close();
                   sap.ui.core.BusyIndicator.hide(0);
                 },
               });
@@ -450,160 +552,173 @@ sap.ui.define(
       },
 
       doSimulation: function () {
-        
-
-        var that = this;
-        sap.m.MessageBox.confirm("Fiyat hesaplaması yapılacak, emin misiniz?", {
-          title: "Bilgilendirme",
-          actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
-          styleClass: "messageBoxError",
-          onClose: function (e) {
-            if (e === sap.m.MessageBox.Action.YES) {
-              sap.ui.core.BusyIndicator.show();
-
-              var oModel = that.getView().getModel();
-              var oTable = that.byId("lineItemsList");
-
-              var idMusteri = that.selectionModel.oData.Kunnr;
-
-              var oModel2 = oTable.getModel("SiparisList");    
-              var aData   = oModel2.getData();
-
-              var siparisItem = [];
-              var data = {};
-
-
-              for (var i = 0; i < aData.results.length; i++) { 
-                if(aData.results[i].Menge > 0){
-                  var material = aData.results[i].Matnr;
-                  var adet = parseFloat(
-                    aData.results[i].Menge
-                  ).toFixed(2);
-                  var birim = aData.results[i].Meins;
-  
-                  var siparisResult = {};
-                  siparisResult.idMusteri = idMusteri;
-                  siparisResult.Matnr = material.toString();
-                  siparisResult.Menge = adet;
-                  siparisResult.Meins = birim;
-                  siparisResult.SiparisTutar = "1";
-                  siparisResult.Kdv = "0";
-  
-                  siparisItem.push(siparisResult);
-                }
-
-              }
-
-              // for (var i = 0; i < oTable.getItems().length; i++) {
-              //   var material = oTable.getItems()[i].getCells()[0].getText();
-              //   var adet = parseFloat(
-              //     oTable.getItems()[i].getCells()[6].getValue()
-              //   ).toFixed(2);
-              //   var birim = oTable.getItems()[i].getCells()[8].getText();
-
-              //   var siparisResult = {};
-              //   siparisResult.idMusteri = idMusteri;
-              //   siparisResult.Matnr = material.toString();
-              //   siparisResult.Menge = adet;
-              //   siparisResult.Meins = birim;
-              //   siparisResult.SiparisTutar = "1";
-              //   siparisResult.Kdv = "0";
-
-              //   siparisItem.push(siparisResult);
-              // }
-
-              data.idMusteri = idMusteri;
-              data.musteriToSiparis = siparisItem;
-              data.ToplamSiparis = "0";
-              data.ToplamKdv = "0";
-              data.ToplamSiparisKdv = "0";
-
-              
-              
-              var a = that.getModel("selectionModel");
-              oModel.create("/MusteriSet", data, {
-                success: function (oData, oResponse) {
-                  a.setProperty("/ToplamSiparis", oData.ToplamSiparis);
-                  a.setProperty("/Kdv", oData.ToplamKdv);
-                  a.setProperty("/ToplamSiparisKdv", oData.ToplamSiparisKdv);
-                  var oTableRefresh = that.byId("lineItemsList");
-
-
-                  var oModel3 = oTableRefresh.getModel("SiparisList");    
-                  var aData2   = oModel3.getData();
- 
-
-                  for (var y = 0;y < oData.musteriToSiparis.results.length;y++ ) {
-                    var material2 = oData.musteriToSiparis.results[y].Matnr;
-                    var mengeout = oData.musteriToSiparis.results[y].Menge;
-
-                    if (mengeout > 0) {
-                      for ( var i = 0;i < aData2.results.length; i++) {
-                        var material = aData2.results[i].Matnr;
-                        if (material == material2) {
-                          var siptutar = oData.musteriToSiparis.results[y].SiparisTutar;
-                          // var kdvtutar = oData.musteriToSiparis.results[y].Kdv;
-                          // oTableRefresh .getItems()[i].getCells()[9].setText(siptutar);
-                          aData2.results[i].SiparisTutar = siptutar;
-                          // var sPath = "/results/"
-                          // oModel3.setProperty(sPath+"i"+"/SiparisTutar", siptutar);    
-                          break;
-                        }
-                      }                  
-                
-                      // for ( var i = 0;i < oTableRefresh.getItems().length; i++) {
-                      //   var material = oTableRefresh.getItems()[i].getCells()[0].getText();
-                      //   if (material == material2) {
-                      //     var siptutar = oData.musteriToSiparis.results[y].SiparisTutar;
-                      //     // var kdvtutar = oData.musteriToSiparis.results[y].Kdv;
-                      //     oTableRefresh .getItems()[i].getCells()[9].setText(siptutar);
-                      //     break;
-                      //   }
-                      // }
-                    }
-                  }
-                  var jsonData = new sap.ui.model.json.JSONModel(); 
-                  jsonData.setData(aData2);
-                  that.getView().setModel(jsonData, "SiparisList"); 
-                  
-                  sap.ui.core.BusyIndicator.hide(0);
-
-                  that.onKaydet();
-                  // MessageToast.show("Sipariş Başarıyla Yaratıldı");
-                },
-                error: function (err) {
-                  // this._showServiceError($(err.response.responseText).find("message").first().text());
-                  // var message = $(err.responseText).find('message').first().text();
-                  var errorObj1 = JSON.parse(err.responseText);
-                  // sap.m.MessageBox.error(errorObj1.error.message.value,  {
-                  sap.m.MessageBox.error(
-                    errorObj1.error.innererror.errordetails[0].message,
-                    {
-                      title: "HATA",
-                      id: "messageBoxId2",
-                      contentWidth: "100px",
-                    }
-                  );
-                  sap.ui.core.BusyIndicator.hide(0);
-                },
-              });
-            } else {
-              sap.m.MessageToast.show("Sipariş kaydedilmedi!");
-            }
-          },
+        var dialog = new sap.m.BusyDialog({
+          text: "Fiyat Hesaplanıyor...",
         });
 
+        dialog.open();
+
+        var that = this;
+        // sap.m.MessageBox.confirm("Fiyat hesaplaması yapılacak, emin misiniz?", {
+        //   title: "Bilgilendirme",
+        //   actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
+        //   styleClass: "messageBoxError",
+        //   onClose: function (e) {
+        //     if (e === sap.m.MessageBox.Action.YES) {
+
+        var oModel = that.getView().getModel();
+        var oTable = that.byId("lineItemsList");
+
+        var idMusteri = that.selectionModel.oData.Kunnr;
+
+        var oModel2 = oTable.getModel("SiparisList");
+        var aData = oModel2.getData();
+
+        var siparisItem = [];
+        var data = {};
+
+        for (var i = 0; i < aData.results.length; i++) {
+          if (aData.results[i].Menge > 0) {
+            var material = aData.results[i].Matnr;
+            var adet = parseFloat(aData.results[i].Menge).toFixed(2);
+            var birim = aData.results[i].Meins;
+
+            var siparisResult = {};
+            siparisResult.idMusteri = idMusteri;
+            siparisResult.Matnr = material.toString();
+            siparisResult.Menge = adet;
+            siparisResult.Meins = birim;
+            siparisResult.SiparisTutar = "1";
+            siparisResult.Kdv = "0";
+
+            siparisItem.push(siparisResult);
+          }
+        }
+
+        // for (var i = 0; i < oTable.getItems().length; i++) {
+        //   var material = oTable.getItems()[i].getCells()[0].getText();
+        //   var adet = parseFloat(
+        //     oTable.getItems()[i].getCells()[6].getValue()
+        //   ).toFixed(2);
+        //   var birim = oTable.getItems()[i].getCells()[8].getText();
+
+        //   var siparisResult = {};
+        //   siparisResult.idMusteri = idMusteri;
+        //   siparisResult.Matnr = material.toString();
+        //   siparisResult.Menge = adet;
+        //   siparisResult.Meins = birim;
+        //   siparisResult.SiparisTutar = "1";
+        //   siparisResult.Kdv = "0";
+
+        //   siparisItem.push(siparisResult);
+        // }
+
+        data.idMusteri = idMusteri;
+        data.musteriToSiparis = siparisItem;
+        data.ToplamSiparis = "0";
+        data.ToplamKdv = "0";
+        data.ToplamSiparisKdv = "0";
+
+        var a = that.getModel("selectionModel");
+        oModel.create("/MusteriSet", data, {
+          success: function (oData, oResponse) {
+            a.setProperty("/ToplamSiparis", oData.ToplamSiparis);
+            a.setProperty("/Kdv", oData.ToplamKdv);
+            a.setProperty("/ToplamSiparisKdv", oData.ToplamSiparisKdv);
+            var oTableRefresh = that.byId("lineItemsList");
+
+            var oModel3 = oTableRefresh.getModel("SiparisList");
+            var aData2 = oModel3.getData();
+
+            for (var y = 0; y < oData.musteriToSiparis.results.length; y++) {
+              var material2 = oData.musteriToSiparis.results[y].Matnr;
+              var mengeout = oData.musteriToSiparis.results[y].Menge;
+
+              if (mengeout > 0) {
+                for (var i = 0; i < aData2.results.length; i++) {
+                  var material = aData2.results[i].Matnr;
+                  if (material == material2) {
+                    var siptutar =
+                      oData.musteriToSiparis.results[y].SiparisTutar;
+                    // var kdvtutar = oData.musteriToSiparis.results[y].Kdv;
+                    // oTableRefresh .getItems()[i].getCells()[9].setText(siptutar);
+                    aData2.results[i].SiparisTutar = siptutar;
+                    // var sPath = "/results/"
+                    // oModel3.setProperty(sPath+"i"+"/SiparisTutar", siptutar);
+                    break;
+                  }
+                }
+
+                // for ( var i = 0;i < oTableRefresh.getItems().length; i++) {
+                //   var material = oTableRefresh.getItems()[i].getCells()[0].getText();
+                //   if (material == material2) {
+                //     var siptutar = oData.musteriToSiparis.results[y].SiparisTutar;
+                //     // var kdvtutar = oData.musteriToSiparis.results[y].Kdv;
+                //     oTableRefresh .getItems()[i].getCells()[9].setText(siptutar);
+                //     break;
+                //   }
+                // }
+              }
+            }
+            var jsonData = new sap.ui.model.json.JSONModel();
+            jsonData.setData(aData2);
+            that.getView().setModel(jsonData, "SiparisList");
+
+            sap.ui.core.BusyIndicator.hide(0);
+
+            that.onKaydet();
+            // MessageToast.show("Sipariş Başarıyla Yaratıldı");
+          },
+          error: function (err) {
+            // this._showServiceError($(err.response.responseText).find("message").first().text());
+            // var message = $(err.responseText).find('message').first().text();
+            var errorObj1 = JSON.parse(err.responseText);
+            // sap.m.MessageBox.error(errorObj1.error.message.value,  {
+            sap.m.MessageBox.error(
+              errorObj1.error.innererror.errordetails[0].message,
+              {
+                title: "HATA",
+                id: "messageBoxId2",
+                contentWidth: "100px",
+              }
+            );
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
+        // } else {
+        //   sap.m.MessageToast.show("Sipariş kaydedilmedi!");
+        // }
+        //   },
+        // });
+        dialog.close();
         sap.ui.core.BusyIndicator.hide(0);
       },
-      onChange:function(event){
-        var idMenge = event.getSource().getParent().getCells()[6].getValue();   
-        var oTable = this.byId("lineItemsList"); 
+      onChange: function (event) {
+        var idMenge = event.getSource().getParent().getCells()[6].getValue();
+        var oTable = this.byId("lineItemsList");
 
-        var sPath = event.getSource().mBindingInfos.value.binding.oContext.sPath;
-        var oModel = oTable.getModel("SiparisList");  
-          oModel.setProperty(sPath+"/Menge", idMenge);    
+        var sPath =
+          event.getSource().mBindingInfos.value.binding.oContext.sPath;
+        var oModel = oTable.getModel("SiparisList");
+        oModel.setProperty(sPath + "/Menge", idMenge);
       },
 
+      openPayment: function (e) {
+        var t = this.getModel("selectionModel");
+        if (!this._valueHelpDialogPayment) {
+          this._valueHelpDialogPayment = sap.ui.xmlfragment(
+            "zfiotelselkokpit.fragment.Payment",
+            this
+          );
+          this.getView().addDependent(this._valueHelpDialogPayment);
+        }
+        var a = [];
+        this._valueHelpDialogPayment.open();
+      },
+
+      closePayment: function () {
+        this._valueHelpDialogPayment.close();
+      },
 
       openKisiEkle: function (e) {
         var t = this.getModel("selectionModel");
@@ -648,20 +763,136 @@ sap.ui.define(
         });
       },
 
+      onSelectRadio: function () {
+        var e = sap.ui.getCore().byId("rbG");
+        var t = e.getSelectedButton().getId();
+        if (t === "idRB1") {
+          sap.ui.getCore().byId("_idLblSMS").setVisible(true);
+          sap.ui.getCore().byId("_idInputSMS").setVisible(true);
+          sap.ui.getCore().byId("_idLblMail").setVisible(false);
+          sap.ui.getCore().byId("_idInputMail").setVisible(false);
+        } else if (t === "idRB2") {
+          sap.ui.getCore().byId("_idLblSMS").setVisible(false);
+          sap.ui.getCore().byId("_idInputSMS").setVisible(false);
+          sap.ui.getCore().byId("_idLblMail").setVisible(true);
+          sap.ui.getCore().byId("_idInputMail").setVisible(true);
+        }
+      },
+      onSelectRadio2: function () {
+        var e = sap.ui.getCore().byId("rbG2");
+        var t = e.getSelectedButton().getId();
+        if (t === "idRB3") {
+          sap.ui.getCore().byId("_idBakiye1").setVisible(true);
+          sap.ui.getCore().byId("_idBakiye2").setVisible(false);
+          sap.ui.getCore().byId("_idBakiye3").setVisible(false);
+        } else if (t === "idRB4") {
+          sap.ui.getCore().byId("_idBakiye1").setVisible(false);
+          sap.ui.getCore().byId("_idBakiye2").setVisible(true);
+          sap.ui.getCore().byId("_idBakiye3").setVisible(false);
+        } else if (t === "idRB5") {
+          sap.ui.getCore().byId("_idBakiye1").setVisible(false);
+          sap.ui.getCore().byId("_idBakiye2").setVisible(false);
+          sap.ui.getCore().byId("_idBakiye3").setVisible(true);
+        }
+      },
+
+      onSendPayment: function () {
+
+        var dialog = new sap.m.BusyDialog({
+          text: "Gönderiliyor...",
+        });
+
+        dialog.open();
+
+        var that = this;
+        var oModel = this.getView().getModel();
+        var data = {};
+
+        var idMusteri = this.getView().byId("_idMusteri").getValue();
+        var mail      = sap.ui.getCore().byId("_idInputMail").getValue();
+        var telefon   = sap.ui.getCore().byId("_idInputSMS").getValue();
+        var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
+
+        var e = sap.ui.getCore().byId("rbG");
+        var t = e.getSelectedButton().getId();
+        if (t === "idRB1") {
+          if (telefon == "") {
+            i = "Telefon giriniz";
+            sap.m.MessageToast.show(i);
+            sap.ui.core.BusyIndicator.hide(0);
+          } else if (telefon.length < 10) {
+            alert("Geçerli Numara Giriniz!");
+            return false;
+          } else {
+            // data.Telefon   = sap.ui.getCore().byId("_idInputSMS").getValue();
+            data.Type      = "S";
+            // data.idMusteri = idMusteri;
+          }
+        } else if (t === "idRB2") {
+          if (!mailregex.test(mail)) {
+            alert(mail + " Geçerli bir mail adresi değil!");
+          } else {
+            // data.Email     = sap.ui.getCore().byId("_idInputMail").getValue();
+            data.Type      = "M";
+            // data.idMusteri = idMusteri;
+          }
+        }
+
+        var e2 = sap.ui.getCore().byId("rbG2");
+        var t2 = e2.getSelectedButton().getId();
+        if (t2 === "idRB3") {
+          data.Tutar = sap.ui.getCore().byId("_idBakiye1").getValue(); 
+        } else if (t2 === "idRB4") {
+          data.Tutar = sap.ui.getCore().byId("_idBakiye2").getValue(); 
+        } else if (t2 === "idRB5") {
+          data.Tutar = sap.ui.getCore().byId("_idBakiye3").getValue(); 
+        }
+
+        data.Tutar   = data.Tutar.replace(",", ".");
+        data.Email   = mail;
+        data.Telefon = telefon;
+        data.idMusteri = idMusteri;
+
+        oModel.create("/OdemeSet", data, {
+          success: function (oData, oResponse) { 
+
+            sap.ui.core.BusyIndicator.hide(0);
+            sap.m.MessageToast.show("Link Gönderildi!");
+            that._valueHelpDialogPayment.close();
+            sap.ui.getCore().byId("_idBakiye3").setValue("0.00");
+            dialog.close();
+          },
+          error: function (err) { 
+            dialog.close();
+            var errorObj1 = JSON.parse(err.responseText); 
+            sap.m.MessageBox.error(
+              errorObj1.error.innererror.errordetails[0].message,
+              {
+                title: "HATA",
+                id: "messageBoxId2",
+                contentWidth: "100px",
+              }
+            );
+          },
+        });
+ 
+        
+       
+
+
+      },
+
       onKisiEkle: function () {
         var that = this;
         var oModel = this.getView().getModel();
         var data = {};
 
-        var idMusteri = this.getView().byId("_id6").getValue();
+        var idMusteri = this.getView().byId("_idMusteri").getValue();
         var ad = sap.ui.getCore().byId("idAd").getValue();
         var mail = sap.ui.getCore().byId("idMail").getValue();
         var telefon = sap.ui.getCore().byId("idTelefon").getValue();
- 
-        var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/; 
-        
-        
 
+        var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
 
         if (ad == "") {
           var i = "Ad soyad giriniz";
@@ -671,18 +902,12 @@ sap.ui.define(
           i = "Telefon giriniz";
           sap.m.MessageToast.show(i);
           sap.ui.core.BusyIndicator.hide(0);
-        }
-          else if( telefon.length < 10){
-            alert("Geçerli Numara Giriniz!");
-            return false;
-        
-        }
-        else if(!mailregex.test(mail)){
-
-          alert(mail + " Geçerli bir mail adresi değil!"); 
-        }
-        
-        else {
+        } else if (telefon.length < 10) {
+          alert("Geçerli Numara Giriniz!");
+          return false;
+        } else if (!mailregex.test(mail)) {
+          alert(mail + " Geçerli bir mail adresi değil!");
+        } else {
           data.idMusteri = idMusteri;
           data.Name = ad;
           data.Email = mail;
@@ -725,30 +950,26 @@ sap.ui.define(
 
           sap.ui.getCore().byId("idAd").setValue("");
           sap.ui.getCore().byId("idMail").setValue("");
-          sap.ui.getCore().byId("idTelefon").setValue(""); 
-
-
-
+          sap.ui.getCore().byId("idTelefon").setValue("");
         }
       },
 
-      onSendNote:function(){
+      onSendNote: function () {
         var ad = this.getView()
           .byId("_idCBoxPerson")
           .getSelectedItem()
           .getText();
-          if(ad == "")
-          { 
-            var i = "Görüşülen kişiyi seçiniz!";
-            sap.m.MessageToast.show(i);
-            sap.ui.core.BusyIndicator.hide(0);    
-            return false;      
-          }
+        if (ad == "") {
+          var i = "Görüşülen kişiyi seçiniz!";
+          sap.m.MessageToast.show(i);
+          sap.ui.core.BusyIndicator.hide(0);
+          return false;
+        }
 
-        var that = this; 
+        var that = this;
         var data = {};
 
-        var idMusteri = this.getView().byId("_id6").getValue();
+        var idMusteri = this.getView().byId("_idMusteri").getValue();
         var not = this.byId("_IDGenFeedInput1").getValue();
         data.idMusteri = idMusteri;
         data.Not = not;
@@ -759,28 +980,25 @@ sap.ui.define(
           actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
           styleClass: "messageBoxError",
           onClose: function (e) {
-            if (e === sap.m.MessageBox.Action.YES) { 
-                var oModel = that.getView().getModel(); 
-                oModel.create("/NotMailSet", data, {
-                  success: function (oData, oResponse) {
+            if (e === sap.m.MessageBox.Action.YES) {
+              var oModel = that.getView().getModel();
+              oModel.create("/NotMailSet", data, {
+                success: function (oData, oResponse) {
+                  sap.m.MessageBox.information(oResponse.data.Mesaj, {
+                    title: "Bilgilendirme",
+                    id: "messageBoxId2",
+                    contentWidth: "100px",
+                  });
 
-                    sap.m.MessageBox.information(oResponse.data.Mesaj, {
-                      title: "Bilgilendirme",
-                      id: "messageBoxId2",
-                      contentWidth: "100px",
-                    });
-
-                    sap.ui.core.BusyIndicator.hide(0);
-
-                  },
-                  error: function (err) {},
-                }); 
+                  sap.ui.core.BusyIndicator.hide(0);
+                },
+                error: function (err) {},
+              });
             }
           },
         });
 
         this.byId("_IDGenFeedInput1").setValue("");
-
       },
 
       onHelpRequestedKunnr: function (e) {
@@ -812,17 +1030,14 @@ sap.ui.define(
       onValueHelpCloseKunnr: function (e) {
         var t = e.getParameter("selectedItem"),
           a = this.getModel("selectionModel");
-          var kunnr = t.getBindingContext().getProperty("idMusteri");
-          var newKunnr = kunnr.replace(/^0+/, '');
+        var kunnr = t.getBindingContext().getProperty("idMusteri");
+        var newKunnr = kunnr.replace(/^0+/, "");
         if (t) {
           a.setProperty("/AgEnabled", true);
-          a.setProperty(
-            "/Kunnr",
-            newKunnr
-          );
+          a.setProperty("/Kunnr", newKunnr);
           a.setProperty("/Name", t.getBindingContext().getProperty("Name"));
         }
-        e.getSource().getBinding("items").filter([]); 
+        e.getSource().getBinding("items").filter([]);
       },
 
       onFavPress: function (oEvent) {
@@ -830,10 +1045,11 @@ sap.ui.define(
         var oBindingContext = oListItem.getBindingContext();
         var idMusteri = oBindingContext.getProperty("idMusteri");
         var Parnr = oBindingContext.getProperty("Parnr");
+        var Telefon = oBindingContext.getProperty("Telefon");
         var data = {};
         data.idMusteri = idMusteri;
         data.Parnr = Parnr;
-        data.Type = "U"; 
+        data.Type = "U";
         var that = this;
         sap.m.MessageBox.show("Lütfen işlem seçimi yapınız", {
           title: "İşlem",
@@ -841,7 +1057,7 @@ sap.ui.define(
           styleClass: "messageBoxError",
           onClose: function (e) {
             if (e === "Favori") {
-              var oModel = that.getView().getModel(); 
+              var oModel = that.getView().getModel();
               oModel.create("/IletisimSet", data, {
                 success: function (oData, oResponse) {
                   sap.ui.core.BusyIndicator.hide(0);
@@ -849,6 +1065,13 @@ sap.ui.define(
                 error: function (err) {},
               });
             } else if (e === "Ara") {
+              var phoneNumber = Telefon;
+              var CustomerNo = idMusteri;
+
+              window.chrome.webview.hostObjects.sync.ctimessage.MakeCall(
+                phoneNumber,
+                CustomerNo
+              );
             } else {
             }
           },
@@ -874,23 +1097,25 @@ sap.ui.define(
           .byId("_IDGenComboBox2")
           .getSelectedItem()
           .getKey();
-          if(ugrp !== "00")
-          {
-            aFilter.push(
-              new sap.ui.model.Filter(
-                "UrunGrp",
-                sap.ui.model.FilterOperator.EQ,
-                ugrp
-              )
-            );
-          }
+        if (ugrp !== "00") {
+          aFilter.push(
+            new sap.ui.model.Filter(
+              "UrunGrp",
+              sap.ui.model.FilterOperator.EQ,
+              ugrp
+            )
+          );
+        }
 
         // var oTable = this.byId("lineItemsList");
         // var oBinding = oTable.getBinding("items");
         // oBinding.filter(aFilter, sap.ui.model.FilterType.Application);
-        oView.byId("lineItemsList").getBinding("items").filter(aFilter, "Application");
+        oView
+          .byId("lineItemsList")
+          .getBinding("items")
+          .filter(aFilter, "Application");
       },
-      onSearchFieldLiveChange: function(event) {
+      onSearchFieldLiveChange: function (event) {
         var oView = this.getView();
         const query = event.getParameter("newValue").trim();
         var aFilter = [];
@@ -913,10 +1138,13 @@ sap.ui.define(
           );
         }
 
-        oView.byId("lineItemsList").getBinding("items").filter(aFilter, "Application"); 
+        oView
+          .byId("lineItemsList")
+          .getBinding("items")
+          .filter(aFilter, "Application");
       },
 
-      handleSearch:function(oEvent){
+      handleSearch: function (oEvent) {
         var sValue = oEvent.getParameter("value");
         var aFilter = [];
         var i = /^-?\d*(\.\d+)?$/;
@@ -936,10 +1164,9 @@ sap.ui.define(
               sValue
             )
           );
-        } 
+        }
         var oBinding = oEvent.getSource().getBinding("items");
-        oBinding.filter([aFilter]); 
-      
+        oBinding.filter([aFilter]);
       },
 
       onFilterPosts: function (e) {
@@ -965,7 +1192,7 @@ sap.ui.define(
         // );
         // filter binding
 
-        var idMusteri = this.getView().byId("_id6").getValue();
+        var idMusteri = this.getView().byId("_idMusteri").getValue();
         aFilter.push(
           new sap.ui.model.Filter(
             "idMusteri",
@@ -973,7 +1200,7 @@ sap.ui.define(
             idMusteri
           )
         );
-         
+
         // var oTable = this.byId("lineItemsList");
         // var oBinding = oTable.getBinding("items");
         // oBinding.filter(aFilter);

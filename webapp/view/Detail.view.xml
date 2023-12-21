@@ -43,11 +43,12 @@
                                 alignItems="Start"
                             >
                                 <Input
-                                    id="_id6"
+                                    id="_idMusteri"
                                     value="{selectionModel>/Kunnr}"
                                     showValueHelp="true"
                                     valueHelpOnly="true"
                                     valueHelpRequest="onHelpRequestedKunnr"
+                                    editable="{selectionModel>/KunnrEdit}"
                                     width="auto"
                                 />
                                 <Button
@@ -277,19 +278,19 @@
                             <Text
                                 text="Ürün Kodu"
                                 id="label0"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
                             id="column1"
                             visible="true"
-                            width="10%"
+                            width="25%"
                             hAlign="Center"
                         >
                             <Text
                                 text="Ürün Adı"
                                 id="label1"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
@@ -301,7 +302,7 @@
                             <Text
                                 text="{selectionModel>/FirstDay}"
                                 id="label2"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
@@ -313,7 +314,7 @@
                             <Text
                                 text="{selectionModel>/SecondDay}"
                                 id="label3"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
@@ -325,7 +326,7 @@
                             <Text
                                 text="{selectionModel>/ThirdDay}"
                                 id="label4"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
@@ -337,27 +338,27 @@
                             <Text
                                 text="Önerilen"
                                 id="label5"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
                             id="column6"
-                            width="20%"
+                            width="15%"
                         >
                             <Label
                                 text="Alınan Sipariş Miktarı"
                                 id="label6"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
                             id="column7"
-                            width="20%"
+                            width="10%"
                         >
                             <Label
                                 text="Koli İçi Adet"
                                 id="label7"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
@@ -367,17 +368,17 @@
                             <Label
                                 text="Birim"
                                 id="label8"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
                             id="column9"
-                            width="20%"
+                            width="10%"
                         >
                             <Label
                                 text="Sipariş Tutarı"
                                 id="label9"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                         <Column
@@ -391,7 +392,7 @@
                             <Label
                                 text="Ürün Grubu"
                                 id="label11"
-                                class="smallLabel"
+                                class="smallLabel2"
                             />
                         </Column>
                     </columns>
@@ -407,31 +408,31 @@
                                     text="{= parseFloat(${SiparisList>Matnr}) }"
                                     id="idMatnr"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>Maktx}"
                                     id="idMaktx"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>FirstDayAdet}"
                                     id="idFirstDay"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>SecondDayAdet}"
                                     id="idSecondDay"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>ThirdDayAdet}"
                                     id="idThirdDay"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <ObjectStatus id="_IDGenObjectStatus1"
                                     class="sapUiSmallMarginBottom"
@@ -442,7 +443,7 @@
                                     text="{Onerilen}"
                                     id="idOnerilen"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 /> -->
                                 <StepInput
                                     id="idMenge"
@@ -451,39 +452,36 @@
                                     min="0"
                                     required="false"
                                     change="onChange"
-                                    
-                                    
-                                    class="smallLabel"
                                 />
                                 <Text
                                     text="{SiparisList>Koli}"
                                     id="idKoli"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>Meins}"
                                     id="idMeins"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>SiparisTutar}"
                                     id="idSiparisTutar"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>UrunGrp}"
                                     id="idUrunGrp"
                                     visible="false"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{SiparisList>UrunGrpTxt}"
                                     id="idUrunGrpTxt"
                                     visible="false"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                             </cells>
                         </ColumnListItem>
@@ -552,27 +550,12 @@
                                     markFavorite="{= ${Fav} === 'X' ? true : false}"
                                     number="{Telefon}"
                                     activeIcon="sap-icon://call"
-                                    press="onFavPress">
-                                    <!-- <firstStatus>
-                                        <ObjectStatus id="_IDGenObjectStatus2" text="{Email}" visible="false" />
-                                    </firstStatus> -->
+                                    press="onFavPress"> 
                                     <ObjectAttribute id="_IDGenObjectAttribute2" text="{Email}"
                                         visible="true" />
                                     <ObjectAttribute id="_IDGenObjectAttribute1" text="{Parnr}"
                                         visible="false" />
-                                </ObjectListItem>
-                                <!-- <headerToolbar>
-                                <Toolbar id="_IDGenToolbar3">
-                                    <Button
-                                        id="_IDTelEkle"
-                                        text="Ekle"
-                                        type="Accept"
-                                        press="onKaydet"
-                                        class="sapUiSmallMarginEnd"
-                                        icon="sap-icon://accept"
-                                    />
-                                </Toolbar>
-                            </headerToolbar> -->
+                                </ObjectListItem> 
                             </List>
                             <core:Title
                                 id="_IDGenTitle4"
@@ -581,9 +564,8 @@
                             <Label
                                 id="_IDGenLabel9"
                                 text="Görüşülen Kişi"
-                                class="sapUiSmallMarginTop sapUiTinyMarginBottom"
-                            />
-                            <!-- <Input id="idIlgili" /> --> 
+                                labelFor="_idCBoxPerson"
+                            /> 
                             <ComboBox 
                                 id="_idCBoxPerson"
                                 enabled="{= ${selectionModel>/AgEnabled} }"
@@ -597,62 +579,15 @@
                                     key="{Parnr}" 
                                     text="{Name}"
                                 />
-                            </ComboBox>
-                            <Label
-                                id="_IDGenLabel10"
-                                text="Geri Bildirim"
-                                class="sapUiSmallMarginTop sapUiTinyMarginBottom"
-                            />
-                            <FeedInput
-                                id="_IDGenFeedInput1"
-                                maxLength="1200"
-                                post="onSendNote"
-                                showIcon="false"
-                                placeholder="Not giriniz..."
-                            />
+                            </ComboBox> 
+                            <Label id="idLbl1"/>  
+                            <TextArea id="_IDGenFeedInput1" value="" growing="true" width="100%" placeholder="Not giriniz.."/>    
+                            <Label id="idLbl3"/>  
+                            <Button id="idBtn1" text="Gönder" press="onSendNote" type="Accept" width="20%" /> 
+                            <Label id="idLbl4"/>  
+                            <Text id="idLbl2" visible="true" text="Müşterinin kanal ve operasyon yöneticilerine mail gönderilecektir."/>    
                         </f:content>
                     </f:SimpleForm>
-                    <!-- <f:SimpleForm
-                    id="SimpleFormDisplay480_12120-2"
-                    editable="false"
-                    layout="ResponsiveGridLayout"
-                    labelSpanXL="4"
-                    labelSpanL="4"
-                    labelSpanM="12"
-                    labelSpanS="12"
-                    adjustLabelSpan="false"
-                    emptySpanXL="0"
-                    emptySpanL="0"
-                    emptySpanM="0"
-                    emptySpanS="0"
-                    columnsXL="2"
-                    columnsL="2"
-                    columnsM="1"
-                    singleContainerFullSize="false"
-                >
-                    <f:content>
-                        <core:Title
-                            id="_IDGenTitle4"
-                            text="Notlar"
-                        />
-                        <Label
-                            id="_IDGenLabel9"
-                            text="İlgili Kişi"
-                            class="sapUiSmallMarginTop sapUiTinyMarginBottom"
-                        />
-                        <Input id="idIlgili" />
-                        <Label
-                            id="_IDGenLabel10"
-                            text="Geri Bildirim"
-                            class="sapUiSmallMarginTop sapUiTinyMarginBottom"
-                        />
-                        <FeedInput
-                            id="_IDGenFeedInput1"
-                            post="onPost"
-                            showIcon="false"
-                        />
-                    </f:content>
-                </f:SimpleForm> -->
                 </VBox>
             </Panel>
 
@@ -675,13 +610,6 @@
                             items="{/NotSet}"
                         >
                         <StandardListItem id="idStList" title="{Description}" icon="sap-icon://marketing-campaign"/>
-                            <!-- <FeedListItem
-                                id="_IDGenFeedListItem1"
-                                icon="sap-icon://marketing-campaign"
-                                iconDensityAware="true"
-                                info="{Description}"
-                                text="{= parseFloat(${KampanyaNo}) }"
-                            /> -->
                         </List>
                     </l:content>
                 </l:VerticalLayout>
@@ -708,64 +636,64 @@
                     fixedLayout="true"
                     showSeparators="All"
                 >
-                    <columns>
-                        <Column
-                            id="column0x"
-                            visible="true"
-                            width="5em"
-                            hAlign="Center"
-                        >
-                            <Text
-                                text="Ürün Kodu"
-                                id="label01"
-                                class="smallLabel"
-                            />
-                        </Column>
-                        <Column
-                            id="column1x"
-                            visible="true"
-                            width="8em"
-                            hAlign="Center"
-                        >
-                            <Text
-                                text="Ürün Adı"
-                                id="label1x"
-                                class="smallLabel"
-                            />
-                        </Column>
-                        <Column
-                            id="column6x"
-                            width="4em"
-                        >
-                            <Label
-                                text="Alınan Sipariş Miktarı"
-                                id="label6x"
-                                class="smallLabel"
-                            />
-                        </Column>
+                <columns>
+                    <Column
+                        id="column0x"
+                        visible="true"
+                        width="5em"
+                        hAlign="Center"
+                    >
+                        <Text
+                            text="Ürün Kodu"
+                            id="label01"
+                            class="smallLabel2"
+                        />
+                    </Column>
+                    <Column
+                        id="column1x"
+                        visible="true"
+                        width="8em"
+                        hAlign="Center"
+                    >
+                        <Text
+                            text="Ürün Adı"
+                            id="label1x"
+                            class="smallLabel2"
+                        />
+                    </Column>
+                    <Column
+                        id="column6x"
+                        width="4em"
+                    >
+                        <Label
+                            text="Alınan Sipariş Miktarı"
+                            id="label6x"
+                            class="smallLabel2"
+                        />
+                    </Column>
 
-                        <Column
-                            id="column8x"
-                            width="3em"
-                        >
-                            <Label
-                                text="Birim"
-                                id="label8x"
-                                class="smallLabel"
-                            />
-                        </Column>
-                        <Column
-                            id="column9x"
-                            width="5em"
-                        >
-                            <Label
-                                text="Sipariş Tutarı"
-                                id="label9x"
-                                class="smallLabel"
-                            />
-                        </Column>
+                    <Column
+                        id="column8x"
+                        width="3em"
+                    >
+                        <Label
+                            text="Birim"
+                            id="label8x"
+                            class="smallLabel2"
+                        />
+                    </Column>
+                    <Column
+                        id="column9x"
+                        width="5em"
+                    >
+                        <Label
+                            text="Sipariş Tutarı"
+                            id="label9x"
+                            class="smallLabel2"
+                        />
+                    </Column>
 
-                    </columns>
+                </columns>
                     <items>
                         <ColumnListItem
                             id="_IDGenColumnListItem2"
@@ -777,13 +705,13 @@
                                     text="{= parseFloat(${OzetList>Matnr}) }"
                                     id="idMatnrx"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{OzetList>Maktx}"
                                     id="idMaktxx"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Input
                                     id="idMengex"
@@ -792,65 +720,67 @@
                                     editable="false"
                                     required="false"
                                     valueStateText="Invalid entry"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
 
                                 <Text
                                     text="{OzetList>Meins}"
                                     id="idMeinsx"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                                 <Text
                                     text="{OzetList>SiparisTutar}  ₺"
                                     id="idSiparisTutarx"
                                     visible="true"
-                                    class="smallLabel"
+                                    class="smallLabel2"
                                 />
                             </cells>
                         </ColumnListItem>
                     </items>
                 </Table>
 
-
-                <VBox id="_IDGenVBox1">
+                <FlexBox id="_IDGenVBox1"  
+				alignItems="End" direction="Column"
+				 >
                     <Label
                         id="_id21"
                         text="Toplam Sipariş Tutarı(₺)"
                         required="false"
                         width="auto"
                     />
-                    <Input
+                    <Input 
                         id="_id22"
                         value="{path: 'selectionModel>/ToplamSiparis', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
                         enabled="false"
-                        width="500px"
+                        width="250px"
                     />
-                    <Label
+                    <Label 
                         id="_id23"
                         text="KDV"
                         required="false"
                         width="auto"
                     />
-                    <Input
+                    <Input 
                         id="_id24"
                         value="{path: 'selectionModel>/Kdv', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
                         enabled="false"
-                        width="500px"
+                        width="250px"
                     />
-                    <Label
+                    <Label 
                         id="_id25"
                         text="KDV'li Toplam Sipariş Tutarı(₺)"
                         required="false"
                         width="auto"
                     />
-                    <Input
+                    <Input 
                         id="_id26"
                         value="{path: 'selectionModel>/ToplamSiparisKdv', type: '.Unit', formatOptions:{style : 'long', showMeasure:'false' }  }"
                         enabled="false"
-                        width="500px"
+                        width="250px"
                     />
-                </VBox>
+                </FlexBox>
+            <!-- </VBox> -->
             </Panel>
         </content>
 
@@ -882,7 +812,7 @@
                         id="_IDGenButton6"
                         text="Ödeme Linki Gönder"
                         type="Accept"
-                        press="onGonder"
+                        press="openPayment"
                         class="sapUiSmallMarginEnd"
                         icon="sap-icon://customer-and-supplier"
                     />

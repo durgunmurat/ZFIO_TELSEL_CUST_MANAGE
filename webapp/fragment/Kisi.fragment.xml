@@ -10,7 +10,7 @@
                 <Input  width="auto" id="idMail" placeholder="abc@ornek.com" showSuggestion="true" type="Text"  /> 
             </InputListItem>
             <InputListItem id="_IDGenInputListItem3" label="Telefon">
-                <Input  width="auto" id="idTelefon" placeholder="+90(5xx)xxxxxxx" showSuggestion="true" type="Text" maxLength="10" />
+                <Input  width="auto" id="idTelefon"  showSuggestion="true" type="Text" maxLength="10" />
             </InputListItem>
 
 		<beginButton>

@@ -8,8 +8,8 @@
     <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Communication.xml">
         <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
     </edmx:Reference>
-    <edmx:Reference Uri="/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV/$metadata">
-        <edmx:Include Namespace="ZFIO_TELSEL_CUST_MANAGE_SRV"/>
+    <edmx:Reference Uri="/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/$metadata">
+        <edmx:Include Namespace="ZFIO_TELSEL_CUST_MANAGE_SRV_01"/>
     </edmx:Reference>
     <edmx:DataServices>
         <Schema xmlns="http://docs.oasis-open.org/odata/ns/edm" Namespace="local">

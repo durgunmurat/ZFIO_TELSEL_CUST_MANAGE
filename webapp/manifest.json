@@ -17,7 +17,7 @@
         },
         "dataSources": {
             "mainService": {
-                "uri": "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV/",
+                "uri": "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
                 "type": "OData",
                 "settings": {
                     "annotations": [],
@@ -99,7 +99,7 @@
             "routes": [
                 {
                     "name": "RouteDetail",
-                    "pattern": ":?query:",
+                    "pattern": ":?query:",  
                     "target": [
                         "TargetDetail"
                     ]

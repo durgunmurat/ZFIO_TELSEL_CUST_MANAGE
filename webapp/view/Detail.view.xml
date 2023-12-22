@@ -202,6 +202,7 @@
                 headerText="{i18n>urunListesi}"
                 width="auto"
                 visible="{selectionModel>/UrunPanelVisible}"
+                class="smallLabel2"
             >
                 <Table
                     id="lineItemsList"
@@ -215,6 +216,7 @@
                     updateFinished=".onUpdateFinished"
                     fixedLayout="true"
                     showSeparators="All"
+                    class="smallLabel2"
                 >
                     <headerToolbar>
                         <Toolbar id="_IDGenToolbar2">
@@ -268,20 +270,20 @@
                         </Toolbar>
                     </headerToolbar>
 
-                    <columns>
-                        <Column
+                    <columns >
+                        <Column class="smallLabel2"
                             id="column0"
                             visible="true"
                             width="10%"
                             hAlign="Center"
                         >
-                            <Text
+                            <Text  
                                 text="Ürün Kodu"
                                 id="label0"
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column1"
                             visible="true"
                             width="25%"
@@ -293,7 +295,7 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column2"
                             visible="true"
                             width="10%"
@@ -305,7 +307,7 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column3"
                             visible="true"
                             width="10%"
@@ -317,7 +319,7 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column4"
                             visible="true"
                             width="10%"
@@ -329,7 +331,7 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column5"
                             visible="true"
                             width="10%"
@@ -341,17 +343,17 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column6"
                             width="15%"
                         >
-                            <Label
+                            <Label 
                                 text="Alınan Sipariş Miktarı"
                                 id="label6"
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column7"
                             width="10%"
                         >
@@ -361,7 +363,7 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column8"
                             width="10%"
                         >
@@ -371,7 +373,7 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2"
                             id="column9"
                             width="10%"
                         >
@@ -381,11 +383,11 @@
                                 class="smallLabel2"
                             />
                         </Column>
-                        <Column
+                        <Column class="smallLabel2" 
                             id="column10"
                             visible="false"
                         />
-                        <Column
+                        <Column class="smallLabel2"
                             id="column11"
                             visible="false"
                         >
@@ -397,11 +399,11 @@
                         </Column>
                     </columns>
 
-                    <items>
+                    <items > 
                         <ColumnListItem
                             id="_IDGenColumnListItem1"
                             type="Inactive"
-                            press=".onPress"
+                            press=".onPress" class="smallLabel2"
                         >
                             <cells>
                                 <Text

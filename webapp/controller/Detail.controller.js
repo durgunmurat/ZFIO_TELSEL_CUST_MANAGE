@@ -65,7 +65,7 @@ sap.ui.define(
             sap.ui.core.BusyIndicator.hide(0);
             if (oData.Name !== "") {
               l.setProperty("/AgEnabled", true);
-              l.setProperty("/KunnrEdit", false);
+              // l.setProperty("/KunnrEdit", false);
               l.setProperty("/Kunnr", newKunnr);
               l.setProperty("/Name", oData.Name);
 
@@ -226,6 +226,15 @@ sap.ui.define(
         this.byId("_id22").setValue("0");
         this.byId("_id24").setValue("0");
         this.byId("_id26").setValue("0");
+        this.byId("_IDGenFeedInput1").setValue("");
+
+        var numberOfDaysToAdd = 1;
+        var today = new Date();
+        var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern : "dd-MM-yyyy" });    
+        today.setDate(today.getDate() + numberOfDaysToAdd);
+        var dateFormatted = dateFormat.format(today);
+        this.getView().byId("idDate1").setValue(dateFormatted); 
+
 
         var l = this.getModel("selectionModel");
         l.setProperty("/Enabled", false);
@@ -453,6 +462,8 @@ sap.ui.define(
                   siparisResult.Meins = birim;
                   siparisResult.SiparisTutar = "0";
                   siparisResult.Kdv = "0";
+                  var  begda = this.getView().byId("idDate1").getValue(); 
+                  data.SevkDate = begda;
 
                   siparisItem.push(siparisResult);
                 }
@@ -546,6 +557,8 @@ sap.ui.define(
         data.ToplamSiparis = "0";
         data.ToplamKdv = "0";
         data.ToplamSiparisKdv = "0";
+        var  begda = this.getView().byId("idDate1").getValue(); 
+        data.SevkDate = begda;
 
         var a = that.getModel("selectionModel");
         oModel.create("/MusteriSet", data, {
@@ -920,6 +933,7 @@ sap.ui.define(
           this.getView().addDependent(this._valueHelpDialogKunnr);
         }
         var a = [];
+// buraya SİCİL NO eklenecek
         this._valueHelpDialogKunnr.getBinding("items").filter(a);
         this._valueHelpDialogKunnr.open();
       },

@@ -27,7 +27,7 @@
       
       <Label id="_idLblSMS"   text="Telefon"/>
       <!-- <Input id="_idInputSMS" width="auto"  editable="true" value="{OdemeList>/results/0/Telefon}" type="Text" maxLength="10"/>  -->
-        <Input id="_idInputSMS" width="auto"  editable="true" value=" {selectionModel>/TelPaym}" type="Text" maxLength="10"/>
+        <Input id="_idInputSMS" width="auto"  editable="true" value="{selectionModel>/TelPaym}" maxLength="10"/>
       <Label id="_idLblMail"   text="Email" visible="false" />
       <!-- <Input id="_idInputMail" width="auto"  editable="true" value="{OdemeList>/results/0/Email}"  visible="false"/>  -->
         <Input id="_idInputMail" width="auto"  editable="true" value="{selectionModel>/MailPaym}"  visible="false"/> 

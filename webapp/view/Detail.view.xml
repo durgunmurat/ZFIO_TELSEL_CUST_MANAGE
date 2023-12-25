@@ -259,6 +259,12 @@
                                 search=".onFilterPosts"
                                 liveChange=".onSearchFieldLiveChange"
                             />
+                            <Label id="idLblDate1" labelFor="idDate1" text="Sevkiyat Tarihi"/>
+                            <DatePicker id="idDate1" width="auto" displayFormat="medium" 
+                            value="{path:'',type:'sap.ui.model.type.DateTime', formatOptions:{pattern:'dd-MM-yyyy'} }"
+                            placeholder="Sevkiyat Tarihi Giriniz.."
+                            valueStateText="Geçersiz Giriş" enabled="true" visible="true"
+                            /> 
                             <Button
                                 id="_IDsimulate"
                                 text="Fiyat Hesapla"
@@ -467,12 +473,19 @@
                                     visible="true"
                                     class="smallLabel2"
                                 />
-                                <Text
+                                <!-- <Text
                                     text="{SiparisList>SiparisTutar}"
                                     id="idSiparisTutar"
                                     visible="true"
                                     class="smallLabel2"
-                                />
+                                /> -->
+                                <ObjectNumber
+                                                id="idSiparisTutar"
+                                                number="{parts:[{path: 'SiparisList>SiparisTutar'},{path:'selectionModel>/Currency'}],
+                                                type: 'sap.ui.model.type.Currency',
+                                                formatOptions: {showMeasure: false}}"
+                                                state="None" 
+                                            />
                                 <Text
                                     text="{SiparisList>UrunGrp}"
                                     id="idUrunGrp"
@@ -587,7 +600,7 @@
                             <Label id="idLbl3"/>  
                             <Button id="idBtn1" text="Gönder" press="onSendNote" type="Accept" width="20%" /> 
                             <Label id="idLbl4"/>  
-                            <Text id="idLbl2" visible="true" text="Müşterinin kanal ve operasyon yöneticilerine mail gönderilecektir."/>    
+                            <Text class="smallLabel" id="idLbl2" visible="true" text="Müşterinin kanal ve operasyon yöneticilerine mail gönderilecektir."/>    
                         </f:content>
                     </f:SimpleForm>
                 </VBox>
@@ -668,7 +681,7 @@
                         width="4em"
                     >
                         <Label
-                            text="Alınan Sipariş Miktarı"
+                            text="Alınan Sipariş"
                             id="label6x"
                             class="smallLabel2"
                         />
@@ -790,34 +803,24 @@
             <Toolbar id="_IDGenToolbar1">
                 <content>
                     <Button
-                        visible="{selectionModel>/UrunPanelVisible}"
-                        id="_IDGenButton5"
-                        text="Siparişi Tamamla"
-                        type="Accept"
-                        press="saveInput"
-                        class="sapUiSmallMarginEnd"
-                        icon="sap-icon://cart"
-                    />
-                    <!-- <ToolbarSpacer id="_IDGenToolbarSpacer3" />
-                    <Button
-                        visible="{selectionModel>/UrunPanelVisible}"
-                        id="_IDTelEkle"
-                        text="İletişim Bilgilerine Kişi Ekle"
-                        type="Accept"
-                        press="openKisiEkle"
-                        class="sapUiSmallMarginEnd"
-                        icon="sap-icon://phone"
-                    /> -->
+                    visible="{selectionModel>/UrunPanelVisible}"
+                    id="_IDGenButton6"
+                    text="Ödeme Linki Gönder"
+                    type="Accept"
+                    press="openPayment"
+                    class="sapUiSmallMarginEnd"
+                    icon="sap-icon://customer-and-supplier"
+                    /> 
                     <ToolbarSpacer id="_IDGenToolbarSpacer1" />
                     <Button
-                        visible="{selectionModel>/UrunPanelVisible}"
-                        id="_IDGenButton6"
-                        text="Ödeme Linki Gönder"
-                        type="Accept"
-                        press="openPayment"
-                        class="sapUiSmallMarginEnd"
-                        icon="sap-icon://customer-and-supplier"
-                    />
+                    visible="{selectionModel>/UrunPanelVisible}"
+                    id="_IDGenButton5"
+                    text="Siparişi Tamamla"
+                    type="Accept"
+                    press="saveInput"
+                    class="sapUiSmallMarginEnd"
+                    icon="sap-icon://cart"
+                />
                 </content>
             </Toolbar>
         </footer>

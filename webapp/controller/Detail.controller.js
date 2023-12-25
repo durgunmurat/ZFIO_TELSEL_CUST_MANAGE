@@ -230,6 +230,10 @@ sap.ui.define(
 
         var numberOfDaysToAdd = 1;
         var today = new Date();
+        var day = today.getDay();
+        if(day=="6"){
+          numberOfDaysToAdd = 2;
+        }
         var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({pattern : "dd-MM-yyyy" });    
         today.setDate(today.getDate() + numberOfDaysToAdd);
         var dateFormatted = dateFormat.format(today);
@@ -426,7 +430,7 @@ sap.ui.define(
       },
 
       saveInput: function () {
-        var  begda = this.getView().byId("idDate1").getValue(); 
+       
         var that = this;
         sap.m.MessageBox.confirm("Sipariş yaratılıyor, emin misiniz?", {
           title: "Bilgilendirme",
@@ -463,8 +467,7 @@ sap.ui.define(
                   siparisResult.Meins = birim;
                   siparisResult.SiparisTutar = "0";
                   siparisResult.Kdv = "0";
-                  
-                  data.SevkDate = begda;
+
 
                   siparisItem.push(siparisResult);
                 }
@@ -475,6 +478,8 @@ sap.ui.define(
               data.ToplamSiparis = "0";
               data.ToplamKdv = "0";
               data.ToplamSiparisKdv = "0";
+              var  begda = that.getView().byId("idDate1").getValue(); 
+              data.SevkDate = begda;
               oModel.create("/MusteriSet", data, {
                 success: function (oData, oResponse) {
                   sap.m.MessageBox.information(oResponse.data.Mesaj, {

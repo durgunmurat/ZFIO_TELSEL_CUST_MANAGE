@@ -426,6 +426,7 @@ sap.ui.define(
       },
 
       saveInput: function () {
+        var  begda = this.getView().byId("idDate1").getValue(); 
         var that = this;
         sap.m.MessageBox.confirm("Sipariş yaratılıyor, emin misiniz?", {
           title: "Bilgilendirme",
@@ -462,7 +463,7 @@ sap.ui.define(
                   siparisResult.Meins = birim;
                   siparisResult.SiparisTutar = "0";
                   siparisResult.Kdv = "0";
-                  var  begda = this.getView().byId("idDate1").getValue(); 
+                  
                   data.SevkDate = begda;
 
                   siparisItem.push(siparisResult);

@@ -354,7 +354,7 @@
                             width="15%"
                         >
                             <Label 
-                                text="Alınan Sipariş Miktarı"
+                                text="Alınan Sipariş"
                                 id="label6"
                                 class="smallLabel2"
                             />

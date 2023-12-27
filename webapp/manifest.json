@@ -45,6 +45,7 @@
     },
     "sap.ui5": {
         "flexEnabled": true,
+        "handleValidation": true, 
         "dependencies": {
             "minUI5Version": "1.102.1",
             "libs": {

@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<SelectDialog id="_IDGenSelectDialog3" title="Müşteri" class="sapUiPopupWithPadding" items="{/SicilSet}"
+		search="onValueHelpSearchSicil" confirm="onValueHelpCloseSicil" cancel="onValueHelpCloseSicil">
+		<StandardListItem id="_IDGenStandardListItem3" title="{= parseFloat(${idTemsilci}) }" description="{TemsilciAdi}" /> 
+	</SelectDialog>
+</core:FragmentDefinition>

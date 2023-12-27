@@ -24,6 +24,11 @@
                 headerText="Genel Bilgiler"
                 width="auto"
             >
+            <Label id="_IDLbl1" text="Seçim Yapınız" labelFor="rbGMain" class="smallLabel2" />
+            <RadioButtonGroup id="rbGMain" select="onSelectRadioMain" columns="5" class="smallLabel2" > 
+            <RadioButton id="idRBSic" text="Sicil" selected="true" class="smallLabel2"/> 
+            <RadioButton id="idRBMus" text="Müşteri" class="smallLabel2"/> 
+            </RadioButtonGroup> 
                 <f:SimpleForm
                     id="_IDGenSimpleForm1"
                     editable="false"
@@ -33,16 +38,28 @@
                     columnsL="3"
                 >
                     <f:content>
+
                         <core:Title
                             id="_IDGenTitle5"
-                            text="Müşteri No"
+                            text="{selectionModel>/Title1}"
                         />
                         <VBox id="_IDGenVBox11">
+
                             <HBox
                                 id="_IDVBox0"
                                 alignItems="Start"
                             >
-                                <Input
+
+                            <Input  class="smallLabel2"
+                                    id="_idTemsilci"
+                                    value="{selectionModel>/SicilId}"
+                                    showValueHelp="true"
+                                    valueHelpOnly="true"
+                                    valueHelpRequest="onHelpRequestedSicil" 
+                                    width="auto"
+                                    visible="{selectionModel>/SicilVisible}"
+                                />
+                                <Input class="smallLabel2"
                                     id="_idMusteri"
                                     value="{selectionModel>/Kunnr}"
                                     showValueHelp="true"
@@ -50,16 +67,19 @@
                                     valueHelpRequest="onHelpRequestedKunnr"
                                     editable="{selectionModel>/KunnrEdit}"
                                     width="auto"
+                                    visible="{selectionModel>/MusteriVisible}"
                                 />
-                                <Button
+                                <Button class="smallLabel2"
                                     id="_idBtnList"
                                     text="Listele"
                                     enabled="{= ${selectionModel>/AgEnabled} }"
                                     press="onPressMalzemeListesi"
                                     icon="sap-icon://display"
+                                    visible="{selectionModel>/MusteriVisible}"
                                 />
                             </HBox>
-                            <Text id="_idTxt6" text="{selectionModel>/Name}" />
+                            <Text id="_idTxt6" text="{selectionModel>/Name}" visible="{selectionModel>/MusteriVisible}" class="smallLabel2"/>
+                            <Text id="_idTxt7" text="{selectionModel>/SicilAd}" visible="{selectionModel>/SicilVisible}" class="smallLabel2"/>
                         </VBox>
                         <core:Title
                             id="_IDGenTitle3"
@@ -216,7 +236,7 @@
                     updateFinished=".onUpdateFinished"
                     fixedLayout="true"
                     showSeparators="All"
-                    class="smallLabel2"
+                    class="smallLabel2" 
                 >
                     <headerToolbar>
                         <Toolbar id="_IDGenToolbar2">
@@ -351,7 +371,7 @@
                         </Column>
                         <Column class="smallLabel2"
                             id="column6"
-                            width="15%"
+                            width="15%" 
                         >
                             <Label 
                                 text="Alınan Sipariş"
@@ -459,8 +479,16 @@
                                     visible="true"
                                     min="0"
                                     required="false"
-                                    change="onChange"
+                                    change="onChange" 
+                                    enabled="true"
+                                    editable="true"
                                 />
+                                <!-- <Input liveChange="onChange"
+                                id="idMenge"
+                                value="{path: 'SiparisList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
+                                visible="true" 
+                                required="false" 
+                                valueLiveUpdate="true"  /> -->
                                 <Text
                                     text="{SiparisList>Koli}"
                                     id="idKoli"

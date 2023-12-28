@@ -30,14 +30,24 @@ sap.ui.define(
         this.onSetSelectionModel();
         this.onSetDetailModel();
 
-        var complete_url = window.location.href;
-        // var complete_url = "https://sapfioridev.sutas.com.tr:8443/sap/bc/ui2/flp#ztelselkokpit-display";
+        // var complete_url = window.location.href;
+        var complete_url = "https://sapfioridev.sutas.com.tr:8443/sap/bc/ui2/flp#ztelselkokpit-display?108472";
         var idMusteri = "";
+        var idMusteriTmp = "";
         var pieces = complete_url.split("?");
-        if (pieces.length > 2) 
-        {   idMusteri = window.location.href.split("?")[1]; } 
-        else
-        { idMusteri = "" ; } 
+        for (var i = 0; i < pieces.length; i++) {
+          idMusteriTmp = complete_url.split("?")[i];
+          if(isNaN(idMusteriTmp)){
+          } 
+          else{
+            idMusteri = idMusteriTmp;
+            break;
+          }
+        } 
+        // if (pieces.length > 2) 
+        // {   idMusteri = window.location.href.split("?")[1]; } 
+        // else
+        // { idMusteri = "" ; } 
           this.byId("_idMusteri").setValue(idMusteri);
           this.getMusteri();
         
@@ -72,13 +82,14 @@ sap.ui.define(
               l.setProperty("/Name", oData.Name);
               l.setProperty("/SicilId", oData.idTemsilci);
               l.setProperty("/SicilAd", oData.TemsilciAdi);
+              
               var button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
               sap.ui.getCore().byId(that.createId("rbGMain")).setSelectedButton(button);
               l.setProperty("/SicilVisible", false);
               l.setProperty("/MusteriVisible", true);
-              oButton.attachPress(function (oEvent) {
-                console.log("Pressed!");
-              });
+              // oButton.attachPress(function (oEvent) {
+              //   console.log("Pressed!");
+              // });
 
               oButton.firePress();
             } else if(oData.TemsilciAdi !== "") {
@@ -144,32 +155,32 @@ sap.ui.define(
         });
       },
 
-      onSetSiparisList: function () {
-        var data = [
-          {
-            idMusteri: "",
-            idTemsilci: "",
-            Matnr: "",
-            Maktx: "",
-            Menge: 0,
-            Meins: "",
-            UrunGrp: "",
-            UrunGrpTxt: "",
-            Search: "",
-            FirstDay: "",
-            SecondDay: "",
-            ThirdDay: "",
-            Onerilen: "",
-            Koli: "",
-            SiparisTutar: 0,
-            FirstDayAdet: "",
-            SecondDayAdet: "",
-            ThirdDayAdet: "",
-            Mesaj: "",
-            Kdv: 0,
-          },
-        ];
-      },
+      // onSetSiparisList: function () {
+      //   var data = [
+      //     {
+      //       idMusteri: "",
+      //       idTemsilci: "",
+      //       Matnr: "",
+      //       Maktx: "",
+      //       Menge: 0,
+      //       Meins: "",
+      //       UrunGrp: "",
+      //       UrunGrpTxt: "",
+      //       Search: "",
+      //       FirstDay: "",
+      //       SecondDay: "",
+      //       ThirdDay: "",
+      //       Onerilen: "",
+      //       Koli: "",
+      //       SiparisTutar: 0,
+      //       FirstDayAdet: "",
+      //       SecondDayAdet: "",
+      //       ThirdDayAdet: "",
+      //       Mesaj: "",
+      //       Kdv: 0,
+      //     },
+      //   ];
+      // },
 
       onSetSelectionModel: function () {
         this.selectionModel = new sap.ui.model.json.JSONModel({
@@ -217,8 +228,7 @@ sap.ui.define(
           AgEnabled: false,
           SipTamam: false,
           SicilVisible: true,
-          MusteriVisible: false,
-          Title1: "Sicil No",
+          MusteriVisible: false, 
         });
         this.getView().setModel(this.selectionModel, "selectionModel");
       },
@@ -843,9 +853,11 @@ sap.ui.define(
         } else if (telefon.length < 10) {
           alert("Geçerli Numara Giriniz!");
           return false;
-        } else if (!mailregex.test(mail)) {
-          alert(mail + " Geçerli bir mail adresi değil!");
-        } else {
+        } 
+        // else if (!mailregex.test(mail)) {
+        //   alert(mail + " Geçerli bir mail adresi değil!");
+        // } 
+        else {
           data.idMusteri = idMusteri;
           data.Name = ad;
           data.Email = mail;
@@ -976,18 +988,16 @@ sap.ui.define(
         var e = sap.ui.getCore().byId(this.createId("rbGMain"));
         var t = e.getSelectedButton().getText();
         var l = this.getModel("selectionModel");
-        if (t === "Sicil") {
+        if (t === "Temsilci") {
           l.setProperty("/SicilVisible", true);
-          l.setProperty("/MusteriVisible", false);
-          l.setProperty("/Title1", "Sicil No");
+          l.setProperty("/MusteriVisible", false); 
 
           // sap.ui.getCore().byId(this.createId("_idTemsilci")).setVisible(true);
           // sap.ui.getCore().byId(this.createId("_idMusteri")).setVisible(false);
           // sap.ui.getCore().byId(this.createId("_idBtnList")).setVisible(false);
         } else if (t === "Müşteri") {
           l.setProperty("/SicilVisible", false);
-          l.setProperty("/MusteriVisible", true);
-          l.setProperty("/Title1", "Müşteri No");
+          l.setProperty("/MusteriVisible", true); 
 
           // sap.ui.getCore().byId(this.createId("_idTemsilci")).setVisible(false);
           // sap.ui.getCore().byId(this.createId("_idMusteri")).setVisible(true);
@@ -1022,7 +1032,7 @@ sap.ui.define(
         e.getSource().getBinding("items").filter(i);
       },
       onValueHelpCloseSicil: function (e) {
-        var button = sap.ui.getCore().byId("idRBMus"); //find the button 
+        var button = sap.ui.getCore().byId(this.createId("idRBMus")); //find the button 
 
         var t = e.getParameter("selectedItem"),
           a = this.getModel("selectionModel");
@@ -1036,6 +1046,8 @@ sap.ui.define(
             "/SicilAd",
             t.getBindingContext().getProperty("TemsilciAdi")
           );
+          a.setProperty("/Kunnr", "");
+          a.setProperty("/Name", "");
           sap.ui.getCore().byId(this.createId("rbGMain")).setSelectedButton(button);
 
           // sap.ui.getCore().byId(this.createId("_idTemsilci")).setVisible(false);

@@ -24,11 +24,8 @@
                 headerText="Genel Bilgiler"
                 width="auto"
             >
-            <Label id="_IDLbl1" text="Seçim Yapınız" labelFor="rbGMain" class="smallLabel2" />
-            <RadioButtonGroup id="rbGMain" select="onSelectRadioMain" columns="5" class="smallLabel2" > 
-            <RadioButton id="idRBSic" text="Sicil" selected="true" class="smallLabel2"/> 
-            <RadioButton id="idRBMus" text="Müşteri" class="smallLabel2"/> 
-            </RadioButtonGroup> 
+            <!-- <Label id="_IDLbl1" text="Seçim Yapınız" labelFor="rbGMain" class="smallLabel2" /> -->
+
                 <f:SimpleForm
                     id="_IDGenSimpleForm1"
                     editable="false"
@@ -39,10 +36,10 @@
                 >
                     <f:content>
 
-                        <core:Title
+                        <!-- <core:Title
                             id="_IDGenTitle5"
-                            text="{selectionModel>/Title1}"
-                        />
+                            text="{= ${selectionModel>SicilVisible} === 'true' ? 'Sicil' : 'Müşteri'}" 
+                        /> -->
                         <VBox id="_IDGenVBox11">
 
                             <HBox
@@ -78,8 +75,12 @@
                                     visible="{selectionModel>/MusteriVisible}"
                                 />
                             </HBox>
-                            <Text id="_idTxt6" text="{selectionModel>/Name}" visible="{selectionModel>/MusteriVisible}" class="smallLabel2"/>
+                            <Text id="_idTxt6" text="{selectionModel>/Name} ({selectionModel>/SicilAd})" visible="{selectionModel>/MusteriVisible}" class="smallLabel2"/>
                             <Text id="_idTxt7" text="{selectionModel>/SicilAd}" visible="{selectionModel>/SicilVisible}" class="smallLabel2"/>
+                                <RadioButtonGroup id="rbGMain" select="onSelectRadioMain" columns="5" class="smallLabel2" > 
+                                    <RadioButton id="idRBSic" text="Temsilci" selected="true" class="smallLabel2"/> 
+                                    <RadioButton id="idRBMus" text="Müşteri" class="smallLabel2"/> 
+                                    </RadioButtonGroup> 
                         </VBox>
                         <core:Title
                             id="_IDGenTitle3"

@@ -10,7 +10,8 @@
                 <Input  width="auto" id="idMail" placeholder="abc@ornek.com" showSuggestion="true" type="Text"  /> 
             </InputListItem>
             <InputListItem id="_IDGenInputListItem3" label="Telefon">
-                <Input  width="auto" id="idTelefon"  showSuggestion="true" type="Text" maxLength="10" />
+				<MaskInput id="idTelefon" mask="(999)9999999" placeholderSymbol="_" placeholder="10 Haneli Numara Giriniz" showClearIcon="true" />
+                <!-- <Input  width="auto" id="idTelefon"  showSuggestion="true" type="Text" maxLength="10" /> -->
             </InputListItem>
 
 		<beginButton>

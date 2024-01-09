@@ -30,8 +30,8 @@ sap.ui.define(
         this.onSetSelectionModel();
         this.onSetDetailModel();
 
-        // var complete_url = window.location.href;
-        var complete_url = "https://sapfioridev.sutas.com.tr:8443/sap/bc/ui2/flp#ztelselkokpit-display?108472";
+        var complete_url = window.location.href;
+        // var complete_url = "https://sapfioridev.sutas.com.tr:8443/sap/bc/ui2/flp#ztelselkokpit-display?108472";
         var idMusteri = "";
         var idMusteriTmp = "";
         var pieces = complete_url.split("?");
@@ -672,7 +672,7 @@ sap.ui.define(
         });
       },
       onChange: function (event) {
-        jQuery.sap.delayedCall(1000, this, function () {
+        // jQuery.sap.delayedCall(500, this, function () {
           // var cellMenge = event.getSource().getParent().getCells()[6];
           var idMenge = event.getSource().getParent().getCells()[6].getValue();
           //   while (idMenge.charAt(0) == '0') {
@@ -687,7 +687,7 @@ sap.ui.define(
             event.getSource().mBindingInfos.value.binding.oContext.sPath;
           var oModel = oTable.getModel("SiparisList");
           oModel.setProperty(sPath + "/Menge", idMenge);
-        });
+        // });
       },
 
       openPayment: function (e) {
@@ -905,16 +905,17 @@ sap.ui.define(
       },
 
       onSendNote: function () {
-        var ad = this.getView()
-          .byId("_idCBoxPerson")
-          .getSelectedItem()
-          .getText();
-        if (ad == "") {
-          var i = "Görüşülen kişiyi seçiniz!";
-          sap.m.MessageToast.show(i);
-          sap.ui.core.BusyIndicator.hide(0);
-          return false;
-        }
+        // var ad = this.getView().byId("_idCBoxPerson").getSelectedItem().getText();
+        // if (this.getView().byId("_idCBoxPerson").getSelectedItem() !== null )
+        //  {
+          // var ad = this.getView().byId("_idCBoxPerson").getSelectedItem().getText();
+        //   var i = "Görüşülen kişiyi seçiniz!";
+        //   sap.m.MessageToast.show(i);
+        //   sap.ui.core.BusyIndicator.hide(0);
+        //   return false;
+        // }
+
+        
 
         var that = this;
         var data = {};
@@ -923,7 +924,8 @@ sap.ui.define(
         var not = this.byId("_IDGenFeedInput1").getValue();
         data.idMusteri = idMusteri;
         data.Not = not;
-        data.Ad = ad;
+        // data.Ad = ad;
+        data.Ad = this.getView().byId("_idCBoxPerson").getValue();
 
         sap.m.MessageBox.confirm("Mail gönderilecek, emin misiniz?", {
           title: "Bilgilendirme",
@@ -949,6 +951,7 @@ sap.ui.define(
         });
 
         this.byId("_IDGenFeedInput1").setValue("");
+        this.getView().byId("_idCBoxPerson").setValue("");
       },
 
       onSelectRadio: function () {
@@ -1097,10 +1100,17 @@ sap.ui.define(
           a = this.getModel("selectionModel");
         var kunnr = t.getBindingContext().getProperty("idMusteri");
         var newKunnr = kunnr.replace(/^0+/, "");
+        var sicil = t.getBindingContext().getProperty("idTemsilci");
+        var newSicil = sicil.replace(/^0+/, "");
         if (t) {
           a.setProperty("/AgEnabled", true);
           a.setProperty("/Kunnr", newKunnr);
           a.setProperty("/Name", t.getBindingContext().getProperty("Name"));
+          a.setProperty("/SicilId", newSicil);
+          a.setProperty(
+            "/SicilAd",
+            t.getBindingContext().getProperty("TemsilciAdi")
+          );
         }
         e.getSource().getBinding("items").filter([]);
       },

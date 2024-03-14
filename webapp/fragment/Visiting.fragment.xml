@@ -1,0 +1,151 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:f="sap.ui.layout.form"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout"
+    id="_IDFragVH">
+    <Dialog id="_IDFragPayment2" title="Arama Saatlerini Düzenle" icon="sap-icon://create"
+        state="Success">
+
+        <!-- <VBox id="_IDGenVBoxVH1" class="sapUiSmallMargin">
+
+            <f:SimpleForm id="simpleFormVH"
+			editable="true"
+			layout="ColumnLayout"
+			title="Düzenle"
+			columnsM="2"
+			columnsL="3"
+			columnsXL="3"
+            width="200px">
+                <f:content> -->
+        <VBox id="_IDGenVBoxVH1" class="sapUiSmallMargin">
+            
+            <f:SimpleForm id="SimpleFormVH2"
+                editable="true"
+                layout="ResponsiveGridLayout"
+                title="Kişi Bilgileri"
+                labelSpanXL="4"
+                labelSpanL="4"
+                labelSpanM="12"
+                labelSpanS="12"
+                adjustLabelSpan="false"
+                emptySpanXL="0"
+                emptySpanL="0"
+                emptySpanM="0"
+                emptySpanS="0"
+                columnsXL="2"
+                columnsL="2"
+                columnsM="1"
+                singleContainerFullSize="false">
+                <f:content>
+                    <!-- <core:Title id="VHId43" text="Kişi Bilgileri" /> -->
+                    <Label id="VHId1" text="Ad-Soyad" />
+                    <Input id="VHId2" value="{selectionModel>/VHName}" width="200px" />
+                    <Label id="VHId3" text="Email" />
+                    <Input id="VHId4" value="{selectionModel>/VHEmail}" width="200px" />
+                    <Label id="VHId5" text="Telefon" />
+                    <Input id="VHId6" value="{selectionModel>/VHTelefon}" width="200px" />
+                    
+                </f:content>
+                <f:layoutData>
+                    <FlexItemData id="_IDGenFlexItemDataVH1" shrinkFactor="0"
+                        backgroundDesign="Solid" styleClass="sapContrastPlus" />
+                </f:layoutData>
+            </f:SimpleForm>
+
+            <f:SimpleForm id="SimpleFormVH1"
+            editable="true"
+            layout="ResponsiveGridLayout"
+            title="Arama Saatleri"
+			labelSpanXL="4"
+			labelSpanL="4"
+			labelSpanM="4"
+			labelSpanS="12"
+			adjustLabelSpan="false"
+			emptySpanXL="0"
+			emptySpanL="0"
+			emptySpanM="0"
+			emptySpanS="0"
+			columnsXL="3"
+			columnsL="2"
+			columnsM="2"
+            singleContainerFullSize="false">
+            <f:content>
+                <core:Title id="VHId44" text="Öğleden Önce" />
+                <Label id="VHId11" text="Pazartesi" />
+                <MaskInput id="VHId7" mask="99:99:99" value="{selectionModel>/MOAB1}" width="90px" />
+                <MaskInput id="VHId8" mask="99:99:99" value="{selectionModel>/MOBI1}"
+                    editable="true" width="90px" />
+
+                <Label id="VHId17" text="Salı" />
+                <MaskInput id="VHId13" mask="99:99:99" value="{selectionModel>/DIAB1}" width="90px" />
+                <MaskInput id="VHId14" mask="99:99:99" value="{selectionModel>/DIBI1}"
+                    editable="true" width="90px"/>
+
+                <Label id="VHId18" text="Çarşamba" />
+                <MaskInput id="VHId19" mask="99:99:99" value="{selectionModel>/MIAB1}" width="90px"/>
+                <MaskInput id="VHId20" mask="99:99:99" value="{selectionModel>/MIBI1}"
+                    editable="true" width="90px"/>
+
+                <Label id="VHId21" text="Perşembe" />
+                <MaskInput id="VHId22" mask="99:99:99" value="{selectionModel>/DOAB1}" width="90px"/>
+                <MaskInput id="VHId23" mask="99:99:99" value="{selectionModel>/DOBI1}"
+                    editable="true" width="90px"/>
+
+
+                <Label id="VHId24" text="Cuma" />
+                <MaskInput id="VHId25" mask="99:99:99" value="{selectionModel>/FRAB1}" width="90px" />
+                <MaskInput id="VHId26" mask="99:99:99" value="{selectionModel>/FRBI1}"
+                    editable="true" width="90px"/>
+
+
+                <Label id="VHId27" text="Cumartesi" />
+                <MaskInput id="VHId28" mask="99:99:99" value="{selectionModel>/SAAB1}" width="90px"/>
+                <MaskInput id="VHId29" mask="99:99:99" value="{selectionModel>/SABI1}"
+                    editable="true" width="90px"/>
+
+
+                <core:Title id="VHId45" text="Öğleden Sonra" />
+                <Label id="VHId12" text="Pazartesi" />
+                <MaskInput id="VHId9" mask="99:99:99" value="{selectionModel>/MOAB2}" width="90px"/>
+                <MaskInput id="VHId10" mask="99:99:99" value="{selectionModel>/MOBI2}"
+                    editable="true" width="90px" />
+
+                <Label id="VHId30" text="Salı" />
+                <MaskInput id="VHId15" mask="99:99:99" value="{selectionModel>/DIAB2}" width="90px"/>
+                <MaskInput id="VHId16" mask="99:99:99" value="{selectionModel>/DIBI2}"
+                    editable="true" width="90px"/>
+
+                <Label id="VHId31" text="Çarşamba" />
+                <MaskInput id="VHId32" mask="99:99:99" value="{selectionModel>/MIAB2}" width="90px"/>
+                <MaskInput id="VHId33" mask="99:99:99" value="{selectionModel>/MIBI2}"
+                    editable="true" width="90px"/>
+
+                <Label id="VHId34" text="Perşembe" />
+                <MaskInput id="VHId35" mask="99:99:99" value="{selectionModel>/DOAB2}" width="90px"/>
+                <MaskInput id="VHId36" mask="99:99:99" value="{selectionModel>/DOBI2}"
+                    editable="true" width="90px"/>
+
+
+                <Label id="VHId37" text="Cuma" />
+                <MaskInput id="VHId38" mask="99:99:99" value="{selectionModel>/FRAB2}" width="90px"/>
+                <MaskInput id="VHId39" mask="99:99:99" value="{selectionModel>/FRBI2}"
+                    editable="true" width="90px"/>
+
+
+                <Label id="VHId40" text="Cumartesi" />
+                <MaskInput id="VHId41" mask="99:99:99" value="{selectionModel>/SAAB2}" width="90px"/>
+                <MaskInput id="VHId42" mask="99:99:99" value="{selectionModel>/SABI2}"
+                    editable="true" width="90px"/>
+            </f:content>
+        </f:SimpleForm>            
+        </VBox>
+        <beginButton />
+        <buttons>
+            <Button id="VHBtn1" text="Kaydet" press="saveVisiting" type="Accept" />
+            <Button id="VHBtn2" text="Kapat" press="closeVisiting" type="Reject" />
+            <Button id="VHBtn3" text="Saatleri Sil" press="clearVisiting" type="Transparent"/>
+        </buttons>
+        <customHeader />
+        <endButton />
+    </Dialog>
+</core:FragmentDefinition>

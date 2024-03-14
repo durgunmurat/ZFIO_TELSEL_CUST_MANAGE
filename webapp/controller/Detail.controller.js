@@ -37,20 +37,18 @@ sap.ui.define(
         var pieces = complete_url.split("?");
         for (var i = 0; i < pieces.length; i++) {
           idMusteriTmp = complete_url.split("?")[i];
-          if(isNaN(idMusteriTmp)){
-          } 
-          else{
+          if (isNaN(idMusteriTmp)) {
+          } else {
             idMusteri = idMusteriTmp;
             break;
           }
-        } 
-        // if (pieces.length > 2) 
-        // {   idMusteri = window.location.href.split("?")[1]; } 
+        }
+        // if (pieces.length > 2)
+        // {   idMusteri = window.location.href.split("?")[1]; }
         // else
-        // { idMusteri = "" ; } 
-          this.byId("_idMusteri").setValue(idMusteri);
-          this.getMusteri();
-        
+        // { idMusteri = "" ; }
+        this.byId("_idMusteri").setValue(idMusteri);
+        this.getMusteri();
       },
       _onRouteMatched: function (oEvent) {
         oController = this;
@@ -82,9 +80,12 @@ sap.ui.define(
               l.setProperty("/Name", oData.Name);
               l.setProperty("/SicilId", oData.idTemsilci);
               l.setProperty("/SicilAd", oData.TemsilciAdi);
-              
+
               var button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
-              sap.ui.getCore().byId(that.createId("rbGMain")).setSelectedButton(button);
+              sap.ui
+                .getCore()
+                .byId(that.createId("rbGMain"))
+                .setSelectedButton(button);
               l.setProperty("/SicilVisible", false);
               l.setProperty("/MusteriVisible", true);
               // oButton.attachPress(function (oEvent) {
@@ -92,11 +93,14 @@ sap.ui.define(
               // });
 
               oButton.firePress();
-            } else if(oData.TemsilciAdi !== "") {
+            } else if (oData.TemsilciAdi !== "") {
               l.setProperty("/SicilId", oData.idTemsilci);
               l.setProperty("/SicilAd", oData.TemsilciAdi);
               button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
-              sap.ui.getCore().byId(that.createId("rbGMain")).setSelectedButton(button);
+              sap.ui
+                .getCore()
+                .byId(that.createId("rbGMain"))
+                .setSelectedButton(button);
               l.setProperty("/SicilVisible", false);
               l.setProperty("/MusteriVisible", true);
             }
@@ -108,12 +112,31 @@ sap.ui.define(
       },
 
       getSiparisList: function () {
+        var openOrder = this.getView().byId("_IDGenComboBox3").getValue();
         var cari = this.getView().byId("_idMusteri").getValue();
+
         var that = this;
+
+        var acikSip = that.byId("_IDGenComboBox3").getBinding("items");
+        var n = [];
+        n.push(
+          new sap.ui.model.Filter(
+            "idMusteri",
+            sap.ui.model.FilterOperator.EQ,
+            cari
+          )
+        );
+        acikSip.filter(new sap.ui.model.Filter(n, true));
+        acikSip.refresh();
+
+
+
         var SAPoData = new sap.ui.model.odata.v2.ODataModel(
           "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
           true
         );
+
+
 
         sap.ui.core.BusyIndicator.show(0);
         var jsonData = new sap.ui.model.json.JSONModel();
@@ -125,12 +148,19 @@ sap.ui.define(
               sap.ui.model.FilterOperator.EQ,
               cari
             ),
+            new sap.ui.model.Filter(
+              "Vbeln",
+              sap.ui.model.FilterOperator.EQ,
+              openOrder
+            ),
           ],
           success: function (oData, oResponse) {
             sap.ui.core.BusyIndicator.hide(0);
             if (oData.results && oData.results.length > 0) {
               jsonData.setData(oData);
               that.getView().setModel(jsonData, "SiparisList");
+
+
             } else {
               jsonData.setData([]);
               that.getView().setModel(jsonData, "SiparisList");
@@ -154,33 +184,6 @@ sap.ui.define(
           },
         });
       },
-
-      // onSetSiparisList: function () {
-      //   var data = [
-      //     {
-      //       idMusteri: "",
-      //       idTemsilci: "",
-      //       Matnr: "",
-      //       Maktx: "",
-      //       Menge: 0,
-      //       Meins: "",
-      //       UrunGrp: "",
-      //       UrunGrpTxt: "",
-      //       Search: "",
-      //       FirstDay: "",
-      //       SecondDay: "",
-      //       ThirdDay: "",
-      //       Onerilen: "",
-      //       Koli: "",
-      //       SiparisTutar: 0,
-      //       FirstDayAdet: "",
-      //       SecondDayAdet: "",
-      //       ThirdDayAdet: "",
-      //       Mesaj: "",
-      //       Kdv: 0,
-      //     },
-      //   ];
-      // },
 
       onSetSelectionModel: function () {
         this.selectionModel = new sap.ui.model.json.JSONModel({
@@ -228,7 +231,39 @@ sap.ui.define(
           AgEnabled: false,
           SipTamam: false,
           SicilVisible: true,
-          MusteriVisible: false, 
+          MusteriVisible: false,
+          DisplayMode: true,
+          Vdatu: "",
+          //visiting hours --start--
+          Query:"",
+          VHName: "",
+          VHEmail: "",
+          VHTelefon: "",
+          MOAB1: "00:00:00",
+          MOBI1: "00:00:00",
+          MOAB2: "00:00:00",
+          MOBI2: "00:00:00",
+          DIAB1: "00:00:00",
+          DIBI1: "00:00:00",
+          DIAB2: "00:00:00",
+          DIBI2: "00:00:00",
+          MIAB1: "00:00:00",
+          MIBI1: "00:00:00",
+          MIAB2: "00:00:00",
+          MIBI2: "00:00:00",
+          DOAB1: "00:00:00",
+          DOBI1: "00:00:00",
+          DOAB2: "00:00:00",
+          DOBI2: "00:00:00",
+          FRAB1: "00:00:00",
+          FRBI1: "00:00:00",
+          FRAB2: "00:00:00",
+          FRBI2: "00:00:00",
+          SAAB1: "00:00:00",
+          SABI1: "00:00:00",
+          SAAB2: "00:00:00",
+          SABI2: "00:00:00",
+          //visiting hours --end--
         });
         this.getView().setModel(this.selectionModel, "selectionModel");
       },
@@ -244,7 +279,10 @@ sap.ui.define(
         });
         this.getView().setModel(e, "detailModel");
       },
-      onPressMalzemeListesi: function (e) {
+      onPressOpenOrder: function (e) {
+        var l = this.getModel("selectionModel");
+
+
         var jsonRefresh = new sap.ui.model.json.JSONModel();
         jsonRefresh.setData([]);
         this.getView().setModel(jsonRefresh, "OzetList");
@@ -253,6 +291,10 @@ sap.ui.define(
         this.byId("_id24").setValue("0");
         this.byId("_id26").setValue("0");
         this.byId("_IDGenFeedInput1").setValue("");
+
+        var openOrder = this.getView().byId("_IDGenComboBox3").getValue();
+        var openOrderVdatu = this.getView().byId("_IDGenComboBox3").getSelectedKey();
+        // this.byId("_IDGenComboBox3").setValue("");
 
         var numberOfDaysToAdd = 1;
         var today = new Date();
@@ -265,12 +307,23 @@ sap.ui.define(
         });
         today.setDate(today.getDate() + numberOfDaysToAdd);
         var dateFormatted = dateFormat.format(today);
-        this.getView().byId("idDate1").setValue(dateFormatted);
+        if (openOrderVdatu !== '') {
 
-        var l = this.getModel("selectionModel");
+          this.getView().byId("idDate1").setValue(openOrderVdatu);
+          l.setProperty("/Vdatu", openOrderVdatu);
+        }
+        else {
+          this.getView().byId("idDate1").setValue(dateFormatted);
+          l.setProperty("/Vdatu", dateFormatted);
+        }
+        openOrderVdatu = '';
+
+
+
         l.setProperty("/Enabled", false);
         l.setProperty("/TelPaym", "");
         l.setProperty("/MailPaym", "");
+
 
         var cari = this.getView().byId("_idMusteri").getValue();
         var that = this;
@@ -288,6 +341,11 @@ sap.ui.define(
               "idMusteri",
               sap.ui.model.FilterOperator.EQ,
               cari
+            ),
+            new sap.ui.model.Filter(
+              "Vbeln",
+              sap.ui.model.FilterOperator.EQ,
+              openOrder
             ),
           ],
           success: function (oData, oResponse) {
@@ -357,7 +415,8 @@ sap.ui.define(
           sap.ui.core.BusyIndicator.hide(0);
         } else {
           var o = this;
-          // var r = this.byId("lineItemsList").getBinding("items");
+
+          var acikSip = that.byId("_IDGenComboBox3").getBinding("items");
           var r = that.byId("_idCBoxPerson").getBinding("items");
           var p = that.byId("_IDGenList2").getBinding("items");
           var s = that.byId("_IDGenList3").getBinding("items");
@@ -378,9 +437,11 @@ sap.ui.define(
             true
           );
 
+          acikSip.filter(new sap.ui.model.Filter(n, true));
           r.filter(new sap.ui.model.Filter(n, true));
           p.filter(new sap.ui.model.Filter(n, true));
           s.filter(new sap.ui.model.Filter(n, true));
+
           oModel.read("/CariSet('" + cari + "')", {
             success: function (oData, oResponse) {
               l.setProperty("/ToplamBakiye", oData.ToplamBakiye);
@@ -394,19 +455,230 @@ sap.ui.define(
             },
           });
           sap.ui.core.BusyIndicator.show(0);
+
+          acikSip.refresh();
           r.refresh();
           p.refresh();
           s.refresh();
 
           l.setProperty("/UrunPanelExpanded", true);
-          l.setProperty("/Panel1", false);
           l.setProperty("/Panel2", true);
           l.setProperty("/Panel3", true);
           l.setProperty("/Panel4", true);
           l.setProperty("/UrunPanelVisible", true);
           l.setProperty("/SelectionScreenPanelExpanded", true);
+          if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
+            l.setProperty("/DisplayMode", false);
+            l.setProperty("/UrunPanelExpanded", false);
+            jQuery.sap.delayedCall(500, this, function () {
+              this.onKaydet();
+            });
+          } else {
+            l.setProperty("/DisplayMode", true);
+            // l.setProperty("/Panel1", false);
+            sap.ui.core.BusyIndicator.hide(0);
+          }
+        }
+      },
+      onPressMalzemeListesi: function (e) {
+        var l = this.getModel("selectionModel");
 
+        var jsonRefresh = new sap.ui.model.json.JSONModel();
+        jsonRefresh.setData([]);
+        this.getView().setModel(jsonRefresh, "OzetList");
+
+        this.byId("_id22").setValue("0");
+        this.byId("_id24").setValue("0");
+        this.byId("_id26").setValue("0");
+        this.byId("_IDGenFeedInput1").setValue("");
+
+        // var openOrder = this.getView().byId("_IDGenComboBox3").getValue();
+        // var openOrderVdatu = this.getView().byId("_IDGenComboBox3").getSelectedKey();
+        // this.byId("_IDGenComboBox3").setValue("");
+        this.byId("_IDGenComboBox3").setSelectedKey("");
+
+        var numberOfDaysToAdd = 1;
+        var today = new Date();
+        var day = today.getDay();
+        if (day == "6") {
+          numberOfDaysToAdd = 2;
+        }
+        var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+          pattern: "dd-MM-yyyy",
+        });
+        today.setDate(today.getDate() + numberOfDaysToAdd);
+        var dateFormatted = dateFormat.format(today);
+        // if(openOrderVdatu !== ''){
+
+        //   this.getView().byId("idDate1").setValue(openOrderVdatu);  
+        //   l.setProperty("/Vdatu",openOrderVdatu);
+        // }
+        // else{
+        this.getView().byId("idDate1").setValue(dateFormatted);
+        l.setProperty("/Vdatu", dateFormatted);
+        // }
+        // openOrderVdatu = '';
+
+
+
+        l.setProperty("/Enabled", false);
+        l.setProperty("/TelPaym", "");
+        l.setProperty("/MailPaym", "");
+
+
+        var cari = this.getView().byId("_idMusteri").getValue();
+        var that = this;
+        var SAPoData = new sap.ui.model.odata.v2.ODataModel(
+          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
+          true
+        );
+
+        sap.ui.core.BusyIndicator.show(0);
+        var jsonData = new sap.ui.model.json.JSONModel();
+        jsonData.setSizeLimit("10000000");
+        SAPoData.read("/SiparisSet", {
+          filters: [
+            new sap.ui.model.Filter(
+              "idMusteri",
+              sap.ui.model.FilterOperator.EQ,
+              cari
+            ),
+            // new sap.ui.model.Filter(
+            //   "Vbeln",
+            //   sap.ui.model.FilterOperator.EQ,
+            //   openOrder
+            // ),
+          ],
+          success: function (oData, oResponse) {
+            sap.ui.core.BusyIndicator.hide(0);
+            if (oData.results && oData.results.length > 0) {
+              jsonData.setData(oData);
+              that.getView().setModel(jsonData, "SiparisList");
+
+              l.setProperty("/FirstDay", oData.results[0].FirstDay);
+              l.setProperty("/SecondDay", oData.results[0].SecondDay);
+              l.setProperty("/ThirdDay", oData.results[0].ThirdDay);
+            } else {
+              jsonData.setData([]);
+              that.getView().setModel(jsonData, "SiparisList");
+            }
+          },
+          error: function (oError) {
+            try {
+              var errMessage = JSON.parse(oError.responseText);
+              errMessage = errMessage.error.message.value;
+            } catch (e) {
+              errMessage = oError.message;
+            }
+            sap.m.MessageBox.alert(errMessage, {
+              icon: sap.m.MessageBox.Icon.ERROR,
+              title: this.getView()
+                .getModel("i18n")
+                .getResourceBundle()
+                .getText("hataUyari"),
+            });
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
+
+        var jsonDataPaym = new sap.ui.model.json.JSONModel();
+        jsonDataPaym.setSizeLimit("10000000");
+        SAPoData.read("/OdemeSet", {
+          filters: [
+            new sap.ui.model.Filter(
+              "idMusteri",
+              sap.ui.model.FilterOperator.EQ,
+              cari
+            ),
+          ],
+          success: function (oDataPaym, oResponsePaym) {
+            sap.ui.core.BusyIndicator.hide(0);
+            if (oDataPaym.results && oDataPaym.results.length > 0) {
+              jsonDataPaym.setData(oDataPaym);
+              that.getView().setModel(jsonDataPaym, "OdemeList");
+              l.setProperty("/TelPaym", oDataPaym.results[0].Telefon);
+              l.setProperty("/MailPaym", oDataPaym.results[0].Email);
+            } else {
+              jsonDataPaym.setData([]);
+              that.getView().setModel(jsonDataPaym, "OdemeList");
+            }
+          },
+          error: function (oErrorPaym) {
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
+
+        var that = this;
+        var a = true;
+        if (this.selectionModel.oData.Kunnr == "") {
+          var i = "Müşteri giriniz";
+          sap.m.MessageToast.show(i);
           sap.ui.core.BusyIndicator.hide(0);
+        } else {
+          var o = this;
+
+          var acikSip = that.byId("_IDGenComboBox3").getBinding("items");
+          var r = that.byId("_idCBoxPerson").getBinding("items");
+          var p = that.byId("_IDGenList2").getBinding("items");
+          var s = that.byId("_IDGenList3").getBinding("items");
+
+          var n = [];
+
+          var cari = o.getView().byId("_idMusteri").getValue();
+          n.push(
+            new sap.ui.model.Filter(
+              "idMusteri",
+              sap.ui.model.FilterOperator.EQ,
+              cari
+            )
+          );
+
+          var oModel = new sap.ui.model.odata.v2.ODataModel(
+            "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
+            true
+          );
+
+          acikSip.filter(new sap.ui.model.Filter(n, true));
+          r.filter(new sap.ui.model.Filter(n, true));
+          p.filter(new sap.ui.model.Filter(n, true));
+          s.filter(new sap.ui.model.Filter(n, true));
+
+          oModel.read("/CariSet('" + cari + "')", {
+            success: function (oData, oResponse) {
+              l.setProperty("/ToplamBakiye", oData.ToplamBakiye);
+              l.setProperty("/ToplamBak", oData.ToplamBakiye);
+              l.setProperty("/VadeBorc", oData.VadeBorc);
+              l.setProperty("/Email", oData.Email);
+              l.setProperty("/Telefon", oData.Telefon);
+            },
+            error: function (err) {
+              alert("Error!");
+            },
+          });
+          sap.ui.core.BusyIndicator.show(0);
+
+          acikSip.refresh();
+          r.refresh();
+          p.refresh();
+          s.refresh();
+
+          l.setProperty("/UrunPanelExpanded", true);
+          l.setProperty("/Panel2", true);
+          l.setProperty("/Panel3", true);
+          l.setProperty("/Panel4", true);
+          l.setProperty("/UrunPanelVisible", true);
+          l.setProperty("/SelectionScreenPanelExpanded", true);
+          // if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
+          //   l.setProperty("/DisplayMode", false);
+          //   l.setProperty("/UrunPanelExpanded", false);
+          //   jQuery.sap.delayedCall(500, this, function () {
+          //     this.onKaydet();
+          //   });
+          // } else {
+          l.setProperty("/DisplayMode", true);
+          // l.setProperty("/Panel1", false);
+          sap.ui.core.BusyIndicator.hide(0);
+          // }
         }
       },
       setInitialFocus: function (e) {
@@ -456,14 +728,25 @@ sap.ui.define(
 
       saveInput: function () {
         var that = this;
-        sap.m.MessageBox.confirm("Sipariş yaratılıyor, emin misiniz?", {
+        var openOrder = this.getView().byId("_IDGenComboBox3").getValue();
+
+        if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
+          var text1 = "Sipariş güncelleniyor, emin misiniz?";
+          var text2 = "Sipariş Güncelleniyor...";
+        }
+        else {
+          text1 = "Sipariş yaratılıyor, emin misiniz?";
+          text2 = "Sipariş Yaratılıyor...";
+        }
+
+        sap.m.MessageBox.confirm(text1, {
           title: "Bilgilendirme",
           actions: [sap.m.MessageBox.Action.YES, sap.m.MessageBox.Action.NO],
           styleClass: "messageBoxError",
           onClose: function (e) {
             if (e === sap.m.MessageBox.Action.YES) {
               var dialog = new sap.m.BusyDialog({
-                text: "Sipariş Yaratılıyor...",
+                text: text2,
               });
 
               dialog.open();
@@ -501,6 +784,7 @@ sap.ui.define(
               data.ToplamSiparis = "0";
               data.ToplamKdv = "0";
               data.ToplamSiparisKdv = "0";
+              data.Vbeln = that.getView().byId("_IDGenComboBox3").getValue();
               var begda = that.getView().byId("idDate1").getValue();
               data.SevkDate = begda;
               oModel.create("/MusteriSet", data, {
@@ -517,6 +801,8 @@ sap.ui.define(
                   that.byId("_id26").setValue("0");
                   that.getSiparisList();
 
+                  // that.byId("_IDGenComboBox3").setValue("");
+                  that.byId("_IDGenComboBox3").setSelectedKey("");
                   sap.ui.core.BusyIndicator.hide(0);
                 },
                 error: function (err) {
@@ -673,23 +959,178 @@ sap.ui.define(
       },
       onChange: function (event) {
         // jQuery.sap.delayedCall(500, this, function () {
-          // var cellMenge = event.getSource().getParent().getCells()[6];
-          var idMenge = event.getSource().getParent().getCells()[6].getValue();
-          //   while (idMenge.charAt(0) == '0') {
-          //     if (idMenge.length == 1) { break };
-          //     if (idMenge.charAt(1) == '.') { break };
-          //     idMenge = idMenge.substr(1, s.length-1)
-          // }
+        // var cellMenge = event.getSource().getParent().getCells()[6];
+        var idMenge = event.getSource().getParent().getCells()[6].getValue();
+        //   while (idMenge.charAt(0) == '0') {
+        //     if (idMenge.length == 1) { break };
+        //     if (idMenge.charAt(1) == '.') { break };
+        //     idMenge = idMenge.substr(1, s.length-1)
+        // }
 
-          var oTable = this.byId("lineItemsList");
+        var oTable = this.byId("lineItemsList");
 
-          var sPath =
-            event.getSource().mBindingInfos.value.binding.oContext.sPath;
-          var oModel = oTable.getModel("SiparisList");
-          oModel.setProperty(sPath + "/Menge", idMenge);
+        var sPath =
+          event.getSource().mBindingInfos.value.binding.oContext.sPath;
+        var oModel = oTable.getModel("SiparisList");
+        oModel.setProperty(sPath + "/Menge", idMenge);
         // });
       },
 
+
+      openVisiting: function (e) {
+        var t = this.getModel("selectionModel");
+        if (!this._valueHelpDialogVisiting) {
+          this._valueHelpDialogVisiting = sap.ui.xmlfragment(
+            "zfiotelselkokpit.fragment.Visiting",
+            this
+          );
+          this.getView().addDependent(this._valueHelpDialogVisiting);
+        }
+        var a = [];
+        this._valueHelpDialogVisiting.open();
+      },
+
+      closeVisiting: function () {
+        this._valueHelpDialogVisiting.close();
+      },
+      clearVisiting:function (){
+      
+        sap.ui.getCore().byId("VHId7").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId8").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId9").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId10").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId13").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId14").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId15").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId16").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId19").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId20").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId32").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId33").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId22").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId23").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId35").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId36").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId25").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId26").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId38").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId39").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId28").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId29").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId41").setValue("00:00:00");
+        sap.ui.getCore().byId("VHId42").setValue("00:00:00");
+
+
+      },
+      saveVisiting: function () {
+        var l = this.getModel("selectionModel");
+
+        var that = this;
+        var oModel = this.getView().getModel();
+        var data = {};
+
+        var idMusteri = this.getView().byId("_idMusteri").getValue();
+        var ad        = sap.ui.getCore().byId("VHId2").getValue();
+        var mail      = sap.ui.getCore().byId("VHId4").getValue();
+        var telefon   = sap.ui.getCore().byId("VHId6").getValue();
+
+
+        var mailregex = /^\w+[\w-+\.]*\@\w+([-\.]\w+)*\.[a-zA-Z]{2,}$/;
+
+        if (ad == "") {
+          var i = "Ad soyad giriniz";
+          sap.m.MessageToast.show(i);
+          sap.ui.core.BusyIndicator.hide(0);
+        } else if (telefon == "") {
+          i = "Telefon giriniz";
+          sap.m.MessageToast.show(i);
+          sap.ui.core.BusyIndicator.hide(0);
+        } else if (telefon.length < 10) {
+          alert("Geçerli Numara Giriniz!");
+          return false;
+        }
+        // else if (!mailregex.test(mail)) {
+        //   alert(mail + " Geçerli bir mail adresi değil!");
+        // }
+        else {
+
+          data.Query   = this.selectionModel.oData.Query;
+          data.Name    = ad;
+          data.Email   = mail;
+          data.Telefon = telefon;
+
+          // visiting hours -start-
+          data.MOAB1 = sap.ui.getCore().byId("VHId7").getValue();
+          data.MOBI1 = sap.ui.getCore().byId("VHId8").getValue();
+          data.MOAB2 = sap.ui.getCore().byId("VHId9").getValue();
+          data.MOBI2 = sap.ui.getCore().byId("VHId10").getValue();
+
+          data.DIAB1 = sap.ui.getCore().byId("VHId13").getValue();
+          data.DIBI1 = sap.ui.getCore().byId("VHId14").getValue();
+          data.DIAB2 = sap.ui.getCore().byId("VHId15").getValue();
+          data.DIBI2 = sap.ui.getCore().byId("VHId16").getValue();
+          
+          data.MIAB1 = sap.ui.getCore().byId("VHId19").getValue();
+          data.MIBI1 = sap.ui.getCore().byId("VHId20").getValue();
+          data.MIAB2 = sap.ui.getCore().byId("VHId32").getValue();
+          data.MIBI2 = sap.ui.getCore().byId("VHId33").getValue();
+          
+          data.DOAB1 = sap.ui.getCore().byId("VHId22").getValue();
+          data.DOBI1 = sap.ui.getCore().byId("VHId23").getValue();
+          data.DOAB2 = sap.ui.getCore().byId("VHId35").getValue();
+          data.DOBI2 = sap.ui.getCore().byId("VHId36").getValue();
+          
+          data.FRAB1 = sap.ui.getCore().byId("VHId25").getValue();
+          data.FRBI1 = sap.ui.getCore().byId("VHId26").getValue();
+          data.FRAB2 = sap.ui.getCore().byId("VHId38").getValue();
+          data.FRBI2 = sap.ui.getCore().byId("VHId39").getValue();
+          
+          data.SAAB1 = sap.ui.getCore().byId("VHId28").getValue();
+          data.SABI1 = sap.ui.getCore().byId("VHId29").getValue();
+          data.SAAB2 = sap.ui.getCore().byId("VHId41").getValue();
+          data.SABI2 = sap.ui.getCore().byId("VHId42").getValue();
+          // visiting hours - end -
+
+          oModel.create("/VisitingSet", data, {
+            success: function (oData, oResponse) { 
+
+
+              var p = that.byId("_IDGenList2").getBinding("items");
+              var n = [];
+              n.push(
+                new sap.ui.model.Filter(
+                  "idMusteri",
+                  sap.ui.model.FilterOperator.EQ,
+                  idMusteri
+                )
+              );
+              p.filter(new sap.ui.model.Filter(n, true));
+              p.refresh();
+
+
+              sap.ui.core.BusyIndicator.hide(0);
+              sap.m.MessageToast.show("Başarıyla tamamlandı!");
+              that._valueHelpDialogVisiting.close();
+            },
+            error: function (err) { 
+              var errorObj1 = JSON.parse(err.responseText); 
+              sap.m.MessageBox.error(
+                errorObj1.error.innererror.errordetails[0].message,
+                {
+                  title: "HATA",
+                  id: "messageBoxId2",
+                  contentWidth: "100px",
+                }
+              );
+            },
+          });
+
+          // sap.ui.getCore().byId("idAd").setValue("");
+          // sap.ui.getCore().byId("idMail").setValue("");
+          // sap.ui.getCore().byId("idTelefon").setValue("");
+        }
+
+      },
       openPayment: function (e) {
         var t = this.getModel("selectionModel");
         if (!this._valueHelpDialogPayment) {
@@ -853,10 +1294,10 @@ sap.ui.define(
         } else if (telefon.length < 10) {
           alert("Geçerli Numara Giriniz!");
           return false;
-        } 
+        }
         // else if (!mailregex.test(mail)) {
         //   alert(mail + " Geçerli bir mail adresi değil!");
-        // } 
+        // }
         else {
           data.idMusteri = idMusteri;
           data.Name = ad;
@@ -905,18 +1346,6 @@ sap.ui.define(
       },
 
       onSendNote: function () {
-        // var ad = this.getView().byId("_idCBoxPerson").getSelectedItem().getText();
-        // if (this.getView().byId("_idCBoxPerson").getSelectedItem() !== null )
-        //  {
-          // var ad = this.getView().byId("_idCBoxPerson").getSelectedItem().getText();
-        //   var i = "Görüşülen kişiyi seçiniz!";
-        //   sap.m.MessageToast.show(i);
-        //   sap.ui.core.BusyIndicator.hide(0);
-        //   return false;
-        // }
-
-        
-
         var that = this;
         var data = {};
 
@@ -944,7 +1373,7 @@ sap.ui.define(
 
                   sap.ui.core.BusyIndicator.hide(0);
                 },
-                error: function (err) {},
+                error: function (err) { },
               });
             }
           },
@@ -993,14 +1422,14 @@ sap.ui.define(
         var l = this.getModel("selectionModel");
         if (t === "Temsilci") {
           l.setProperty("/SicilVisible", true);
-          l.setProperty("/MusteriVisible", false); 
+          l.setProperty("/MusteriVisible", false);
 
           // sap.ui.getCore().byId(this.createId("_idTemsilci")).setVisible(true);
           // sap.ui.getCore().byId(this.createId("_idMusteri")).setVisible(false);
           // sap.ui.getCore().byId(this.createId("_idBtnList")).setVisible(false);
         } else if (t === "Müşteri") {
           l.setProperty("/SicilVisible", false);
-          l.setProperty("/MusteriVisible", true); 
+          l.setProperty("/MusteriVisible", true);
 
           // sap.ui.getCore().byId(this.createId("_idTemsilci")).setVisible(false);
           // sap.ui.getCore().byId(this.createId("_idMusteri")).setVisible(true);
@@ -1035,7 +1464,7 @@ sap.ui.define(
         e.getSource().getBinding("items").filter(i);
       },
       onValueHelpCloseSicil: function (e) {
-        var button = sap.ui.getCore().byId(this.createId("idRBMus")); //find the button 
+        var button = sap.ui.getCore().byId(this.createId("idRBMus")); //find the button
 
         var t = e.getParameter("selectedItem"),
           a = this.getModel("selectionModel");
@@ -1051,7 +1480,10 @@ sap.ui.define(
           );
           a.setProperty("/Kunnr", "");
           a.setProperty("/Name", "");
-          sap.ui.getCore().byId(this.createId("rbGMain")).setSelectedButton(button);
+          sap.ui
+            .getCore()
+            .byId(this.createId("rbGMain"))
+            .setSelectedButton(button);
 
           // sap.ui.getCore().byId(this.createId("_idTemsilci")).setVisible(false);
           // sap.ui.getCore().byId(this.createId("_idMusteri")).setVisible(true);
@@ -1116,28 +1548,96 @@ sap.ui.define(
       },
 
       onFavPress: function (oEvent) {
-        var oListItem = oEvent.getSource();
+        var l = this.getModel("selectionModel");
+
+        var oListItem       = oEvent.getSource();
         var oBindingContext = oListItem.getBindingContext();
-        var idMusteri = oBindingContext.getProperty("idMusteri");
-        var Parnr = oBindingContext.getProperty("Parnr");
-        var Telefon = oBindingContext.getProperty("Telefon");
+        var idMusteri       = oBindingContext.getProperty("idMusteri");
+        var Parnr           = oBindingContext.getProperty("Parnr");
+        var Telefon         = oBindingContext.getProperty("Telefon");
+        var Email           = oBindingContext.getProperty("Email");
+        var Name            = oBindingContext.getProperty("Name");
+
+        l.setProperty("/VHName", Name);
+        l.setProperty("/VHEmail", Email);
+        l.setProperty("/VHTelefon", Telefon);
+
+
         var data = {};
         data.idMusteri = idMusteri;
         data.Parnr = Parnr;
         data.Type = "U";
         var that = this;
+
+        var SAPoData = new sap.ui.model.odata.v2.ODataModel(
+          "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
+          true
+        );
+
+
+        var query = idMusteri;
+        query += '-';
+        query += Parnr;
+
+        SAPoData.read("/VisitingSet('" + query + "')", {
+          success: function (oData, oResponse) {
+
+            // l.setProperty("/VHName", oData.results[0].Name);
+            // l.setProperty("/VHEmail", oData.results[0].Email);
+            // l.setProperty("/VHTelefon",oData.results[0].Email);
+            l.setProperty("/Query",oData.Query);
+            l.setProperty("/MOAB1", oData.MOAB1);
+            l.setProperty("/MOBI1", oData.MOBI1);
+            l.setProperty("/MOAB2", oData.MOAB2);
+            l.setProperty("/MOBI2", oData.MOBI2);
+            l.setProperty("/DIAB1", oData.DIAB1);
+            l.setProperty("/DIBI1", oData.DIBI1);
+            l.setProperty("/DIAB2", oData.DIAB2);
+            l.setProperty("/DIBI2", oData.DIBI2);
+            l.setProperty("/MIAB1", oData.MIAB1);
+            l.setProperty("/MIBI1", oData.MIBI1);
+            l.setProperty("/MIAB2", oData.MIAB2);
+            l.setProperty("/MIBI2", oData.MIBI2);
+            l.setProperty("/DOAB1", oData.DOAB1);
+            l.setProperty("/DOBI1", oData.DOBI1);
+            l.setProperty("/DOAB2", oData.DOAB2);
+            l.setProperty("/DOBI2", oData.DOBI2);
+            l.setProperty("/FRAB1", oData.FRAB1);
+            l.setProperty("/FRBI1", oData.FRBI1);
+            l.setProperty("/FRAB2", oData.FRAB2);
+            l.setProperty("/FRBI2", oData.FRBI2);
+            l.setProperty("/SAAB1", oData.SAAB1);
+            l.setProperty("/SABI1", oData.SABI1);
+            l.setProperty("/SAAB2", oData.SAAB2);
+            l.setProperty("/SABI2", oData.SABI2);
+
+
+
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+          error: function (oError) {
+            sap.ui.core.BusyIndicator.hide(0);
+          },
+        });
+
+
         sap.m.MessageBox.show("Lütfen işlem seçimi yapınız", {
           title: "İşlem",
-          actions: ["Favori", "Ara", "Çıkış"],
+          actions: ["Arama Saatleri", "Favori", "Ara", "Çıkış"],
           styleClass: "messageBoxError",
           onClose: function (e) {
-            if (e === "Favori") {
+            if (e === "Arama Saatleri") {
+
+              that.openVisiting(); 
+
+            }
+            else if (e === "Favori") {
               var oModel = that.getView().getModel();
               oModel.create("/IletisimSet", data, {
                 success: function (oData, oResponse) {
                   sap.ui.core.BusyIndicator.hide(0);
                 },
-                error: function (err) {},
+                error: function (err) { },
               });
             } else if (e === "Ara") {
               var phoneNumber = Telefon;
@@ -1163,6 +1663,8 @@ sap.ui.define(
       onMessagePopoverPress: function (e) {
         this._getMessagePopover().openBy(e.getSource());
       },
+
+
       onSearch3: function (e) {
         var oView = this.getView();
 
@@ -1257,15 +1759,6 @@ sap.ui.define(
             )
           );
         }
-        // var ugrp = this.getView().byId('_IDGenComboBox2').getSelectedItem().getKey();
-        // aFilter.push(
-        //   new sap.ui.model.Filter(
-        //     "UrunGrp",
-        //     sap.ui.model.FilterOperator.EQ,
-        //     ugrp
-        //   )
-        // );
-        // filter binding
 
         var idMusteri = this.getView().byId("_idMusteri").getValue();
         aFilter.push(
@@ -1275,10 +1768,6 @@ sap.ui.define(
             idMusteri
           )
         );
-
-        // var oTable = this.byId("lineItemsList");
-        // var oBinding = oTable.getBinding("items");
-        // oBinding.filter(aFilter);
       },
       _getMessagePopover: function () {
         if (!this._oMessagePopover) {
@@ -1320,7 +1809,20 @@ sap.ui.define(
           // this.getView().byId("lineItemsList").getBinding("items").filter(aFilters);
         }
       },
+      onChangeDate: function (oEvent) {
+        var l = this.getModel("selectionModel");
 
+        var fromDate = this.byId("idDate1").getDateValue();
+        var h = fromDate.getDay();
+        if (h === 0) {
+          sap.m.MessageToast.show('Pazar günü seçilemez!');
+          this.getView().byId("idDate1").setValue(this.selectionModel.oData.Vdatu);
+          return;
+        }
+        var l = this.getModel("selectionModel");
+        l.setProperty("/Vdatu", oEvent.getParameter("newValue"));
+
+      },
       _fixUtcProblem: function (t) {
         if (t) {
           return new Date(e.getTime() - e.getTimezoneOffset() * 60 * 1e3);

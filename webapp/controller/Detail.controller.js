@@ -96,6 +96,10 @@ sap.ui.define(
             } else if (oData.TemsilciAdi !== "") {
               l.setProperty("/SicilId", oData.idTemsilci);
               l.setProperty("/SicilAd", oData.TemsilciAdi);
+              if(oData.SevkiyatDay == "X"){
+                l.setProperty("/DistSevkVisible", true);
+                l.setProperty("/DistSevkText", "Dist.Sevk.Günleri"); 
+              }
               button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
               sap.ui
                 .getCore()
@@ -221,6 +225,8 @@ sap.ui.define(
           MailPaym: "",
           SyUname: sap.ushell.Container.getService("UserInfo").getId(),
           SelectionScreenPanelExpanded: true,
+          DistSevkVisible:false,
+          DistSevkText:"",
           Panel1: false,
           Panel2: false,
           Panel3: false,
@@ -420,6 +426,11 @@ sap.ui.define(
           var r = that.byId("_idCBoxPerson").getBinding("items");
           var p = that.byId("_IDGenList2").getBinding("items");
           var s = that.byId("_IDGenList3").getBinding("items");
+          
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            var sDist = that.byId("_IDGenList6").getBinding("items");
+          }
+          
 
           var n = [];
 
@@ -441,6 +452,10 @@ sap.ui.define(
           r.filter(new sap.ui.model.Filter(n, true));
           p.filter(new sap.ui.model.Filter(n, true));
           s.filter(new sap.ui.model.Filter(n, true));
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            sDist.filter(new sap.ui.model.Filter(n, true));
+          }
+          
 
           oModel.read("/CariSet('" + cari + "')", {
             success: function (oData, oResponse) {
@@ -460,6 +475,10 @@ sap.ui.define(
           r.refresh();
           p.refresh();
           s.refresh();
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            sDist.refresh();
+          }
+          
 
           l.setProperty("/UrunPanelExpanded", true);
           l.setProperty("/Panel2", true);
@@ -467,6 +486,10 @@ sap.ui.define(
           l.setProperty("/Panel4", true);
           l.setProperty("/UrunPanelVisible", true);
           l.setProperty("/SelectionScreenPanelExpanded", true);
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            l.setProperty("/DistSevkVisible", true);
+            l.setProperty("/DistSevkText", "Dist.Sevk.Günleri");
+          }
           if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
             l.setProperty("/DisplayMode", false);
             l.setProperty("/UrunPanelExpanded", false);
@@ -621,7 +644,9 @@ sap.ui.define(
           var r = that.byId("_idCBoxPerson").getBinding("items");
           var p = that.byId("_IDGenList2").getBinding("items");
           var s = that.byId("_IDGenList3").getBinding("items");
-
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            var sDist = that.byId("_IDGenList6").getBinding("items");
+          }
           var n = [];
 
           var cari = o.getView().byId("_idMusteri").getValue();
@@ -642,6 +667,9 @@ sap.ui.define(
           r.filter(new sap.ui.model.Filter(n, true));
           p.filter(new sap.ui.model.Filter(n, true));
           s.filter(new sap.ui.model.Filter(n, true));
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            sDist.filter(new sap.ui.model.Filter(n, true));
+          }
 
           oModel.read("/CariSet('" + cari + "')", {
             success: function (oData, oResponse) {
@@ -661,6 +689,9 @@ sap.ui.define(
           r.refresh();
           p.refresh();
           s.refresh();
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            sDist.refresh();
+          }
 
           l.setProperty("/UrunPanelExpanded", true);
           l.setProperty("/Panel2", true);
@@ -668,6 +699,10 @@ sap.ui.define(
           l.setProperty("/Panel4", true);
           l.setProperty("/UrunPanelVisible", true);
           l.setProperty("/SelectionScreenPanelExpanded", true);
+          if(this.selectionModel.oData.DistSevkVisible == true){
+            l.setProperty("/DistSevkVisible", true);
+            l.setProperty("/DistSevkText", "Dist.Sevk.Günleri");
+          }
           // if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
           //   l.setProperty("/DisplayMode", false);
           //   l.setProperty("/UrunPanelExpanded", false);
@@ -1287,11 +1322,11 @@ sap.ui.define(
           var i = "Ad soyad giriniz";
           sap.m.MessageToast.show(i);
           sap.ui.core.BusyIndicator.hide(0);
-        } else if (telefon == "") {
-          i = "Telefon giriniz";
+        } else if (telefon == "" && mail == "") {
+          i = "Telefon veya Email'den En Az Biri Dolu Olmalıdır!";
           sap.m.MessageToast.show(i);
           sap.ui.core.BusyIndicator.hide(0);
-        } else if (telefon.length < 10) {
+        } else if (telefon !== "" && telefon.length < 10) {
           alert("Geçerli Numara Giriniz!");
           return false;
         }

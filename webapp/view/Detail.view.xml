@@ -31,7 +31,7 @@
                     layout="ResponsiveGridLayout"
                     columnsXL="4"
                     columnsM="2"
-                    columnsL="3"
+                    columnsL="4"
                 >
                     <f:content> 
                         <VBox id="_IDGenVBox11">
@@ -211,6 +211,56 @@
                                 </CustomListItem>
                             </items>
                         </List>
+
+<!--yeni yeni yeni-->
+<core:Title
+id="_IDGenTitle6"
+text="{selectionModel>/DistSevkText}"  
+emphasized="true"
+/>
+<List 
+visible="{selectionModel>/DistSevkVisible}"
+backgroundDesign="Transparent"
+id="_IDGenList6"
+items="{
+path: '/DistSevkSet',
+sorter: {
+path: 'Gun'
+}
+}"
+>
+<items>
+    <CustomListItem id="_idCLI6">
+        <FlexBox id="_IDGenFlexBox6">
+            <VBox
+                id="_IDGenVBox12"
+                width="10%"
+            >
+                <HBox id="_IDGenHBox9">
+                    <core:Icon
+                        id="_idIcon2"
+                        src="sap-icon://inventory"
+                    />
+                </HBox>
+            </VBox>
+            <VBox
+                id="_IDGenVBox13"
+                width="50%"
+            >
+                <HBox id="_IDGenHBox10">
+                    <Text
+                        id="_idTxt8"
+                        text="{Gun}"
+                    />
+                </HBox>
+            </VBox>
+        </FlexBox>
+    </CustomListItem>
+</items>
+</List>
+<!--yeni yeni yeni-->
+
+                        
                     </f:content>
                 </f:SimpleForm>
             </Panel>

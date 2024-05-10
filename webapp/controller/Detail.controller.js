@@ -99,6 +99,7 @@ sap.ui.define(
               if(oData.SevkiyatDay == "X"){
                 l.setProperty("/DistSevkVisible", true);
                 l.setProperty("/DistSevkText", "Dist.Sevk.Günleri"); 
+                l.setProperty("/DistMusSip","Müşteri Sip.");
               }
               button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
               sap.ui
@@ -226,7 +227,8 @@ sap.ui.define(
           SyUname: sap.ushell.Container.getService("UserInfo").getId(),
           SelectionScreenPanelExpanded: true,
           DistSevkVisible:false,
-          DistSevkText:"",
+          DistSevkText:"", 
+          MusteriSip:"",
           Panel1: false,
           Panel2: false,
           Panel3: false,
@@ -488,7 +490,7 @@ sap.ui.define(
           l.setProperty("/SelectionScreenPanelExpanded", true);
           if(this.selectionModel.oData.DistSevkVisible == true){
             l.setProperty("/DistSevkVisible", true);
-            l.setProperty("/DistSevkText", "Dist.Sevk.Günleri");
+            l.setProperty("/DistSevkText", "Dist.Sevk.Günleri"); 
           }
           if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
             l.setProperty("/DisplayMode", false);
@@ -701,7 +703,7 @@ sap.ui.define(
           l.setProperty("/SelectionScreenPanelExpanded", true);
           if(this.selectionModel.oData.DistSevkVisible == true){
             l.setProperty("/DistSevkVisible", true);
-            l.setProperty("/DistSevkText", "Dist.Sevk.Günleri");
+            l.setProperty("/DistSevkText", "Dist.Sevk.Günleri"); 
           }
           // if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
           //   l.setProperty("/DisplayMode", false);
@@ -762,8 +764,11 @@ sap.ui.define(
       },
 
       saveInput: function () {
-        var that = this;
-        var openOrder = this.getView().byId("_IDGenComboBox3").getValue();
+        var that = this; 
+        var openOrder  = that.getView().byId("_IDGenComboBox3").getValue();
+        // var musteriSip = that.getView().byId("_IDGenInput1").getValue();
+        
+        // var MusteriSip = this.getView().byId("_idTxt9").getValue();
 
         if (openOrder !== 'Yeni Sip.' && openOrder !== '') {
           var text1 = "Sipariş güncelleniyor, emin misiniz?";
@@ -814,6 +819,17 @@ sap.ui.define(
                 }
               }
 
+
+// MÜŞTERİ SİPARİŞİ
+
+if(that.selectionModel.oData.DistSevkVisible == true)
+  {
+    data.MusteriSip = that.selectionModel.oData.MusteriSip;
+  }
+
+// MÜŞTERİ SİPARİŞİ
+
+
               data.idMusteri = idMusteri;
               data.musteriToSiparis = siparisItem;
               data.ToplamSiparis = "0";
@@ -836,7 +852,7 @@ sap.ui.define(
                   that.byId("_id26").setValue("0");
                   that.getSiparisList();
 
-                  // that.byId("_IDGenComboBox3").setValue("");
+                  that.byId("_IDGenInput1").setValue("");
                   that.byId("_IDGenComboBox3").setSelectedKey("");
                   sap.ui.core.BusyIndicator.hide(0);
                 },

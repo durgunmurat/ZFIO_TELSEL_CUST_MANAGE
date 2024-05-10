@@ -23,7 +23,7 @@
                 expanded="{selectionModel>/SelectionScreenPanelExpanded}"
                 headerText="Genel Bilgiler"
                 width="auto"
-            > 
+            >
 
                 <f:SimpleForm
                     id="_IDGenSimpleForm1"
@@ -33,7 +33,7 @@
                     columnsM="2"
                     columnsL="4"
                 >
-                    <f:content> 
+                    <f:content>
                         <VBox id="_IDGenVBox11">
 
                             <HBox
@@ -171,21 +171,22 @@
                         <core:Title
                             id="_IDGenTitle1"
                             text="Sevkiyat Günleri"
+                            icon="sap-icon://inventory"
                         />
                         <List
                             backgroundDesign="Transparent"
                             id="_IDGenList3"
                             items="{
-            path: '/SevkiyatSet',
-            sorter: {
-                path: 'Gun'
-            }
-        }"
+                                    path: '/SevkiyatSet',
+                                    sorter: {
+                                                path: 'Gun'
+                                            }
+                                    }"
                         >
                             <items>
                                 <CustomListItem id="_idCLI4">
                                     <FlexBox id="_IDGenFlexBox4">
-                                        <VBox
+                                        <!-- <VBox
                                             id="_IDGenVBox9"
                                             width="10%"
                                         >
@@ -195,10 +196,10 @@
                                                     src="sap-icon://inventory"
                                                 />
                                             </HBox>
-                                        </VBox>
+                                        </VBox> -->
                                         <VBox
                                             id="_IDGenVBox10"
-                                            width="50%"
+                                            width="auto"
                                         >
                                             <HBox id="_IDGenHBox8">
                                                 <Text
@@ -212,55 +213,85 @@
                             </items>
                         </List>
 
-<!--yeni yeni yeni-->
-<core:Title
-id="_IDGenTitle6"
-text="{selectionModel>/DistSevkText}"  
-emphasized="true"
-/>
-<List 
-visible="{selectionModel>/DistSevkVisible}"
-backgroundDesign="Transparent"
-id="_IDGenList6"
-items="{
-path: '/DistSevkSet',
-sorter: {
-path: 'Gun'
-}
-}"
->
-<items>
-    <CustomListItem id="_idCLI6">
-        <FlexBox id="_IDGenFlexBox6">
-            <VBox
-                id="_IDGenVBox12"
-                width="10%"
-            >
-                <HBox id="_IDGenHBox9">
-                    <core:Icon
-                        id="_idIcon2"
-                        src="sap-icon://inventory"
-                    />
-                </HBox>
-            </VBox>
-            <VBox
-                id="_IDGenVBox13"
-                width="50%"
-            >
-                <HBox id="_IDGenHBox10">
-                    <Text
-                        id="_idTxt8"
-                        text="{Gun}"
-                    />
-                </HBox>
-            </VBox>
-        </FlexBox>
-    </CustomListItem>
-</items>
-</List>
-<!--yeni yeni yeni-->
+                        <!--yeni yeni yeni-->
+                        <core:Title
+                            id="_IDGenTitle6"
+                            text="{selectionModel>/DistSevkText}"
+                            emphasized="true"
+                            icon="sap-icon://inventory"
+                        />
+                        <List
+                            visible="{selectionModel>/DistSevkVisible}"
+                            backgroundDesign="Transparent"
+                            id="_IDGenList6"
+                            items="{
+                                    path: '/DistSevkSet',
+                                    sorter: {
+                                                path: 'Gun'
+                                            }
+                                    }"  >
+                            <items>
+                                <CustomListItem id="_idCLI6">
+                                    <FlexBox id="_IDGenFlexBox6">
+                                        <!-- <VBox
+                                            id="_IDGenVBox12"
+                                            width="10%"
+                                        >
+                                            <HBox id="_IDGenHBox9">
+                                                <core:Icon
+                                                    id="_idIcon2"
+                                                    src="sap-icon://inventory"
+                                                />
+                                            </HBox>
+                                        </VBox> -->
+                                        <VBox
+                                            id="_IDGenVBox13"
+                                            width="auto"
+                                        >
+                                            <HBox id="_IDGenHBox10">
+                                                <Text
+                                                    id="_idTxt8"
+                                                    text="{Gun}"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
 
-                        
+                                    <FlexBox id="_IDGenFlexBox5">
+                                        <VBox
+                                            id="_IDGenVBox14"
+                                            width="50%"
+                                        >
+                                            <HBox id="_IDGenHBox11">
+                                                <Label visible="{selectionModel>/DistSevkVisible}"
+                                                    id="_idLbl4"
+                                                    text="Müşteri Siparişi:"
+                                                    class="sapUiSmallMarginTop sapUiSmallMarginEnd"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox
+                                            id="_IDGenVBox15"
+                                            width="auto"
+                                        >
+                                            <HBox id="_IDGenHBox12">
+                                                <Input id="_IDGenInput1" 
+                                                    class="smallLabel2"
+                                                    value="{selectionModel>/MusteriSip}"
+                                                    visible="{selectionModel>/DistSevkVisible}"
+                                                    editable="{selectionModel>/DistSevkVisible}"
+                                                    enabled="{selectionModel>/DistSevkVisible}"
+                                                    
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
+                                </CustomListItem>
+                            </items>
+                        </List>  
+                        <!--yeni yeni yeni-->
+
+
                     </f:content>
                 </f:SimpleForm>
             </Panel>
@@ -294,9 +325,9 @@ path: 'Gun'
                                 id="tableHeader"
                                 text="{worklistView>/worklistTableTitle}"
                             />
-                            
-                            <ComboBox 
-                            width="auto"
+
+                            <ComboBox
+                                width="auto"
                                 selectionChange="onSearch3"
                                 id="_IDGenComboBox2"
                                 enabled="{= ${selectionModel>/AgEnabled} }"
@@ -311,46 +342,46 @@ path: 'Gun'
                                     key="{UrunGrp}"
                                     text="{UrunGrpTxt}"
                                 />
-                            </ComboBox> 
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer2"/>
-                            <SearchField 
-                            width="auto"
-                                id="searchField" 
+                            </ComboBox>
+                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer2" />
+                            <SearchField
+                                width="auto"
+                                id="searchField"
                                 placeholder="Ürün Adı veya Kodu Giriniz"
                                 search=".onFilterPosts"
                                 liveChange=".onSearchFieldLiveChange"
                             />
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer3"/>
-                            <ToolbarSeparator id="_IDGenToolbarSep1" /> 
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer1"/>
+                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer3" />
+                            <ToolbarSeparator id="_IDGenToolbarSep1" />
+                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer1" />
                             <!-- <Label
                                 id="_IDLblComboBox2"
                                 text="Ürün Kategorisi"
                             /> -->
                             <ComboBox
-                            selectionChange="onPressOpenOrder"
-                            id="_IDGenComboBox3"
-                            placeholder="Açık Siparişler"
-                            enabled="{= ${selectionModel>/AgEnabled} }"
-                            items="{
+                                selectionChange="onPressOpenOrder"
+                                id="_IDGenComboBox3"
+                                placeholder="Açık Siparişler"
+                                enabled="{= ${selectionModel>/AgEnabled} }"
+                                items="{
                         path: '/AcikSiparisSet',
                         sorter: { path: 'Vbeln' }
                     }"
-                        >
-                            <core:Item
-                                id="_IDGenItem4"
-                                key="{Vdatu}"
-                                text="{Vbeln}"
-                            />
-                            
-                        </ComboBox>
-                        
-                            <Label id="idLblDate1" labelFor="idDate1" text="Sevk.Trh."/>
+                            >
+                                <core:Item
+                                    id="_IDGenItem4"
+                                    key="{Vdatu}"
+                                    text="{Vbeln}"
+                                />
+
+                            </ComboBox>
+
+                            <Label id="idLblDate1" labelFor="idDate1" text="Sevk.Trh." />
                             <DatePicker id="idDate1" width="auto" displayFormat="medium"
                                 value="{path:'',type:'sap.ui.model.type.DateTime', formatOptions:{pattern:'dd-MM-yyyy'} }"
                                 placeholder="Sevkiyat Tarihi Giriniz.."
                                 valueStateText="Geçersiz Giriş" enabled="true" visible="true"
-                                change="onChangeDate" 
+                                change="onChangeDate"
                             />
                             <Button
                                 id="_IDsimulate"

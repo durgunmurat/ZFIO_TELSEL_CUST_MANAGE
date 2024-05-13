@@ -853,7 +853,7 @@ if(that.selectionModel.oData.DistSevkVisible == true)
                   that.getSiparisList();
 
                   that.byId("_IDGenInput1").setValue("");
-                  that.byId("_IDGenComboBox3").setSelectedKey("");
+                  // that.byId("_IDGenComboBox3").setSelectedKey("");
                   sap.ui.core.BusyIndicator.hide(0);
                 },
                 error: function (err) {

@@ -4,76 +4,77 @@
   xmlns:layout="sap.ui.layout"
   id="_IDFrag1">
   <Dialog id="_IDFragPayment1" title="Ödeme Linki Gönder" icon="sap-icon://create" state="Success">
-    <f:SimpleForm id="simpleFormPayment"  
-		layout="ResponsiveGridLayout"
-		editable="true"
-		width="100%"
-		adjustLabelSpan="false"
-		labelSpanXL="2"
-		labelSpanL="2"
-		labelSpanM="2"
-		labelSpanS="5">
+    <f:SimpleForm id="simpleFormPayment"
+      layout="ResponsiveGridLayout"
+      editable="true"
+      width="100%"
+      adjustLabelSpan="false"
+      labelSpanXL="2"
+      labelSpanL="2"
+      labelSpanM="2"
+      labelSpanS="5">
       <f:content>
 
-      <VBox id="_IDGenVBox1" class="sapUiSmallMargin">
-       
-          <!-- <InputListItem id="_IDListItem1" label="Seçim Yapınız"> -->
-        <Label id="_IDGenLabel1" text="Seçim Yapınız" labelFor="rbG" />
-          <RadioButtonGroup id="rbG" select="onSelectRadio" columns="5" class="sapUiMediumMarginBottom" > 
-          <RadioButton id="idRB1" text="SMS" selected="true" /> 
-          <RadioButton id="idRB2" text="Mail" /> 
-        </RadioButtonGroup> 
-      
-      
-      <Label id="_idLblSMS"   text="Telefon"/>
-      <!-- <Input id="_idInputSMS" width="auto"  editable="true" value="{OdemeList>/results/0/Telefon}" type="Text" maxLength="10"/>  -->
-        <Input id="_idInputSMS" width="auto"  editable="true" value="{selectionModel>/TelPaym}" maxLength="10"/>
-      <Label id="_idLblMail"   text="Email" visible="false" />
-      <!-- <Input id="_idInputMail" width="auto"  editable="true" value="{OdemeList>/results/0/Email}"  visible="false"/>  -->
-        <Input id="_idInputMail" width="auto"  editable="true" value="{selectionModel>/MailPaym}"  visible="false"/> 
+        <VBox id="_IDGenVBox1" class="sapUiSmallMargin">
+ 
+          <Label id="_IDGenLabel1" text="Seçim Yapınız" labelFor="rbG" />
+          <RadioButtonGroup id="rbG" select="onSelectRadio" columns="5"
+            class="sapUiMediumMarginBottom">
+            <RadioButton id="idRB1" text="SMS" selected="true" />
+            <RadioButton id="idRB2" text="Mail" />
+          </RadioButtonGroup>
 
-        <RadioButtonGroup id="rbG2" select="onSelectRadio2" columns="5" class="sapUiMediumMarginBottom"> 
-          <RadioButton id="idRB3" text="Toplam Bakiye" selected="true" /> 
-          <RadioButton id="idRB4" text="Vadesi Geçmiş Borç" /> 
-          <RadioButton id="idRB5" text="Diğer Tutar" /> 
-        </RadioButtonGroup>
-        <Input description="(₺)"
-        id="_idBakiye1"
-        value="{parts:[{path: 'selectionModel>/ToplamBak'},{path:'selectionModel>/Currency'}],
-        type: 'sap.ui.model.type.Currency',
-        formatOptions: {showMeasure: false}}"
-        editable="false"
-       />
-       <Input description="(₺)"
-        visible="false"
-        id="_idBakiye2"
-        value="{parts:[{path: 'selectionModel>/VadeBorc'},{path:'selectionModel>/Currency'}],
-        type: 'sap.ui.model.type.Currency',
-        formatOptions: {showMeasure: false}}"
-        editable="false"
-       />
-       <Input description="(₺)"
-        visible="false"
-        id="_idBakiye3"
-        value="{parts:[{path: 'selectionModel>/DigerTutar'},{path:'selectionModel>/Currency'}],
-        type: 'sap.ui.model.type.Currency',
-        formatOptions: {showMeasure: false}}"
-       />
-       </VBox>
 
-      
+          <Label id="_idLblSMS" text="Telefon" />
+          <Input id="_idInputSMS" width="auto" editable="true" value="{selectionModel>/TelPaym}"
+            maxLength="10" />
+          <Label id="_idLblMail" text="Email" visible="false" />
+          <Input id="_idInputMail" width="auto" editable="true" value="{selectionModel>/MailPaym}"
+            visible="false" />
+
+          <RadioButtonGroup id="rbG2" select="onSelectRadio2" columns="5"
+            class="sapUiMediumMarginBottom">
+            <RadioButton id="idRB3" text="Toplam Bakiye" selected="true" />
+            <RadioButton id="idRB4" text="Vadesi Geçmiş Borç" />
+            <RadioButton id="idRB5" text="Diğer Tutar" />
+          </RadioButtonGroup>
+          <Input description="(₺)"
+            id="_idBakiye1"
+            value="{parts:[{path: 'selectionModel>/ToplamBak'},{path:'selectionModel>/Currency'}],
+        type: 'sap.ui.model.type.Currency',
+        formatOptions: {showMeasure: false}}"
+            editable="false"
+          />
+          <Input description="(₺)"
+            visible="false"
+            id="_idBakiye2"
+            value="{parts:[{path: 'selectionModel>/VadeBorc'},{path:'selectionModel>/Currency'}],
+        type: 'sap.ui.model.type.Currency',
+        formatOptions: {showMeasure: false}}"
+            editable="false"
+          />
+          <Input description="(₺)"
+            visible="false"
+            id="_idBakiye3"
+            value="{parts:[{path: 'selectionModel>/DigerTutar'},{path:'selectionModel>/Currency'}],
+        type: 'sap.ui.model.type.Currency',
+        formatOptions: {showMeasure: false}}"
+          />
+        </VBox>
+
 
       </f:content>
       <f:layoutData>
-        <FlexItemData id="_IDGenFlexItemData1" shrinkFactor="0" backgroundDesign="Solid" styleClass="sapContrastPlus"/>
+        <FlexItemData id="_IDGenFlexItemData1" shrinkFactor="0" backgroundDesign="Solid"
+          styleClass="sapContrastPlus" />
       </f:layoutData>
     </f:SimpleForm>
-    <beginButton/>
+    <beginButton />
     <buttons>
-      <Button id="_IDBtnPaym1" text="Gönder" press="onSendPayment" type="Accept"/>
-      <Button id="_IDBtnPaym2" text="Kapat" press="closePayment"   type="Reject"/>
+      <Button id="_IDBtnPaym1" text="Gönder" press="onSendPayment" type="Accept" />
+      <Button id="_IDBtnPaym2" text="Kapat" press="closePayment" type="Reject" />
     </buttons>
-    <customHeader/>
-    <endButton/>
+    <customHeader />
+    <endButton />
   </Dialog>
 </core:FragmentDefinition>

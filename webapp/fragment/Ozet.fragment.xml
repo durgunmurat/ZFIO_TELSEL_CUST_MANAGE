@@ -15,20 +15,7 @@
                     <Label id="_IDGenLabel5" text="{OzetList>Menge}"/>
                     <Label id="_IDGenLabel6" text="{OzetList>Meins}"/>
                 </HBox> 
-                </CustomListItem>
-                <!-- <ObjectListItem id="idFragList2"
-                
-                    title="{OzetList>Maktx}" 
-                    number="{  
-                        parts:[{path:'OzetList>SiparisTutar'},{path:'OzetList>Currency'}],
-                        type: 'sap.ui.model.type.Currency',
-                        formatOptions: {showMeasure: false}
-                    }"
-                    numberUnit="{OzetList>Currency}" > 
-                
-                    <ObjectAttribute id="_IDGenObjectAttribute1" text="{= parseFloat(${OzetList>Matnr}) }" />
-                    <ObjectAttribute id="_IDGenObjectAttribute2" text="{OzetList>Menge} - {OzetList>Meins} " /> 
-                </ObjectListItem> -->
+                </CustomListItem> 
             </items>
         </List>
 

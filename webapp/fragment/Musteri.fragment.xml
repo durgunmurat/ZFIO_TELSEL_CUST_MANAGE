@@ -1,0 +1,61 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog id="idMusteriDialog" title="Müşteri" contentWidth="30%"  afterClose="onValueHelpCloseMusteri" >
+		<customHeader>
+			<Bar id="_IDGenBar1">
+				<contentLeft>
+					<RadioButtonGroup id="idMusterirbG" columns="5"  class="sapUiMediumMarginBottom" > 
+						<RadioButton id="idMusteriRB1" text="Müşterilerim" selected="true" /> 
+						<RadioButton id="idMusteriRB2" text="Tüm Müşteriler" /> 
+					</RadioButtonGroup>
+				</contentLeft>
+				<contentRight>
+					<SearchField id="_IDGenSearchField1" search="onValueHelpSearchMusteri" />
+				</contentRight>
+			</Bar>
+		</customHeader>
+
+		<List
+			class="sapUiPopupWithPadding"
+			id="idMusteriList"
+			items="{
+                path: '/MusteriSet',
+                sorter: {
+                            path: 'idMusteri'
+                        }
+                }"
+			mode="SingleSelectLeft"
+			growing="true"
+			growingThreshold="25"
+			includeItemInSelection="true"
+			
+		>
+			<infoToolbar>
+				<OverflowToolbar visible="false" id="idInfoToolbar">
+					<Label id="idFilterLabel" />
+				</OverflowToolbar>
+			</infoToolbar>
+			<StandardListItem id="_IDGenStandardListItem2" title="{= parseFloat(${idMusteri}) }"
+				description="{Name}" />
+		</List>
+
+		<beginButton>
+			<Button
+				id="_IDSelect"
+				text="Seç"
+				type="Accept"
+				press="onValueHelpSelectionMusteri"
+				class="sapUiSmallMarginEnd"
+			/>
+		</beginButton>
+		<endButton>
+			<Button
+				id="_IDCancel"
+				text="Kapat"
+				type="Reject"
+				press="onValueHelpCloseMusteri"
+				class="sapUiSmallMarginEnd"
+			/>
+		</endButton>
+
+	</Dialog>
+</core:FragmentDefinition>

@@ -55,7 +55,7 @@
                                     value="{selectionModel>/Kunnr}"
                                     showValueHelp="true"
                                     valueHelpOnly="true"
-                                    valueHelpRequest="onHelpRequestedKunnr"
+                                    valueHelpRequest="onHelpRequestedCustomer"
                                     editable="{selectionModel>/KunnrEdit}"
                                     width="auto"
                                     visible="{selectionModel>/MusteriVisible}"
@@ -171,7 +171,6 @@
                         <core:Title
                             id="_IDGenTitle1"
                             text="Sevkiyat Günleri"
-                            icon="sap-icon://inventory"
                         />
                         <List
                             backgroundDesign="Transparent"
@@ -218,7 +217,6 @@
                             id="_IDGenTitle6"
                             text="{selectionModel>/DistSevkText}"
                             emphasized="true"
-                            icon="sap-icon://inventory"
                         />
                         <List
                             visible="{selectionModel>/DistSevkVisible}"
@@ -229,7 +227,7 @@
                                     sorter: {
                                                 path: 'Gun'
                                             }
-                                    }"  >
+                                    }">
                             <items>
                                 <CustomListItem id="_idCLI6">
                                     <FlexBox id="_IDGenFlexBox6">
@@ -275,20 +273,19 @@
                                             width="auto"
                                         >
                                             <HBox id="_IDGenHBox12">
-                                                <Input id="_IDGenInput1" 
+                                                <Input id="_IDGenInput1"
                                                     class="smallLabel2"
                                                     value="{selectionModel>/MusteriSip}"
                                                     visible="{selectionModel>/DistSevkVisible}"
                                                     editable="{selectionModel>/DistSevkVisible}"
                                                     enabled="{selectionModel>/DistSevkVisible}"
-                                                    
                                                 />
                                             </HBox>
                                         </VBox>
                                     </FlexBox>
                                 </CustomListItem>
                             </items>
-                        </List>  
+                        </List>
                         <!--yeni yeni yeni-->
 
 
@@ -320,78 +317,73 @@
                     class="smallLabel2"
                 >
                     <headerToolbar>
-                        <Toolbar id="_IDGenToolbar2">
-                            <Label
-                                id="tableHeader"
-                                text="{worklistView>/worklistTableTitle}"
-                            />
+                        <OverflowToolbar>
+                            <content>
+                                <!-- <Toolbar id="_IDGenToolbar2"> -->
 
-                            <ComboBox
-                                width="auto"
-                                selectionChange="onSearch3"
-                                id="_IDGenComboBox2"
-                                enabled="{= ${selectionModel>/AgEnabled} }"
-                                placeholder="Ürün Kategorisi"
-                                items="{
+                                <Label
+                                    id="tableHeader"
+                                    text="{worklistView>/worklistTableTitle}"
+                                />
+                                <ToolbarSpacer />
+                                <ComboBox
+                                    width="auto"
+                                    selectionChange="onSearch3"
+                                    id="_IDGenComboBox2"
+                                    enabled="{= ${selectionModel>/AgEnabled} }"
+                                    placeholder="Ürün Kategorisi"
+                                    items="{
                             path: '/UrunGrupSet',
                             sorter: { path: 'UrunGrp' }
                         }"
-                            >
-                                <core:Item
-                                    id="_IDGenItem2"
-                                    key="{UrunGrp}"
-                                    text="{UrunGrpTxt}"
+                                >
+                                    <core:Item
+                                        id="_IDGenItem2"
+                                        key="{UrunGrp}"
+                                        text="{UrunGrpTxt}"
+                                    />
+                                </ComboBox>
+                                <!-- <ToolbarSpacer width="1%" id="_IDToolbarSpacer2" /> -->
+                                <SearchField
+                                    width="auto"
+                                    id="searchField"
+                                    placeholder="Ürün Adı veya Kodu Giriniz"
+                                    search=".onFilterPosts"
+                                    liveChange=".onSearchFieldLiveChange"
                                 />
-                            </ComboBox>
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer2" />
-                            <SearchField
-                                width="auto"
-                                id="searchField"
-                                placeholder="Ürün Adı veya Kodu Giriniz"
-                                search=".onFilterPosts"
-                                liveChange=".onSearchFieldLiveChange"
-                            />
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer3" />
+                                <!-- <ToolbarSpacer width="1%" id="_IDToolbarSpacer3" />
                             <ToolbarSeparator id="_IDGenToolbarSep1" />
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer1" />
-                            <!-- <Label
-                                id="_IDLblComboBox2"
-                                text="Ürün Kategorisi"
-                            /> -->
-                            <ComboBox
-                                selectionChange="onPressOpenOrder"
-                                id="_IDGenComboBox3"
-                                placeholder="Açık Siparişler"
-                                enabled="{= ${selectionModel>/AgEnabled} }"
-                                items="{
+                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer1" /> -->
+
+                                <ComboBox
+                                    selectionChange="onPressOpenOrder"
+                                    id="_IDGenComboBox3"
+                                    placeholder="Açık Siparişler"
+                                    enabled="{= ${selectionModel>/AgEnabled} }"
+                                    items="{
                         path: '/AcikSiparisSet',
                         sorter: { path: 'Vbeln' }
                     }"
-                            >
-                                <core:Item
-                                    id="_IDGenItem4"
-                                    key="{Vdatu}"
-                                    text="{Vbeln}"
+                                >
+                                    <core:Item
+                                        id="_IDGenItem4"
+                                        key="{Vdatu}"
+                                        text="{Vbeln}"
+                                    />
+
+                                </ComboBox>
+
+                                <Label id="idLblDate1" labelFor="idDate1" text="Sevk.Trh." />
+                                <DatePicker id="idDate1" width="auto" displayFormat="medium"
+                                    value="{path:'',type:'sap.ui.model.type.DateTime', formatOptions:{pattern:'dd-MM-yyyy'} }"
+                                    placeholder="Sevkiyat Tarihi Giriniz.."
+                                    valueStateText="Geçersiz Giriş" enabled="true" visible="true"
+                                    change="onChangeDate"
                                 />
 
-                            </ComboBox>
-
-                            <Label id="idLblDate1" labelFor="idDate1" text="Sevk.Trh." />
-                            <DatePicker id="idDate1" width="auto" displayFormat="medium"
-                                value="{path:'',type:'sap.ui.model.type.DateTime', formatOptions:{pattern:'dd-MM-yyyy'} }"
-                                placeholder="Sevkiyat Tarihi Giriniz.."
-                                valueStateText="Geçersiz Giriş" enabled="true" visible="true"
-                                change="onChangeDate"
-                            />
-                            <Button
-                                id="_IDsimulate"
-                                text="Fiyat Hesapla"
-                                type="Accept"
-                                press="doSimulation"
-                                class="sapUiSmallMarginEnd"
-                                icon="sap-icon://simulate"
-                            />
-                        </Toolbar>
+                                <!-- </Toolbar> -->
+                            </content>
+                        </OverflowToolbar>
                     </headerToolbar>
 
                     <columns>
@@ -656,20 +648,11 @@
                 >
                     <f:SimpleForm
                         id="_IDGenSimpleForm2"
+                        editable="false"
                         layout="ResponsiveGridLayout"
-                        labelSpanXL="4"
-                        labelSpanL="4"
-                        labelSpanM="12"
-                        labelSpanS="12"
-                        adjustLabelSpan="false"
-                        emptySpanXL="0"
-                        emptySpanL="0"
-                        emptySpanM="0"
-                        emptySpanS="0"
-                        columnsXL="2"
-                        columnsL="2"
+                        columnsXL="3"
                         columnsM="2"
-                        singleContainerFullSize="false"
+                        columnsL="3"
                     >
                         <f:content>
                             <core:Title
@@ -698,6 +681,117 @@
                                         visible="false" />
                                 </ObjectListItem>
                             </List>
+
+                            <core:Title
+                            id="_IDGenTitle5"
+                            text="Müşteri Muhatapları"
+                        />
+                        <List
+                            id="_IDGenList5"
+                            backgroundDesign="Transparent"
+                            showSeparators="All"
+                        >
+                            <CustomListItem id="_idCLI5">
+                                <FlexBox id="_IDGenFlexBox7" >
+                                    <VBox
+                                        id="_IDGenVBox9" 
+                                    >
+                                        <HBox id="_IDGenHBox7" >
+                                            <Label
+                                                id="_idLbl5"
+                                                text="Kanal Yön. :"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox id="_IDGenVBox12" >
+                                        <HBox id="_IDGenHBox9">
+                                            <Text
+                                                id="_idTxt4"
+                                                text="{selectionModel>/Kanal}"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem>
+                            <CustomListItem id="_idCLI7"  >
+                                <FlexBox id="_IDGenFlexBox8" >
+                                    <VBox
+                                        id="_IDGenVBox16" 
+                                    >
+                                        <HBox id="_IDGenHBox13">
+                                            <Label
+                                                id="_idLbl6"
+                                                text="Operasyon Yön. :"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox
+                                        id="_IDGenVBox17"  
+                                    >
+                                        <HBox id="_IDGenHBox14">
+                                            <Text
+                                                id="_idTxt9"
+                                                text="{selectionModel>/Operasyon}"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem>
+                            <CustomListItem id="_idCLI8">
+                                <FlexBox id="_IDGenFlexBox9" >
+                                    <VBox
+                                        id="_IDGenVBox18"  
+                                    >
+                                        <HBox id="_IDGenHBox15">
+                                            <Label
+                                                id="_idLbl7"
+                                                text="Op.Organizasyon Yön. :"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox
+                                        id="_IDGenVBox19"   
+                                    >
+                                        <HBox id="_IDGenHBox16">
+                                            <Text
+                                                id="_idTxt10"
+                                                text="{selectionModel>/Organizasyon}"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem>
+                            <CustomListItem id="_idCLI9" 
+                                       visible="{selectionModel>/EdVisible}"> 
+                                <FlexBox id="_IDGenFlexBox10" >
+                                    <VBox
+                                        id="_IDGenVBox20"  
+                                    >
+                                        <HBox id="_IDGenHBox17">
+                                            <Label
+                                                id="_idLbl8"
+                                                text="ED/ST :"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                    <VBox
+                                        id="_IDGenVBox21"   
+                                    >
+                                        <HBox id="_IDGenHBox18">
+                                            <Text
+                                                id="_idTxt11"
+                                                text="{selectionModel>/Ed}"
+                                            />
+                                        </HBox>
+                                    </VBox>
+                                </FlexBox>
+                            </CustomListItem>
+                        </List>
+
+
+
+
+
                             <core:Title
                                 id="_IDGenTitle4"
                                 text="Notlar"
@@ -726,10 +820,14 @@
                                 placeholder="Not giriniz.." />
                             <Label id="idLbl3" />
                             <Button id="idBtn1" text="Gönder" press="onSendNote" type="Accept"
-                                width="20%" />
+                                width="40%" />
                             <Label id="idLbl4" />
                             <Text class="smallLabel" id="idLbl2" visible="true"
                                 text="Müşterinin kanal ve operasyon yöneticilerine mail gönderilecektir." />
+
+
+                            
+
                         </f:content>
                     </f:SimpleForm>
                 </VBox>
@@ -950,6 +1048,16 @@
                         icon="sap-icon://customer-and-supplier"
                     />
                     <ToolbarSpacer id="_IDGenToolbarSpacer1" />
+                    <Button
+                        id="_IDsimulate"
+                        text="Fiyat Hesapla"
+                        type="Accept"
+                        press="doSimulation"
+                        class="sapUiSmallMarginEnd"
+                        icon="sap-icon://simulate"
+                        visible="{selectionModel>/UrunPanelVisible}"
+                    />
+
                     <Button
                         visible="{selectionModel>/UrunPanelVisible}"
                         id="_IDGenButton5"

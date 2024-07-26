@@ -3,7 +3,7 @@
 		<customHeader>
 			<Bar id="_IDGenBar1">
 				<contentLeft>
-					<RadioButtonGroup id="idMusterirbG" columns="5"  class="sapUiMediumMarginBottom" > 
+					<RadioButtonGroup id="idMusterirbG" select="onValueHelpSearchMusteri" columns="5"  class="sapUiMediumMarginBottom" > 
 						<RadioButton id="idMusteriRB1" text="Müşterilerim" selected="true" /> 
 						<RadioButton id="idMusteriRB2" text="Tüm Müşteriler" /> 
 					</RadioButtonGroup>

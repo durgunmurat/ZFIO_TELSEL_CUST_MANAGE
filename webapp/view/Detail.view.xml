@@ -3,9 +3,11 @@
     xmlns:core="sap.ui.core"
     xmlns:l="sap.ui.layout"
     xmlns:f="sap.ui.layout.form"
+    xmlns:f2="sap.f"
     xmlns:mvc="sap.ui.core.mvc"
     xmlns="sap.m"
     xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:svm="sap.ui.comp.smartvariants"
     xmlns:html="http://www.w3.org/1999/xhtml"
     controllerName="zfiotelselkokpit.controller.Detail"
     xmlns:ui="sap.ui.table"
@@ -98,6 +100,7 @@
                                     >
                                         <HBox id="_IDGenHBox1">
                                             <Label
+                                                visible="{= !${selectionModel>/OPVisible} === true }"
                                                 id="_idLbl1"
                                                 text="Toplam Bakiye:"
                                             />
@@ -106,6 +109,7 @@
                                     <VBox id="_IDGenVBox4">
                                         <HBox id="_IDGenHBox2">
                                             <ObjectNumber
+                                                visible="{= !${selectionModel>/OPVisible} === true }"
                                                 id="_idTxt1"
                                                 number="{parts:[{path: 'selectionModel>/ToplamBakiye'},{path:'selectionModel>/Currency'}],
                                                 type: 'sap.ui.model.type.Currency',
@@ -167,6 +171,38 @@
                                     </VBox>
                                 </FlexBox>
                             </CustomListItem>
+                            <CustomListItem id="_idCLI10">
+                            <FlexBox id="_IDGenFlexBox5" visible="{selectionModel>/Panel2}" >
+                                <VBox
+                                    id="_IDGenVBox14"
+                                    width="auto" 
+                                    
+                                >
+                                    <HBox id="_IDGenHBox11">
+                                        <Label  
+                                            id="_idLbl4"
+                                            text="Müşteri Sip.No:"
+                                            class="sapUiSmallMarginTop sapUiSmallMarginEnd"
+                                        />
+                                    </HBox>
+                                </VBox>
+                                <VBox
+                                    id="_IDGenVBox15"
+                                    width="auto"
+                                    
+                                > 
+                                    <HBox id="_IDGenHBox12">
+                                        <Input id="_IDGenInput1"
+                                            class="smallLabel2"
+                                            value="{selectionModel>/MusteriSip}"
+                                            visible="true"
+                                            editable="true"
+                                            enabled="true"
+                                        />
+                                    </HBox>
+                               </VBox>
+                            </FlexBox>  
+                            </CustomListItem>
                         </List>
                         <core:Title
                             id="_IDGenTitle1"
@@ -185,17 +221,6 @@
                             <items>
                                 <CustomListItem id="_idCLI4">
                                     <FlexBox id="_IDGenFlexBox4">
-                                        <!-- <VBox
-                                            id="_IDGenVBox9"
-                                            width="10%"
-                                        >
-                                            <HBox id="_IDGenHBox7">
-                                                <core:Icon
-                                                    id="_idIcon1"
-                                                    src="sap-icon://inventory"
-                                                />
-                                            </HBox>
-                                        </VBox> -->
                                         <VBox
                                             id="_IDGenVBox10"
                                             width="auto"
@@ -212,14 +237,13 @@
                             </items>
                         </List>
 
-                        <!--yeni yeni yeni-->
                         <core:Title
                             id="_IDGenTitle6"
-                            text="{selectionModel>/DistSevkText}"
+                            text="{selectionModel>/OPSevkText}"
                             emphasized="true"
                         />
                         <List
-                            visible="{selectionModel>/DistSevkVisible}"
+                            visible="{selectionModel>/OPVisible}"
                             backgroundDesign="Transparent"
                             id="_IDGenList6"
                             items="{
@@ -228,65 +252,25 @@
                                                 path: 'Gun'
                                             }
                                     }">
-                            <items>
-                                <CustomListItem id="_idCLI6">
-                                    <FlexBox id="_IDGenFlexBox6">
-                                        <!-- <VBox
-                                            id="_IDGenVBox12"
-                                            width="10%"
-                                        >
-                                            <HBox id="_IDGenHBox9">
-                                                <core:Icon
-                                                    id="_idIcon2"
-                                                    src="sap-icon://inventory"
-                                                />
-                                            </HBox>
-                                        </VBox> -->
+                            <items >
+                                <CustomListItem id="_idCLI6"  >
+                                    <FlexBox id="_IDGenFlexBox6" >
                                         <VBox
                                             id="_IDGenVBox13"
                                             width="auto"
                                         >
                                             <HBox id="_IDGenHBox10">
-                                                <Text
+                                                <Text 
                                                     id="_idTxt8"
                                                     text="{Gun}"
                                                 />
                                             </HBox>
                                         </VBox>
-                                    </FlexBox>
-
-                                    <FlexBox id="_IDGenFlexBox5">
-                                        <VBox
-                                            id="_IDGenVBox14"
-                                            width="50%"
-                                        >
-                                            <HBox id="_IDGenHBox11">
-                                                <Label visible="{selectionModel>/DistSevkVisible}"
-                                                    id="_idLbl4"
-                                                    text="Müşteri Siparişi:"
-                                                    class="sapUiSmallMarginTop sapUiSmallMarginEnd"
-                                                />
-                                            </HBox>
-                                        </VBox>
-                                        <VBox
-                                            id="_IDGenVBox15"
-                                            width="auto"
-                                        >
-                                            <HBox id="_IDGenHBox12">
-                                                <Input id="_IDGenInput1"
-                                                    class="smallLabel2"
-                                                    value="{selectionModel>/MusteriSip}"
-                                                    visible="{selectionModel>/DistSevkVisible}"
-                                                    editable="{selectionModel>/DistSevkVisible}"
-                                                    enabled="{selectionModel>/DistSevkVisible}"
-                                                />
-                                            </HBox>
-                                        </VBox>
-                                    </FlexBox>
-                                </CustomListItem>
+                                    </FlexBox>  
+                                </CustomListItem> 
                             </items>
+
                         </List>
-                        <!--yeni yeni yeni-->
 
 
                     </f:content>
@@ -308,7 +292,7 @@
                     items="{SiparisList>/results}"
                     noDataText="{worklistView>/tableNoDataText}"
                     busyIndicatorDelay="{worklistView>/tableBusyDelay}"
-                    growing="true"
+                    growing="{= !${selectionModel>/OPVisible} === true }"
                     growingThreshold="40"
                     growingScrollToLoad="false"
                     updateFinished=".onUpdateFinished"
@@ -317,15 +301,14 @@
                     class="smallLabel2"
                 >
                     <headerToolbar>
-                        <OverflowToolbar>
+                        <OverflowToolbar id="_IDGenOverflowToolbar1">
                             <content>
-                                <!-- <Toolbar id="_IDGenToolbar2"> -->
 
                                 <Label
                                     id="tableHeader"
                                     text="{worklistView>/worklistTableTitle}"
                                 />
-                                <ToolbarSpacer />
+                                <ToolbarSpacer id="_IDGenToolbarSpacer2" />
                                 <ComboBox
                                     width="auto"
                                     selectionChange="onSearch3"
@@ -343,7 +326,6 @@
                                         text="{UrunGrpTxt}"
                                     />
                                 </ComboBox>
-                                <!-- <ToolbarSpacer width="1%" id="_IDToolbarSpacer2" /> -->
                                 <SearchField
                                     width="auto"
                                     id="searchField"
@@ -351,9 +333,6 @@
                                     search=".onFilterPosts"
                                     liveChange=".onSearchFieldLiveChange"
                                 />
-                                <!-- <ToolbarSpacer width="1%" id="_IDToolbarSpacer3" />
-                            <ToolbarSeparator id="_IDGenToolbarSep1" />
-                            <ToolbarSpacer width="1%" id="_IDToolbarSpacer1" /> -->
 
                                 <ComboBox
                                     selectionChange="onPressOpenOrder"
@@ -373,7 +352,7 @@
 
                                 </ComboBox>
 
-                                <Label id="idLblDate1" labelFor="idDate1" text="Sevk.Trh." />
+                                <Label id="idLblDate1" labelFor="idDate1" text="Teslim Trh." />
                                 <DatePicker id="idDate1" width="auto" displayFormat="medium"
                                     value="{path:'',type:'sap.ui.model.type.DateTime', formatOptions:{pattern:'dd-MM-yyyy'} }"
                                     placeholder="Sevkiyat Tarihi Giriniz.."
@@ -411,6 +390,32 @@
                                 class="smallLabel2"
                             />
                         </Column>
+
+                        <Column class="smallLabel2"
+                            id="column12"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="Aylık Hedef"
+                                id="label13"
+                                class="smallLabel2"
+                            />
+                        </Column>
+                        <Column class="smallLabel2"
+                            id="column13"
+                            visible="true"
+                            width="10%"
+                            hAlign="Center"
+                        >
+                            <Text
+                                text="Tahmini Hdf Gerç.(%)"
+                                id="label14"
+                                class="smallLabel2"
+                            />
+                        </Column>
+
                         <Column class="smallLabel2"
                             id="column2"
                             visible="{selectionModel>/DisplayMode}"
@@ -436,32 +441,23 @@
                             />
                         </Column>
                         <Column class="smallLabel2"
-                            id="column4"
-                            visible="true"
-                            width="10%"
-                            hAlign="Center"
-                        >
-                            <Text
-                                text="{selectionModel>/ThirdDay}"
-                                id="label4"
-                                class="smallLabel2"
-                            />
-                        </Column>
-                        <Column class="smallLabel2"
                             id="column5"
                             visible="{selectionModel>/DisplayMode}"
                             width="10%"
                             hAlign="Center"
                         >
                             <Text
-                                text="Önerilen"
+                                text="Kalan Hedefe Göre Önerilen"
                                 id="label5"
                                 class="smallLabel2"
                             />
                         </Column>
+
                         <Column class="smallLabel2"
                             id="column6"
                             width="15%"
+                            visible="{= !${selectionModel>/OPVisible} === true }"
+                            
                         >
                             <Label
                                 text="Alınan Sipariş"
@@ -469,6 +465,20 @@
                                 class="smallLabel2"
                             />
                         </Column>
+
+                        <Column class="smallLabel2"
+                            id="column14"
+                            width="15%"
+                            visible="{selectionModel>/OPVisible}"
+                        >
+                            <Label
+                                text="Alınan Sipariş"
+                                id="label10"
+                                class="smallLabel2"
+                            />
+                        </Column>
+
+
                         <Column class="smallLabel2"
                             id="column7"
                             width="10%"
@@ -492,6 +502,7 @@
                         <Column class="smallLabel2"
                             id="column9"
                             width="10%"
+                            visible="true"
                         >
                             <Label
                                 text="Sipariş Tutarı"
@@ -499,6 +510,8 @@
                                 class="smallLabel2"
                             />
                         </Column>
+
+
                         <Column class="smallLabel2"
                             id="column10"
                             visible="false"
@@ -520,6 +533,7 @@
                             id="_IDGenColumnListItem1"
                             type="Inactive"
                             press=".onPress" class="smallLabel2"
+                            highlight="{= ${SiparisList>Pen} === 'X' ? 'Error' : undefined }"
                         >
                             <cells>
                                 <Text
@@ -534,6 +548,10 @@
                                     visible="true"
                                     class="smallLabel2"
                                 />
+                                <Label id="_IDGenLabel10"
+                                    text="{path:'SiparisList>AylikHedef',type:'sap.ui.model.type.Float' , formatOptions : {decimals:0}, formatter:'.formatter.convertCurr'}" />
+                                <Label id="_IDGenLabel11"
+                                    text="{path:'SiparisList>HedefGerc', type:'sap.ui.model.type.Number', formatter:'.formatter.numberUnitPerc'}" />
                                 <Text
                                     text="{SiparisList>FirstDayAdet}"
                                     id="idFirstDay"
@@ -546,39 +564,31 @@
                                     visible="true"
                                     class="smallLabel2"
                                 />
-                                <Text
-                                    text="{SiparisList>ThirdDayAdet}"
-                                    id="idThirdDay"
-                                    visible="true"
-                                    class="smallLabel2"
+                                <ObjectNumber id="_IDGenObjectStatus1"
+                                    number="{                                     
+                                path: 'SiparisList>Onerilen',                                     
+                                formatter: '.formatter.numberUnit' 
+                                             
+                                }"
                                 />
-                                <ObjectStatus id="_IDGenObjectStatus1"
-                                    class="sapUiSmallMarginBottom"
-                                    text="{SiparisList>Onerilen}"
-                                    state="{= ${SiparisList>Onerilen} === '0' ? 'Error' : 'Success'}"
-                                />
-                                <!-- <Text
-                                    text="{Onerilen}"
-                                    id="idOnerilen"
-                                    visible="true"
-                                    class="smallLabel2"
-                                /> -->
+
                                 <StepInput
                                     id="idMenge"
                                     value="{path: 'SiparisList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
-                                    visible="true"
+                                    visible="{= !${selectionModel>/OPVisible} === true }"
                                     min="0"
                                     required="false"
                                     change="onChange"
-                                    enabled="true"
+                                    enabled="{= !${selectionModel>/OPVisible} === true }"
                                     editable="true"
                                 />
-                                <!-- <Input liveChange="onChange"
-                                id="idMenge"
-                                value="{path: 'SiparisList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
-                                visible="true" 
-                                required="false" 
-                                valueLiveUpdate="true"  /> -->
+                                <Input
+                                    liveChange="onChange"
+                                    id="idMengeOP"
+                                    value="{path: 'SiparisList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
+                                    visible="{selectionModel>/OPVisible}"
+                                    required="false"
+                                    valueLiveUpdate="true" />
                                 <Text
                                     text="{SiparisList>Koli}"
                                     id="idKoli"
@@ -591,12 +601,6 @@
                                     visible="true"
                                     class="smallLabel2"
                                 />
-                                <!-- <Text
-                                    text="{SiparisList>SiparisTutar}"
-                                    id="idSiparisTutar"
-                                    visible="true"
-                                    class="smallLabel2"
-                                /> -->
                                 <ObjectNumber
                                     id="idSiparisTutar"
                                     number="{parts:[{path: 'SiparisList>SiparisTutar'},{path:'selectionModel>/Currency'}],
@@ -670,8 +674,6 @@
                                     title="{Name}"
                                     icon="sap-icon://call"
                                     type="Active"
-                                    showMarkers="true"
-                                    markFavorite="{= ${Fav} === 'X' ? true : false}"
                                     number="{Telefon}"
                                     activeIcon="sap-icon://call"
                                     press="onFavPress">
@@ -683,113 +685,110 @@
                             </List>
 
                             <core:Title
-                            id="_IDGenTitle5"
-                            text="Müşteri Muhatapları"
-                        />
-                        <List
-                            id="_IDGenList5"
-                            backgroundDesign="Transparent"
-                            showSeparators="All"
-                        >
-                            <CustomListItem id="_idCLI5">
-                                <FlexBox id="_IDGenFlexBox7" >
-                                    <VBox
-                                        id="_IDGenVBox9" 
-                                    >
-                                        <HBox id="_IDGenHBox7" >
-                                            <Label
-                                                id="_idLbl5"
-                                                text="Kanal Yön. :"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                    <VBox id="_IDGenVBox12" >
-                                        <HBox id="_IDGenHBox9">
-                                            <Text
-                                                id="_idTxt4"
-                                                text="{selectionModel>/Kanal}"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                </FlexBox>
-                            </CustomListItem>
-                            <CustomListItem id="_idCLI7"  >
-                                <FlexBox id="_IDGenFlexBox8" >
-                                    <VBox
-                                        id="_IDGenVBox16" 
-                                    >
-                                        <HBox id="_IDGenHBox13">
-                                            <Label
-                                                id="_idLbl6"
-                                                text="Operasyon Yön. :"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                    <VBox
-                                        id="_IDGenVBox17"  
-                                    >
-                                        <HBox id="_IDGenHBox14">
-                                            <Text
-                                                id="_idTxt9"
-                                                text="{selectionModel>/Operasyon}"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                </FlexBox>
-                            </CustomListItem>
-                            <CustomListItem id="_idCLI8">
-                                <FlexBox id="_IDGenFlexBox9" >
-                                    <VBox
-                                        id="_IDGenVBox18"  
-                                    >
-                                        <HBox id="_IDGenHBox15">
-                                            <Label
-                                                id="_idLbl7"
-                                                text="Op.Organizasyon Yön. :"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                    <VBox
-                                        id="_IDGenVBox19"   
-                                    >
-                                        <HBox id="_IDGenHBox16">
-                                            <Text
-                                                id="_idTxt10"
-                                                text="{selectionModel>/Organizasyon}"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                </FlexBox>
-                            </CustomListItem>
-                            <CustomListItem id="_idCLI9" 
-                                       visible="{selectionModel>/EdVisible}"> 
-                                <FlexBox id="_IDGenFlexBox10" >
-                                    <VBox
-                                        id="_IDGenVBox20"  
-                                    >
-                                        <HBox id="_IDGenHBox17">
-                                            <Label
-                                                id="_idLbl8"
-                                                text="ED/ST :"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                    <VBox
-                                        id="_IDGenVBox21"   
-                                    >
-                                        <HBox id="_IDGenHBox18">
-                                            <Text
-                                                id="_idTxt11"
-                                                text="{selectionModel>/Ed}"
-                                            />
-                                        </HBox>
-                                    </VBox>
-                                </FlexBox>
-                            </CustomListItem>
-                        </List>
-
-
-
+                                id="_IDGenTitle5"
+                                text="Müşteri Muhatapları"
+                            />
+                            <List
+                                id="_IDGenList5"
+                                backgroundDesign="Transparent"
+                                showSeparators="All"
+                            >
+                                <CustomListItem id="_idCLI5">
+                                    <FlexBox id="_IDGenFlexBox7">
+                                        <VBox
+                                            id="_IDGenVBox9"
+                                        >
+                                            <HBox id="_IDGenHBox7">
+                                                <Label
+                                                    id="_idLbl5"
+                                                    text="Kanal Yön. :"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox id="_IDGenVBox12">
+                                            <HBox id="_IDGenHBox9">
+                                                <Text
+                                                    id="_idTxt4"
+                                                    text="{selectionModel>/Kanal}"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
+                                </CustomListItem>
+                                <CustomListItem id="_idCLI7">
+                                    <FlexBox id="_IDGenFlexBox8">
+                                        <VBox
+                                            id="_IDGenVBox16"
+                                        >
+                                            <HBox id="_IDGenHBox13">
+                                                <Label
+                                                    id="_idLbl6"
+                                                    text="Operasyon Yön. :"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox
+                                            id="_IDGenVBox17"
+                                        >
+                                            <HBox id="_IDGenHBox14">
+                                                <Text
+                                                    id="_idTxt9"
+                                                    text="{selectionModel>/Operasyon}"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
+                                </CustomListItem>
+                                <CustomListItem id="_idCLI8">
+                                    <FlexBox id="_IDGenFlexBox9">
+                                        <VBox
+                                            id="_IDGenVBox18"
+                                        >
+                                            <HBox id="_IDGenHBox15">
+                                                <Label
+                                                    id="_idLbl7"
+                                                    text="Op.Organizasyon Yön. :"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox
+                                            id="_IDGenVBox19"
+                                        >
+                                            <HBox id="_IDGenHBox16">
+                                                <Text
+                                                    id="_idTxt10"
+                                                    text="{selectionModel>/Organizasyon}"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
+                                </CustomListItem>
+                                <CustomListItem id="_idCLI9"
+                                    visible="{selectionModel>/EdVisible}">
+                                    <FlexBox id="_IDGenFlexBox10">
+                                        <VBox
+                                            id="_IDGenVBox20"
+                                        >
+                                            <HBox id="_IDGenHBox17">
+                                                <Label
+                                                    id="_idLbl8"
+                                                    text="ED/ST :"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                        <VBox
+                                            id="_IDGenVBox21"
+                                        >
+                                            <HBox id="_IDGenHBox18">
+                                                <Text
+                                                    id="_idTxt11"
+                                                    text="{selectionModel>/Ed}"
+                                                />
+                                            </HBox>
+                                        </VBox>
+                                    </FlexBox>
+                                </CustomListItem>
+                            </List>
 
 
                             <core:Title
@@ -825,8 +824,6 @@
                             <Text class="smallLabel" id="idLbl2" visible="true"
                                 text="Müşterinin kanal ve operasyon yöneticilerine mail gönderilecektir." />
 
-
-                            
 
                         </f:content>
                     </f:SimpleForm>
@@ -864,6 +861,200 @@
 
                     </l:content>
                 </l:VerticalLayout>
+            </Panel>
+
+
+            <Panel
+                id="_IDGenPanel6"
+                expandable="true"
+                expanded="{selectionModel>/Panel6}"
+                headerText="Sipariş Raporu"
+                width="auto"
+                visible="{selectionModel>/UrunPanelVisible}">
+
+                <f2:DynamicPageHeader id="_IDGenDynamicPageHeader1">
+                    <f2:content>
+                        <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false"
+                            search="getReportHeader" filterChange=".onFilterChange"
+                            afterVariantLoad=".onAfterVariantLoad">
+                            <fb:filterGroupItems>
+                                <fb:FilterGroupItem id="_IDGenFilterGroupItem1" name="Müşteri"
+                                    label="Müşteri"
+                                    groupName="Group1"
+                                    visibleInFilterBar="true">
+                                    <fb:control>
+                                        <MultiComboBox id="multiComboBox1"
+                                            selectionChange="customFieldChange"
+                                            items="{
+												path: '/ReportKunnrSHSet',
+												templateShareable: true
+											}"
+                                        >
+                                            <core:Item id="_IDGenItem5" key="{Kunnr}" text="{Name}" />
+                                        </MultiComboBox>
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+
+                                <fb:FilterGroupItem id="_IDGenFilterGroupItem5" name="Malzeme"
+                                    label="Malzeme"
+                                    groupName="Group2"
+                                    visibleInFilterBar="true">
+                                    <fb:control>
+                                        <MultiComboBox id="multiComboBox2"
+                                            selectionChange="customFieldChange"
+                                            items="{/ReportMatnrSHSet}"
+                                        >
+                                            <core:Item id="_IDGenItem6" key="{Matnr}" text="{Maktx}" />
+                                        </MultiComboBox>
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+
+                                <fb:FilterGroupItem id="_IDGenFilterGroupItem3" name="Erdat"
+                                    label="Yaratma Tarihi"
+                                    groupName="Group2"
+                                    visibleInFilterBar="true">
+                                    <fb:control>
+                                        <MultiComboBox id="multiComboBox3"
+                                            selectionChange="customFieldChange"
+                                            items="{/ReportErdatSHSet}"
+                                        >
+                                            <core:Item id="_IDGenItem7" key="{Erdat}" text="{Erdat}" />
+                                        </MultiComboBox>
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+
+                                <fb:FilterGroupItem id="_IDGenFilterGroupItem4" name="ReqDate"
+                                    label="Teslim Tarihi"
+                                    groupName="Group2"
+                                    visibleInFilterBar="true">
+                                    <fb:control>
+                                        <MultiComboBox id="multiComboBox4"
+                                            selectionChange="customFieldChange"
+                                            items="{/ReportReqDateSHSet}"
+                                        >
+                                            <core:Item id="_IDGenItem8" key="{ReqDate}"
+                                                text="{ReqDate}" />
+                                        </MultiComboBox>
+                                    </fb:control>
+                                </fb:FilterGroupItem>
+                            </fb:filterGroupItems>
+                        </fb:FilterBar>
+                    </f2:content>
+                </f2:DynamicPageHeader>
+
+
+                <Table id="idReportHeaderTable"
+                    items="{/ReportHeaderSet}"
+                    headerText="Siparişler ( Başlık )"
+                    itemPress="getReportItem"
+                    mode="SingleSelectLeft">
+                    <columns>
+                        <Column id="idSipNoCol">
+                            <Text id="_IDGenText1" text="Sipariş" />
+                        </Column>
+                        <Column id="idKunnrCol" width="90px">
+                            <Text id="_IDGenText2" text="Müşteri No" />
+                        </Column>
+                        <Column id="idName1Col" width="200px">
+                            <Text id="_IDGenText3" text="Müşteri Ad" />
+                        </Column>
+                        <Column id="idDistCol" visible="false">
+                            <Text id="_IDGenText4" text="Dist.No" />
+                        </Column>
+                        <Column id="idName2Col" width="250px">
+                            <Text id="_IDGenText5" text="Dist.Adı" />
+                        </Column>
+                        <Column id="idReqDateCol">
+                            <Text id="_IDGenText6" text="Teslim Tarihi" />
+                        </Column>
+                        <Column id="idErdatCol" >
+                            <Text id="_IDGenText7" text="Yaratma Tarihi" />
+                        </Column>
+                        <Column id="idErzetCol" visible="false">
+                            <Text id="_IDGenText8" text="Yaratma Saati" />
+                        </Column>
+                        <Column id="idUnameCol" visible="false">
+                            <Text id="_IDGenText9" text="Yaratan" />
+                        </Column>
+                        <Column id="idFabSipNoCol" visible="false">
+                            <Text id="_IDGenText10" text="Fab.Sip.No" />
+                        </Column>
+                        <Column id="idMusSipNoCol">
+                            <Text id="_IDGenText11" text="Müş.Sip.No" />
+                        </Column>
+                        <Column id="idProcessedNol">
+                            <Text id="_IDGenText12" text="Mail Gönderildi" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem id="_IDGenColumnListItem3"
+                            type="Active"
+                            vAlign="Middle">
+                            <cells>
+                                <ObjectIdentifier id="_IDGenObjectIdentifier1" text="{Tsblg}" />
+                                <Text id="_IDGenText13" text="{= parseFloat(${Kunnr}) }" />
+                                <Text id="_IDGenText14" text="{KunnrName}" />
+                                <Text id="_IDGenText15" text="{= parseFloat(${Dist}) }" />
+                                <Text id="_IDGenText16" text="{DistName}" />
+                                <Text id="_IDGenText17" text="{ReqDate}" />
+                                <Text id="_IDGenText18" text="{Erdat}" />
+                                <Text id="_IDGenText19" text="{Erzet}" />
+                                <Text id="_IDGenText20" text="{Uname}" />
+                                <Text id="_IDGenText21" text="{FabrikaSipNo}" />
+                                <Text id="_IDGenText22" text="{MusteriSipNo}" /> 
+                                <Text id="_IDGenText23" text="{Processed}" />
+
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+                <OverflowToolbar id="_IDGenOverflowToolbar2">
+                    <ToolbarSpacer id="_IDGenToolbarSpacer3"></ToolbarSpacer>
+                    <Button id="idReportCancel" icon="sap-icon://cancel" text="Sipariş Sil"
+                        press="onSipCancel" />
+                </OverflowToolbar>
+                <Table id="idReportItemTable"
+                    items="{/ReportItemSet}"
+                    headerText="Siparişler ( Kalem )">
+                    <columns>
+                        <Column id="idSipNoCol2">
+                            <Text id="_IDGenText24" text="Sipariş" />
+                        </Column>
+                        <Column id="idPosnrCol">
+                            <Text id="_IDGenText25" text="Kalem No" />
+                        </Column>
+                        <Column id="idMatnrCol">
+                            <Text id="_IDGenText26" text="Malzeme No" />
+                        </Column>
+                        <Column id="idMaktxCol">
+                            <Text id="_IDGenText27" text="Malzeme Tanımı" />
+                        </Column>
+                        <Column id="idMengeCol">
+                            <Text id="_IDGenText28" text="Miktar" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem id="_IDGenColumnListItem4"
+                            type="Active"
+                            vAlign="Middle">
+                            <cells>
+                                <ObjectIdentifier id="_IDGenObjectIdentifier2" text="{Tsblg}" />
+                                <Text id="_IDGenText29" text="{= parseFloat(${Posnr}) }" />
+                                <Text id="_IDGenText30" text="{= parseFloat(${Matnr}) }" />
+                                <Text id="_IDGenText31" text="{Maktx}" />
+                                <ObjectNumber id="_IDGenObjectNumber1"
+                                    number="{                                     
+                                path: 'Menge',                                     
+                                formatter: '.formatter.numberUnit'                    
+                                }"
+                                    unit="{
+                                    path: 'Meins'                               
+                                   }"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
             </Panel>
 
             <Panel
@@ -1039,7 +1230,7 @@
             <Toolbar id="_IDGenToolbar1">
                 <content>
                     <Button
-                        visible="{selectionModel>/UrunPanelVisible}"
+                        visible="{= !${selectionModel>/OPVisible} === true }"
                         id="_IDGenButton6"
                         text="Ödeme Linki Gönder"
                         type="Accept"
@@ -1063,7 +1254,7 @@
                         id="_IDGenButton5"
                         text="Siparişi Tamamla"
                         type="Accept"
-                        press="saveInput"
+                        press="saveOrder"
                         class="sapUiSmallMarginEnd"
                         icon="sap-icon://cart"
                     />

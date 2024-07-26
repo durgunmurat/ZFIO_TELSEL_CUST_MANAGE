@@ -1,11 +1,17 @@
 sap.ui.define([], function () {
   "use strict";
-  return { 
+  return {  
     numberUnit: function (e) {
       if (!e) {
         return "";
       }
       return parseFloat(e).toFixed(0);
+    },
+    numberUnitPerc: function (e) {
+      if (!e) {
+        return "";
+      }
+      return "%" + parseFloat(e).toFixed(0);
     },
     convertCurr : function (value) {
 

@@ -43,7 +43,7 @@
                     <Label id="VHId3" text="Email" />
                     <Input id="VHId4" value="{selectionModel>/VHEmail}" width="200px" />
                     <Label id="VHId5" text="Telefon" />
-                    <Input id="VHId6" value="{selectionModel>/VHTelefon}" width="200px" />
+                    <Input id="VHId6" value="{selectionModel>/VHTelefon}" width="200px" maxLength="10"/>
                     
                 </f:content>
                 <f:layoutData>

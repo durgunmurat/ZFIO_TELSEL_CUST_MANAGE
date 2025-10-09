@@ -1,0 +1,12 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+    <Dialog id="idKisiNotDialog" title="Not">
+        <TextArea id="idKisiNotTextArea" value="{selectionModel>/KisiNot}" growing="true" width="100%" editable="true" />
+            <beginButton />
+            <buttons>
+                <Button id="VHBtn4" text="Kaydet" press="saveKisiNot" type="Accept" />
+                <Button id="VHBtn5" text="Kapat" press="closeKisiNot" type="Reject" /> 
+            </buttons>
+            <customHeader />
+            <endButton />
+    </Dialog>
+</core:FragmentDefinition> 

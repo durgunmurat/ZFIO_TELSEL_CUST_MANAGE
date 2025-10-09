@@ -1,24 +1,49 @@
 <core:FragmentDefinition xmlns="sap.m"
-	xmlns:l="sap.ui.layout" 
+	xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
 	xmlns:core="sap.ui.core">
-	<Dialog title="Kişi Ekle"  id="KisiDialog" afterClose="onExit" afterOpen="_onDialogAfterOpen" >
+	<Dialog title="Kişi Ekle" id="KisiDialog" afterClose="onExit" afterOpen="_onDialogAfterOpen">
+		<f:SimpleForm id="_IDGenSimpleForm3"
+			layout="ResponsiveGridLayout"
+			editable="true"
+			width="100%"
+			adjustLabelSpan="false"
+			labelSpanXL="2"
+			labelSpanL="2"
+			labelSpanM="2"
+			labelSpanS="5">
+			<f:content>
 
-            <InputListItem id="_IDGenInputListItem1" label="Ad-Soyad">
-                <Input  width="auto" id="idAd" placeholder="Ad Soyad" showSuggestion="true" type="Text" /> 
-            </InputListItem>
-            <InputListItem id="_IDGenInputListItem2" label="Mail">
-                <Input  width="auto" id="idMail" placeholder="abc@ornek.com" showSuggestion="true" type="Text"  /> 
-            </InputListItem>
-            <InputListItem id="_IDGenInputListItem3" label="Telefon">
-				<MaskInput id="idTelefon" mask="(999)9999999" placeholderSymbol="_" placeholder="10 Haneli Numara Giriniz" showClearIcon="true" />
-                <!-- <Input  width="auto" id="idTelefon"  showSuggestion="true" type="Text" maxLength="10" /> -->
-            </InputListItem>
+				<VBox id="_IDGenVBox" class="sapUiSmallMargin">
+
+					<InputListItem id="_IDGenInputListItem1" label="Ad-Soyad">
+						<Input width="auto" id="idAd" placeholder="Ad Soyad" showSuggestion="true"
+							type="Text" />
+					</InputListItem>
+					<InputListItem id="_IDGenInputListItem2" label="Mail">
+						<Input width="auto" id="idMail" placeholder="abc@ornek.com"
+							showSuggestion="true" type="Text" />
+					</InputListItem>
+					<InputListItem id="_IDGenInputListItem3" label="Telefon">
+						<MaskInput id="idTelefon" mask="(999)9999999" placeholderSymbol="_"
+							placeholder="10 Haneli Numara Giriniz" showClearIcon="true" />
+						<!-- <Input  width="auto" id="idTelefon"  showSuggestion="true" type="Text"
+						maxLength="10" /> -->
+					</InputListItem>
+					<Label id="_IDGenLabel" ></Label>
+					<InputListItem id="_IDGenInputListItem4" label="Not">
+						<TextArea id="idKisiNot" placeholder="Not Giriniz..." growing="true"
+							width="100%" maxLength="40" />
+					</InputListItem>
+				</VBox>
+			</f:content>
+		</f:SimpleForm>
 
 		<beginButton>
-			<Button id="_IDGenButton1"  type="Accept" press="onKisiEkle" text="Ekle" />
+			<Button id="_IDGenButton1" type="Accept" press="onKisiEkle" text="Ekle" />
 		</beginButton>
 		<endButton>
-			<Button id="_IDGenButton2"  type="Reject" press="closeKisiEkle" text="Kapat" />
+			<Button id="_IDGenButton2" type="Reject" press="closeKisiEkle" text="Kapat" />
 		</endButton>
 	</Dialog>
 

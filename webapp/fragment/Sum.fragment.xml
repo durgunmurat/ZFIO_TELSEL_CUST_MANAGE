@@ -1,7 +1,9 @@
+<!-- No DTD or XML Schema is referenced; this is normal for SAPUI5 fragments. -->
+
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" >
 
-	<TableSelectDialog 
-        id="lineSumList"
+    <TableSelectDialog 
+        id="lineSumListFragment"
         title="Sipariş Özeti"
         contentWidth="30%"
         contentHeight="20%"
@@ -9,62 +11,62 @@
         cancel="handleClose"
         search=".handleSearch" 
         resizable="true"
-		noDataText="Bulunamadı" 
-		items="{OzetList>/results}" >  
+        noDataText="Bulunamadı" 
+        items="{OzetList>/results}" >  
 
     <columns>
         <Column 
-            id="column0"
+            id="sumFrag_sumColumn0"
             visible="true"
             width="5em"
             hAlign="Center"
         >
             <Text
                 text="Ürün Kodu"
-                id="label0"
+                id="sumFrag_label0"
                 class="smallLabel"
             />
         </Column>
         <Column
-            id="column1"
+            id="sumFrag_column1"
             visible="true"
             width="8em"
             hAlign="Center"
         >
             <Text
                 text="Ürün Adı"
-                id="label1"
+                id="sumFrag_label1"
                 class="smallLabel"
             />
         </Column> 
         <Column
-            id="column6"
+            id="sumFrag_column6"
             width="4em"
         >
             <Label
                 text="Alınan Sipariş Miktarı"
-                id="label6"
+                id="sumFrag_label6"
                 class="smallLabel"
             />
         </Column>
         
         <Column
-            id="column8"
+            id="sumFrag_column8"
             width="3em"
         >
             <Label
                 text="Birim"
-                id="label8"
+                id="sumFrag_label8"
                 class="smallLabel"
             />
         </Column>
         <Column
-            id="column9"
+            id="sumFrag_column9"
             width="5em"
         >
             <Label
                 text="Sipariş Tutarı"
-                id="label9"
+                id="sumFrag_label9"
                 class="smallLabel"
             />
         </Column> 
@@ -72,25 +74,25 @@
     </columns>
 
         <ColumnListItem
-            id="_IDGenColumnListItem1"
+            id="sumFrag_IDGenColumnListItem1"
             type="Inactive"
             press=".onPress"
         > 
             <cells>
                 <Text
                     text="{= parseFloat(${OzetList>Matnr}) }"
-                    id="idMatnr"
+                    id="sumFrag_idMatnr"
                     visible="true"
                     class="smallLabel"
                 />
                 <Text
                     text="{OzetList>Maktx}"
-                    id="idMaktx"
+                    id="sumFrag_idMaktx"
                     visible="true"
                     class="smallLabel"
                 /> 
                 <Input
-                    id="idMenge"
+                    id="sumFrag_idMenge"
                     value="{path: 'OzetList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
                     visible="true" 
                     editable="false"
@@ -101,13 +103,13 @@
 
                 <Text
                     text="{OzetList>Meins}"
-                    id="idMeins"
+                    id="sumFrag_idMeins"
                     visible="true"
                     class="smallLabel"
                 />
                 <Text
                     text="{OzetList>SiparisTutar}  ₺"
-                    id="idSiparisTutar"
+                    id="sumFrag_idSiparisTutar"
                     visible="true"
                     class="smallLabel"
                 /> 

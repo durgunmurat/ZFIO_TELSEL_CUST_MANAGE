@@ -1,6 +1,14 @@
 sap.ui.define([], function () {
   "use strict";
   return {  
+
+vadeBorcWithGun : function(vadeGun, vadeBorc, currency) {
+  if (!vadeGun && !vadeBorc) return "";
+  var gun = vadeGun ? parseInt(vadeGun, 10) : "";
+  var borc = sap.ui.core.format.NumberFormat.getCurrencyInstance({showMeasure: false}).format(vadeBorc, currency);
+  return (gun !== "" ? gun + " Gün / " : "") + borc;
+},
+
     numberUnit: function (e) {
       if (!e) {
         return "";

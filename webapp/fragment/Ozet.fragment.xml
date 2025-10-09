@@ -7,7 +7,7 @@
             items="{OzetList>/results}">
             <items>
                 <CustomListItem id="_IDGenStandardListItem1">
-                <HBox id="_IDGenHBox1">
+                <HBox id="OzetFragmentHBox1">
                     <Label id="_IDGenLabel1" text="{OzetList>Maktx}"/>
                     <Label id="_IDGenLabel2" text="{= parseFloat(${OzetList>Matnr}) }"/>
                     <Label id="_IDGenLabel3" text="{OzetList>SiparisTutar}"/>

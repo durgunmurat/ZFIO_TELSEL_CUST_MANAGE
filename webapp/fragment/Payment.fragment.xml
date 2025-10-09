@@ -17,7 +17,7 @@
 
         <VBox id="_IDGenVBox1" class="sapUiSmallMargin">
  
-          <Label id="_IDGenLabel1" text="Seçim Yapınız" labelFor="rbG" />
+          <Label id="_IDGenLabelPayment1" text="Seçim Yapınız" labelFor="rbG" />
           <RadioButtonGroup id="rbG" select="onSelectRadio" columns="5"
             class="sapUiMediumMarginBottom">
             <RadioButton id="idRB1" text="SMS" selected="true" />

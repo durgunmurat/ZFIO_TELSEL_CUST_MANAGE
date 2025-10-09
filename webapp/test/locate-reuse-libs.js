@@ -150,7 +150,7 @@ function registerSAPFonts() {
     });
 }
 
-/*eslint-disable fiori-custom/sap-browser-api-warning, fiori-custom/sap-no-dom-access*/
+/*eslint-disable sap-browser-api-warning, sap-no-dom-access*/
 var currentScript = document.getElementById("locate-reuse-libs");
 if (!currentScript) {
     currentScript = document.currentScript;
@@ -210,8 +210,15 @@ sap.registerComponentDependencyPaths(manifestUri)
         } else {
             sap.ui.getCore().attachInit(function () {
                 registerSAPFonts();
-                // initialize the ushell sandbox component
-                sap.ushell.Container.createRenderer().placeAt("content");
+                try {
+                    // initialize the ushell sandbox component in ui5 v2
+                    sap.ushell.Container.createRenderer(true).then(function (component) {
+                        component.placeAt("content");
+                    });
+                } catch {
+                    // support older versions of ui5 
+                    sap.ushell.Container.createRenderer().placeAt("content");
+                }
             });
         }
     });

@@ -1087,7 +1087,8 @@
                 expanded="{selectionModel>/Panel6}"
                 headerText="Sipariş Raporu"
                 width="auto"
-                visible="{= %{selectionModel>/OPVisible} === true &amp;&amp; %{selectionModel>/UrunPanelVisible} === true }"
+                visible="{selectionModel>/UrunPanelVisible}"
+                
             >
                 <f2:DynamicPageHeader id="_IDGenDynamicPageHeader1">
                     <f2:content>
@@ -1097,8 +1098,7 @@
                             useToolbar="false"
                             search="getReportHeader"
                             filterChange=".onFilterChange"
-                            afterVariantLoad=".onAfterVariantLoad"
-                            visible="{selectionModel>/OPVisible}"
+                            afterVariantLoad=".onAfterVariantLoad" 
                         >
                             <fb:filterGroupItems>
                                 <fb:FilterGroupItem
@@ -1106,7 +1106,7 @@
                                     name="Müşteri"
                                     label="Müşteri"
                                     groupName="Group1"
-                                    visibleInFilterBar="true"
+                                    visibleInFilterBar="false"
                                 >
                                     <fb:control>
                                         <Input
@@ -1116,6 +1116,7 @@
                                             showValueHelp="true"
                                             valueHelpRequest="onValueHelpMusteri"
                                             valueHelpIconSrc="sap-icon://search"
+                                            visible="false"
                                         />
                                         <!-- <MultiComboBox
                                             id="multiComboBox1"

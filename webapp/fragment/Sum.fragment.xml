@@ -8,8 +8,7 @@
         contentWidth="30%"
         contentHeight="20%"
         confirm="saveInput"
-        cancel="handleClose"
-        search=".handleSearch" 
+        cancel="handleClose" 
         resizable="true"
         noDataText="Bulunamadı" 
         items="{OzetList>/results}" >  

@@ -1,0 +1,173 @@
+<!-- No DTD or XML Schema is referenced; this is normal for SAPUI5 fragments. -->
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+>
+    <Dialog
+        id="idSumPopupDialog"
+        title="Sipariş Özeti"
+    >
+        <Table
+            id="idSumPopupDialogTable"
+            width="auto"
+            items="{OzetPopupList>/results}"
+            noDataText="{worklistView>/tableNoDataText}"
+            busyIndicatorDelay="{worklistView>/tableBusyDelay}"
+            growing="true"
+            growingScrollToLoad="false"
+            updateFinished=".onUpdateFinished"
+            fixedLayout="true"
+            showSeparators="All"
+        >
+            <columns>
+                <Column
+                    id="column0xx"
+                    visible="true"
+                    width="5em"
+                    hAlign="Center"
+                >
+                    <Text
+                        text="Ürün Kodu"
+                        id="label011"
+                        class="smallLabel2"
+                    />
+                </Column>
+                <Column
+                    id="column1xx"
+                    visible="true"
+                    width="8em"
+                    hAlign="Center"
+                >
+                    <Text
+                        text="Ürün Adı"
+                        id="label1xx"
+                        class="smallLabel2"
+                    />
+                </Column>
+                <Column
+                    id="column6xx"
+                    width="4em"
+                >
+                    <Label
+                        text="Alınan Sipariş"
+                        id="label6xx"
+                        class="smallLabel2"
+                    />
+                </Column>
+
+                <Column
+                    id="column8xx"
+                    width="3em"
+                >
+                    <Label
+                        text="Birim"
+                        id="label8xx"
+                        class="smallLabel2"
+                    />
+                </Column>
+                <Column
+                    id="column9xx"
+                    width="5em"
+                >
+                    <Label
+                        text="Sipariş Tutarı"
+                        id="label9xx"
+                        class="smallLabel2"
+                    />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem
+                    id="_IDGenColumnListItem2x"
+                    type="Inactive"
+                    press=".onPress"
+                >
+                    <cells>
+                        <Text
+                            text="{= parseFloat(${OzetPopupList>Matnr}) }"
+                            id="idMatnrxx"
+                            visible="true"
+                            class="smallLabel2"
+                        />
+                        <Text
+                            text="{OzetPopupList>Maktx}"
+                            id="idMaktxxx"
+                            visible="true"
+                            class="smallLabel2"
+                        />
+                        <Text
+                            id="idMengexx"
+                            text="{path: 'OzetPopupList>Menge', type: '.TypeInteger', formatter: '.formatter.numberUnit'  }"
+                            visible="true"
+                            class="smallLabel2"
+                        />
+
+                        <Text
+                            text="{OzetPopupList>Meins}"
+                            id="idMeinsxx"
+                            visible="true"
+                            class="smallLabel2"
+                        />
+                        <Text
+                            text="{OzetPopupList>SiparisTutar}  ₺"
+                            id="idSiparisTutarxx"
+                            visible="true"
+                            class="smallLabel2"
+                        />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+
+        <FlexBox
+            id="_IDGenVBoxDetailSumx"
+            alignItems="End"
+            direction="Column"
+        >
+            <Label
+                id="_id21x"
+                text="Toplam Sipariş Tutarı(₺)"
+                required="false"
+                width="auto"
+            />
+            <Input
+                id="_id22x"
+                value="{path: 'selectionModel>/ToplamSiparis', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                enabled="false"
+                width="250px"
+            />
+            <Label
+                id="_id23x"
+                text="KDV"
+                required="false"
+                width="auto"
+            />
+            <Input
+                id="_id24x"
+                value="{path: 'selectionModel>/Kdv', type: '.Currency', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                enabled="false"
+                width="250px"
+            />
+            <Label
+                id="_id25x"
+                text="KDV'li Toplam Sipariş Tutarı(₺)"
+                required="false"
+                width="auto"
+            />
+            <Input
+                id="_id26x"
+                value="{path: 'selectionModel>/ToplamSiparisKdv', type: '.Unit', formatOptions:{style : 'long', showMeasure:'false' }  }"
+                enabled="false"
+                width="250px"
+            />
+        </FlexBox>
+        <endButton>
+            <Button
+                id="idSumPopupCloseBtn"
+                text="Kapat"
+                type="Reject"
+                press="onSumPopupClose"
+            />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

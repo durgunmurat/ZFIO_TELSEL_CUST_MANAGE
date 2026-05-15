@@ -439,7 +439,7 @@
                                     id="idDate1"
                                     width="auto"
                                     displayFormat="medium"
-                                    value="{path:'',type:'sap.ui.model.type.DateTime', formatOptions:{pattern:'dd-MM-yyyy'} }"
+                                    value="{selectionModel>/Vdatu}"
                                     placeholder="Sevkiyat Tarihi Giriniz.."
                                     valueStateText="Geçersiz Giriş"
                                     enabled="true"

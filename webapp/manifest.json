@@ -22,7 +22,8 @@
         "settings": {
           "annotations": [],
           "localUri": "localService/metadata.xml",
-          "odataVersion": "2.0"
+          "odataVersion": "2.0",
+          "maxDataServiceVersion": "2.0"
         }
       }
     }
@@ -76,24 +77,38 @@
       "": {
         "dataSource": "mainService",
         "preload": true,
-        "settings": {}
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "None",
+          "useBatch": false,
+          "defaultOperationMode": "Server",
+          "refreshAfterChange": false,
+          "preliminaryContext": true,
+          "earlyRequests": true
+        }
       },
       "ReportKunnrSH": {
         "dataSource": "mainService",
         "type": "sap.ui.model.odata.v2.ODataModel",
+        "preload": false,
         "settings": {
-          "defaultBindingMode": "TwoWay",
-          "defaultCountMode": "Inline",
-          "json": true
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "None",
+          "json": true,
+          "useBatch": false,
+          "preliminaryContext": true
         }
       },
        "ReportMatnrSH": {
         "dataSource": "mainService",
         "type": "sap.ui.model.odata.v2.ODataModel",
+        "preload": false,
         "settings": {
-          "defaultBindingMode": "TwoWay",
-          "defaultCountMode": "Inline",
-          "json": true
+          "defaultBindingMode": "OneWay",
+          "defaultCountMode": "None",
+          "json": true,
+          "useBatch": false,
+          "preliminaryContext": true
         }
       }
     },

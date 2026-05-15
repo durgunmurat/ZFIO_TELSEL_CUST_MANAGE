@@ -71,11 +71,22 @@
             data-sap-ui-resourceroots='{"zfiotelselkokpit": "../"}'
             data-sap-ui-frameOptions="allow"
             data-sap-ui-flexibilityServices='[{"connector": "LocalStorageConnector"}]'
-        >
-            // NON-SECURE setting for testing environment
-        </script>
-		<script id="locate-reuse-libs" src="./locate-reuse-libs.js"
-				data-sap-ui-manifest-uri="../manifest.json">
+        ></script>
+		<script>
+			// Wait for UI5 bootstrap to complete before loading locate-reuse-libs
+			(function() {
+				if (typeof sap !== 'undefined' && sap.ui && sap.ui.getCore) {
+					sap.ui.getCore().attachInit(function() {
+						var script = document.createElement('script');
+						script.id = 'locate-reuse-libs';
+						script.src = './locate-reuse-libs.js';
+						script.setAttribute('data-sap-ui-manifest-uri', '../manifest.json');
+						document.head.appendChild(script);
+					});
+				} else {
+					console.error('SAP UI5 failed to load');
+				}
+			})();
 		</script>
     </head>
 

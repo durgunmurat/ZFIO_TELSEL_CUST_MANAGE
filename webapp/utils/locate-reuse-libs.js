@@ -1,4 +1,12 @@
-(function (e) {
+(function () {
+  // Guard against sap not being defined
+  if (typeof sap === 'undefined' || !sap.ui) {
+    console.error('SAP UI5 is not loaded yet. Please ensure locate-reuse-libs.js is loaded after UI5 initialization.');
+    return;
+  }
+
+  var e = sap;
+  
   var t = function (e, t) {
     var n = [
       "sap.apf",
@@ -59,7 +67,11 @@
   var r = function (e) {
     var t = e;
     return new Promise(function (r, a) {
-      $.ajax(t)
+      if (typeof jQuery === 'undefined' || !jQuery.ajax) {
+        a(new Error('jQuery is not available'));
+        return;
+      }
+      jQuery.ajax(t)
         .done(function (e) {
           r(n(e));
         })
@@ -75,10 +87,14 @@
         if (n && n.dependencies) {
           n.dependencies.forEach(function (e) {
             if (e.url && e.url.length > 0 && e.type === "UI5LIB") {
-              jQuery.sap.log.info(
-                "Registering Library " + e.componentId + " from server " + e.url
-              );
-              jQuery.sap.registerModulePath(e.componentId, e.url);
+              if (jQuery && jQuery.sap && jQuery.sap.log) {
+                jQuery.sap.log.info(
+                  "Registering Library " + e.componentId + " from server " + e.url
+                );
+              }
+              if (jQuery && jQuery.sap && jQuery.sap.registerModulePath) {
+                jQuery.sap.registerModulePath(e.componentId, e.url);
+              }
             }
           });
         }
@@ -89,55 +105,69 @@
     return r(e).then(function (e) {
       if (e && e.length > 0) {
         var t = "/sap/bc/ui2/app_index/ui5_app_info?id=" + e;
-        var n = jQuery.sap.getUriParameters().get("sap-client");
+        var n = jQuery.sap && jQuery.sap.getUriParameters ? jQuery.sap.getUriParameters().get("sap-client") : null;
         if (n && n.length === 3) {
           t = t + "&sap-client=" + n;
         }
-        return $.ajax(t).done(a);
+        return jQuery.ajax(t).done(a);
       }
     });
   };
-})(sap);
-var scripts = document.getElementsByTagName("script");
-var currentScript = document.getElementById("locate-reuse-libs");
-if (!currentScript) {
-  currentScript = document.currentScript;
-}
-var manifestUri = currentScript.getAttribute("data-sap-ui-manifest-uri");
-var componentName = currentScript.getAttribute("data-sap-ui-componentName");
-var useMockserver = currentScript.getAttribute("data-sap-ui-use-mockserver");
-var bundleResources = function () {
-  jQuery.sap.require("jquery.sap.resources");
-  var e = sap.ui.getCore().getConfiguration().getLanguage();
-  var t = jQuery.sap.resources({ url: "i18n/i18n.properties", locale: e });
-  document.title = t.getText("appTitle");
-};
-sap
-  .registerComponentDependencyPaths(manifestUri)
-  .catch(function (e) {
-    jQuery.sap.log.error(e);
-  })
-  .finally(function () {
-    sap.ui.getCore().attachInit(bundleResources);
-    if (componentName && componentName.length > 0) {
-      if (useMockserver && useMockserver === "true") {
-        sap.ui.getCore().attachInit(function () {
-          sap.ui.require(
-            [componentName.replace(/\./g, "/") + "/localService/mockserver"],
-            function (e) {
-              e.init();
-              sap.ushell.Container.createRenderer().placeAt("content");
-            }
-          );
-        });
-      } else {
-        sap.ui.require(["sap/ui/core/ComponentSupport"]);
-        sap.ui.getCore().attachInit(bundleResources);
+})();
+
+// Safe execution after UI5 is available
+if (typeof sap !== 'undefined' && sap.ui && typeof jQuery !== 'undefined') {
+  var scripts = document.getElementsByTagName("script");
+  var currentScript = document.getElementById("locate-reuse-libs");
+  if (!currentScript) {
+    currentScript = document.currentScript;
+  }
+  
+  if (currentScript) {
+    var manifestUri = currentScript.getAttribute("data-sap-ui-manifest-uri");
+    var componentName = currentScript.getAttribute("data-sap-ui-componentName");
+    var useMockserver = currentScript.getAttribute("data-sap-ui-use-mockserver");
+    
+    var bundleResources = function () {
+      if (jQuery.sap && jQuery.sap.require) {
+        jQuery.sap.require("jquery.sap.resources");
+        var e = sap.ui.getCore().getConfiguration().getLanguage();
+        var t = jQuery.sap.resources({ url: "i18n/i18n.properties", locale: e });
+        document.title = t.getText("appTitle");
       }
-    } else {
-      sap.ui.getCore().attachInit(function () {
-        sap.ushell.Container.createRenderer().placeAt("content");
+    };
+    
+    sap
+      .registerComponentDependencyPaths(manifestUri)
+      .catch(function (e) {
+        if (jQuery.sap && jQuery.sap.log) {
+          jQuery.sap.log.error(e);
+        } else {
+          console.error(e);
+        }
+      })
+      .finally(function () {
+        sap.ui.getCore().attachInit(bundleResources);
+        if (componentName && componentName.length > 0) {
+          if (useMockserver && useMockserver === "true") {
+            sap.ui.getCore().attachInit(function () {
+              sap.ui.require(
+                [componentName.replace(/\./g, "/") + "/localService/mockserver"],
+                function (e) {
+                  e.init();
+                  sap.ushell.Container.createRenderer().placeAt("content");
+                }
+              );
+            });
+          } else {
+            sap.ui.require(["sap/ui/core/ComponentSupport"]);
+            sap.ui.getCore().attachInit(bundleResources);
+          }
+        } else {
+          sap.ui.getCore().attachInit(function () {
+            sap.ushell.Container.createRenderer().placeAt("content");
+          });
+        }
       });
-    }
-  });
-sap.registerComponentDependencyPaths(manifestUri);
+  }
+}

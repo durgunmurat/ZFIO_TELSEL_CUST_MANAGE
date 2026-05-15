@@ -9,10 +9,28 @@ sap.ui.define(
         this.getRouter().initialize();
         this.setModel(i.createDeviceModel(), "device");
       },
-
+      
+      /**
+       * Clean up component resources when destroyed
+       * @public
+       */
       exit: function () {
-        // Component destroy edildiğinde view ve controllerlar da otomatik destroy edilir
-        UIComponent.prototype.exit.apply(this, arguments);
+        // Destroy device model
+        var deviceModel = this.getModel("device");
+        if (deviceModel) {
+          deviceModel.destroy();
+        }
+        
+        // Destroy router
+        var router = this.getRouter();
+        if (router) {
+          router.destroy();
+        }
+        
+        // Call parent exit
+        if (e.prototype.exit) {
+          e.prototype.exit.apply(this, arguments);
+        }
       },
     });
   }

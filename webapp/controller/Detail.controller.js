@@ -56,6 +56,7 @@ sap.ui.define(
             }
           }.bind(this),
         };
+        this.getView().addEventDelegate(this._eventDelegate, this);
       },
 
       /**
@@ -75,6 +76,7 @@ sap.ui.define(
           );
 
         var jsonData = new sap.ui.model.json.JSONModel();
+        jsonData.setSizeLimit(10000000);
         SAPoData.read("/UrunGrupSet", {
           urlParameters: {
             $select: "UrunGrp,UrunGrpTxt",

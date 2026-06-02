@@ -2965,7 +2965,7 @@ sap.ui.define(
                         errorObj1.error.innererror.errordetails.forEach(
                           function (detail) {
                             // Mesaj boş değilse ve dizimizde daha önce eklenmemişse (tekrarları önlemek için) ekle
-                            if ( 
+                            if (
                               ignoredErrorCodes.indexOf(detail.code) === -1 &&
                               detail.message &&
                               errorMessagesArray.indexOf(detail.message) === -1
@@ -4252,6 +4252,18 @@ sap.ui.define(
         var Telefon = oBindingContext.getProperty("Telefon");
         var Email = oBindingContext.getProperty("Email");
         var Name = oBindingContext.getProperty("Name");
+        var sicilId = l.getProperty("/SicilId");
+
+        var that = this;
+        var oModel =
+          this.getView().getModel() ||
+          new sap.ui.model.odata.v2.ODataModel(
+            "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
+            {
+              useBatch: false,
+              defaultCountMode: "None",
+            },
+          );
 
         l.setProperty("/VHName", Name);
         l.setProperty("/VHEmail", Email);
@@ -4329,10 +4341,42 @@ sap.ui.define(
               var phoneNumber = Telefon;
               var CustomerNo = idMusteri;
 
-              window.chrome.webview.hostObjects.sync.ctimessage.MakeCall(
-                phoneNumber,
-                CustomerNo,
-              );
+              if (1 == 2) {
+                window.chrome.webview.hostObjects.sync.ctimessage.MakeCall(
+                  phoneNumber,
+                  CustomerNo,
+                );
+              } else {
+                sap.ui.core.BusyIndicator.show(0);
+
+                // OData Function Import çağrısı
+                that.getView().getModel().callFunction("/TriggerCall", {
+                  method: "POST",
+                  urlParameters: {
+                    AgentNumber: sicilId,
+                    Destination: phoneNumber,
+                  },
+                  success: function (oData, response) {
+                    sap.ui.core.BusyIndicator.hide(0);
+                    sap.m.MessageToast.show("Arama başarıyla başlatıldı.");
+                    // Gerekirse çağrı sonrası diğer state güncellemelerinizi buraya ekleyebilirsiniz
+                  },
+                  error: function (oError) {
+                    sap.ui.core.BusyIndicator.hide(0);
+
+                    // Backend'den (RAISE EXCEPTION ile) fırlattığımız mesajı yakalama
+                    var sMsg = "Arama tetiklenirken bir hata oluştu.";
+                    try {
+                      var oErrorResponse = JSON.parse(oError.responseText);
+                      sMsg = oErrorResponse.error.message.value;
+                    } catch (err) {
+                      // JSON parse edilemezse default mesaj kalır
+                    }
+
+                    sap.m.MessageBox.error(sMsg);
+                  },
+                });
+              }
             } else {
             }
           },

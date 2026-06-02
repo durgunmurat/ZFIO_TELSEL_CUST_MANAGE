@@ -4,10 +4,10 @@
  "conn_server":"https://sapfioridev.sutas.com.tr:8443", 
  "conn_client":"100", 
  "conn_user":"E.GUNGORMEZ",
- "conn_password":"Inervo2026*",
+ "conn_password":"Inervo1234!",
  "abap_package":"ZFIO",
  "abap_bsp":"ZTELSEL_KOKPIT",
  "abap_bsp_text":"Telsel Müsteri Kokpiti",
- "abap_transport":"FRDK901265",
+ "abap_transport":"FRDK901271",
  "abap_language": "EN" 
 }

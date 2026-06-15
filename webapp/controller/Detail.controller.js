@@ -31,6 +31,65 @@ sap.ui.define(
         this.onSetDetailModel();
 
         var complete_url = window.location.href;
+
+        var matchAgentId = complete_url.match(/[?&]agentId=([^&#]*)/);
+        if (matchAgentId && matchAgentId[1]) {
+          var sAgentId = matchAgentId[1];
+          var oSelection = this.getModel("selectionModel");
+
+          // 1. Önce ID'yi atayalım (kullanıcı beklerken ekranda ID görünsün)
+          oSelection.setProperty("/SicilId", sAgentId);
+          if (this.byId("_idTemsilci")) {
+            this.byId("_idTemsilci").setValue(sAgentId);
+          }
+          // 2. onInit içinde olduğumuz için modeli OwnerComponent üzerinden alıyoruz
+          // Bu sayede OData'ya isteğin kesinlikle gitmesini garantiliyoruz
+          var oDataModel = this.getOwnerComponent().getModel();
+
+          if (oDataModel) {
+            oDataModel.read("/SicilSet", {
+              filters: [
+                // onValueHelpSearchSicil'deki gibi "Search" parametresine agentId gönderiyoruz
+                new sap.ui.model.Filter(
+                  "Search",
+                  sap.ui.model.FilterOperator.Contains,
+                  sAgentId,
+                ),
+              ],
+              success: function (oData) {
+                if (oData && oData.results && oData.results.length > 0) {
+                  // Backend'den gelen ilk eşleşen sicili al
+                  var oSicilData = oData.results[0];
+                  var sicil = oSicilData.idTemsilci || sAgentId;
+                  var newSicil = sicil.replace(/^0+/, "");
+
+                  // Tam olarak onValueHelpCloseSicil içindeki ekran değiştirme mantığı
+                  oSelection.setProperty("/SicilVisible", false);
+                  oSelection.setProperty("/MusteriVisible", true);
+                  oSelection.setProperty("/SicilId", newSicil);
+                  oSelection.setProperty("/SicilAd", oSicilData.TemsilciAdi);
+                  oSelection.setProperty("/Kunnr", "");
+                  oSelection.setProperty("/Name", "");
+
+                  try {
+                    var button = sap.ui
+                      .getCore()
+                      .byId(this.createId("idRBMus"));
+                    sap.ui
+                      .getCore()
+                      .byId(this.createId("rbGMain"))
+                      .setSelectedButton(button);
+                  } catch (e) {}
+                }
+              }.bind(this),
+              error: function () {
+                // Hata durumunda model bozulmaz, sadece ID kalır
+                sap.m.MessageToast.show("Temsilci bilgisi alınamadı.");
+              },
+            });
+          }
+        }
+
         // var complete_url = "https://sapfioridev.sutas.com.tr:8443/sap/bc/ui2/flp#ztelselkokpit-display?108472";
         var idMusteri = "";
         var idMusteriTmp = "";
@@ -45,7 +104,9 @@ sap.ui.define(
         }
         this.byId("idInputMusteri").setValue(idMusteri);
         this.byId("_idMusteri").setValue(idMusteri);
-        this.getMusteri();
+        if (idMusteri !== "") {
+          this.getMusteri();
+        }
 
         // Store event delegate reference for cleanup in onExit
         this._eventDelegate = {
@@ -1100,79 +1161,6 @@ sap.ui.define(
       },
 
       getMusteriRefresh: function () {
-        // var cari = this.getView().byId("_idMusteri").getValue();
-        // var newKunnr = cari.replace(/^0+/, "");
-        // var that = this;
-        // var SAPoData = new sap.ui.model.odata.v2.ODataModel(
-        //   "/sap/opu/odata/sap/ZFIO_TELSEL_CUST_MANAGE_SRV_01/",
-        //   true
-        // );
-
-        // var l = this.getModel("selectionModel");
-        // sap.ui.core.BusyIndicator.show(0);
-        // var jsonData = new sap.ui.model.json.JSONModel();
-        // //jsonData.setDefaultBindingMode(sap.ui.model.BindingMode.OneWay);
-        // jsonData.setSizeLimit("10000000");
-        // SAPoData.read("/MusteriSet('" + cari + "')", {
-        //   success: function (oData, oResponse) {
-        //     sap.ui.core.BusyIndicator.hide(0);
-        //     if (oData.Name !== "") {
-        //       l.setProperty("/AgEnabled", true);
-        //       l.setProperty("/Kunnr", newKunnr);
-        //       l.setProperty("/Name", oData.Name);
-        //       l.setProperty("/SicilId", oData.idTemsilci);
-        //       l.setProperty("/SicilAd", oData.TemsilciAdi);
-        //       if (oData.SevkiyatDay == "X") {
-        //         l.setProperty("/OPVisible", true);
-        //         l.setProperty("/OPMusSip", "Müşteri Sip.");
-        //         l.setProperty("/Panel6", true);
-        //       }
-
-        //       l.setProperty("/SevkiyatVisible", oData.SevkiyatVisible);
-        //       if (oData.SevkiyatVisible == true) {
-        //         l.setProperty("/OPSevkText", "Dist.Sevk.Günleri");
-        //       }
-        //       var button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
-        //       sap.ui
-        //         .getCore()
-        //         .byId(that.createId("rbGMain"))
-        //         .setSelectedButton(button);
-        //       l.setProperty("/SicilVisible", false);
-        //       l.setProperty("/MusteriVisible", true);
-
-        //       that.onPressMalzemeListesiNew();
-        //     } else if (oData.TemsilciAdi !== "") {
-        //       l.setProperty("/SicilId", oData.idTemsilci);
-        //       l.setProperty("/SicilAd", oData.TemsilciAdi);
-        //       if (oData.SevkiyatDay == "X") {
-        //         l.setProperty("/OPVisible", true);
-        //         l.setProperty("/OPMusSip", "Müşteri Sip.");
-        //         l.setProperty("/Panel6", true);
-        //       }
-        //       l.setProperty("/SevkiyatVisible", oData.SevkiyatVisible);
-        //       if (oData.SevkiyatVisible == true) {
-        //         l.setProperty("/OPSevkText", "Dist.Sevk.Günleri");
-        //       }
-        //       button = sap.ui.getCore().byId(that.createId("idRBMus")); //find the button
-        //       sap.ui
-        //         .getCore()
-        //         .byId(that.createId("rbGMain"))
-        //         .setSelectedButton(button);
-        //       l.setProperty("/SicilVisible", false);
-        //       l.setProperty("/MusteriVisible", true);
-        //     }
-        //   },
-        //   error: function (oError) {
-        //     sap.ui.core.BusyIndicator.hide(0);
-        //   },
-        // });
-
-        // var dialog = new sap.m.BusyDialog({
-        //     text: "Yükleniyor...",
-        //   });
-
-        //   dialog.open();
-
         var cari =
           (this.getView().byId("_idMusteri") &&
             this.getView().byId("_idMusteri").getValue()) ||
@@ -4350,32 +4338,36 @@ sap.ui.define(
                 sap.ui.core.BusyIndicator.show(0);
 
                 // OData Function Import çağrısı
-                that.getView().getModel().callFunction("/TriggerCall", {
-                  method: "POST",
-                  urlParameters: {
-                    AgentNumber: sicilId,
-                    Destination: phoneNumber,
-                  },
-                  success: function (oData, response) {
-                    sap.ui.core.BusyIndicator.hide(0);
-                    sap.m.MessageToast.show("Arama başarıyla başlatıldı.");
-                    // Gerekirse çağrı sonrası diğer state güncellemelerinizi buraya ekleyebilirsiniz
-                  },
-                  error: function (oError) {
-                    sap.ui.core.BusyIndicator.hide(0);
+                that
+                  .getView()
+                  .getModel()
+                  .callFunction("/TriggerCall", {
+                    method: "POST",
+                    urlParameters: {
+                      AgentNumber: sicilId,
+                      Destination: phoneNumber,
+                      CustomerNo: CustomerNo,
+                    },
+                    success: function (oData, response) {
+                      sap.ui.core.BusyIndicator.hide(0);
+                      sap.m.MessageToast.show("Arama başarıyla başlatıldı.");
+                      // Gerekirse çağrı sonrası diğer state güncellemelerinizi buraya ekleyebilirsiniz
+                    },
+                    error: function (oError) {
+                      sap.ui.core.BusyIndicator.hide(0);
 
-                    // Backend'den (RAISE EXCEPTION ile) fırlattığımız mesajı yakalama
-                    var sMsg = "Arama tetiklenirken bir hata oluştu.";
-                    try {
-                      var oErrorResponse = JSON.parse(oError.responseText);
-                      sMsg = oErrorResponse.error.message.value;
-                    } catch (err) {
-                      // JSON parse edilemezse default mesaj kalır
-                    }
+                      // Backend'den (RAISE EXCEPTION ile) fırlattığımız mesajı yakalama
+                      var sMsg = "Arama tetiklenirken bir hata oluştu.";
+                      try {
+                        var oErrorResponse = JSON.parse(oError.responseText);
+                        sMsg = oErrorResponse.error.message.value;
+                      } catch (err) {
+                        // JSON parse edilemezse default mesaj kalır
+                      }
 
-                    sap.m.MessageBox.error(sMsg);
-                  },
-                });
+                      sap.m.MessageBox.error(sMsg);
+                    },
+                  });
               }
             } else {
             }

@@ -35,6 +35,7 @@ sap.ui.define(
         var matchAgentId = complete_url.match(/[?&]agentId=([^&#]*)/);
         if (matchAgentId && matchAgentId[1]) {
           var sAgentId = matchAgentId[1];
+          this._sInitialAgentId = sAgentId;
           var oSelection = this.getModel("selectionModel");
 
           // 1. Önce ID'yi atayalım (kullanıcı beklerken ekranda ID görünsün)
@@ -68,6 +69,7 @@ sap.ui.define(
                   oSelection.setProperty("/MusteriVisible", true);
                   oSelection.setProperty("/SicilId", newSicil);
                   oSelection.setProperty("/SicilAd", oSicilData.TemsilciAdi);
+                  oSelection.setProperty("/SicilName2", oSicilData.Name2 || "");
                   oSelection.setProperty("/Kunnr", "");
                   oSelection.setProperty("/Name", "");
 
@@ -1416,6 +1418,7 @@ sap.ui.define(
           Name: "",
           SicilId: "",
           SicilAd: "",
+          SicilName2: "",
           // Token:"",
           Net: "",
           Kdv: "",
@@ -4034,6 +4037,10 @@ sap.ui.define(
             "/SicilAd",
             t.getBindingContext().getProperty("TemsilciAdi"),
           );
+          a.setProperty(
+            "/SicilName2",
+            t.getBindingContext().getProperty("Name2") || "",
+          );
           a.setProperty("/Kunnr", "");
           a.setProperty("/Name", "");
           sap.ui
@@ -4240,7 +4247,8 @@ sap.ui.define(
         var Telefon = oBindingContext.getProperty("Telefon");
         var Email = oBindingContext.getProperty("Email");
         var Name = oBindingContext.getProperty("Name");
-        var sicilId = l.getProperty("/SicilId");
+        var sicilId =
+          this._sInitialAgentId || l.getProperty("/SicilName2");
 
         var that = this;
         var oModel =

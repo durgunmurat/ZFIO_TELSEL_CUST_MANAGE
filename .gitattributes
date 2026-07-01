@@ -1,0 +1,9 @@
+*.js text eol=crlf
+*.xml text eol=crlf
+*.json text eol=crlf
+*.properties text eol=crlf
+*.css text eol=crlf
+*.html text eol=crlf
+*.yaml text eol=crlf
+*.yml text eol=crlf
+*.rc text eol=crlf

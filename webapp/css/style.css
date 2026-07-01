@@ -5,13 +5,40 @@
 .smallLabel {
   font-size: 9px !important;
   }
-  
+
   .sapMListTblCell {
   border-left: 1px solid #ccc;
   }
- 
+
+.sapMListTblRow[data-tpmprod="X"] > td {
+  background-color: #c6e0b4 !important;
+}
+
+.sapMListTblRow.tpmProdRow > td,
+.sapMLIB.tpmProdRow > .sapMListTblCell {
+  background-color: #c6e0b4 !important;
+}
+
+.sapMListTblRow[data-tpmprod="X"]:hover > td {
+  background-color: #bad7a8 !important;
+}
+
+.sapMListTblRow.tpmProdRow:hover > td,
+.sapMLIB.tpmProdRow:hover > .sapMListTblCell {
+  background-color: #bad7a8 !important;
+}
+
+.sapMListTblRow[data-tpmprod="X"] > td:first-child {
+  border-left: 4px solid #5c9d43 !important;
+}
+
+.sapMListTblRow.tpmProdRow > td:first-child,
+.sapMLIB.tpmProdRow > .sapMListTblCell:first-child {
+  border-left: 4px solid #5c9d43 !important;
+}
+
   /* .sapMListTbl .sapMText,.sapMListTbl .sapMLabel {
      font-size: 9px !important;
- }  
+ }
     */
- 
+

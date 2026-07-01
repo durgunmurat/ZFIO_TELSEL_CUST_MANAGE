@@ -634,6 +634,13 @@
                             class="smallLabel2"
                             highlight="{= ${SiparisList>Pen} === 'X' ? 'Error' : undefined }"
                         >
+                            <customData>
+                                <core:CustomData
+                                    key="tpmprod"
+                                    value="{= ${SiparisList>TpmProdFlag} === true || ${SiparisList>TpmProd} === 'X' || ${SiparisList>TpmProd} === true ? 'X' : '' }"
+                                    writeToDom="true"
+                                />
+                            </customData>
                             <cells>
                                 <Text
                                     text="{= parseFloat(${SiparisList>Matnr}) }"

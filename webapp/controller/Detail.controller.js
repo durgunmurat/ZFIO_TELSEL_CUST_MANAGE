@@ -19,6 +19,37 @@ sap.ui.define(
 
     return t.extend("zfiotelselkokpit.controller.Detail", {
       formatter: i,
+
+      _getInitialAgentIdFromUrl: function () {
+        var sHref = window.location.href || "";
+        var aQueryParts = [];
+
+        if (window.location.search) {
+          aQueryParts.push(window.location.search.substring(1));
+        }
+
+        var iHrefQueryIndex = sHref.indexOf("?");
+        if (iHrefQueryIndex > -1) {
+          aQueryParts.push(sHref.substring(iHrefQueryIndex + 1).split("#")[0]);
+        }
+
+        var sHash = window.location.hash || "";
+        var iHashQueryIndex = sHash.indexOf("?");
+        if (iHashQueryIndex > -1) {
+          aQueryParts.push(sHash.substring(iHashQueryIndex + 1));
+        }
+
+        for (var i = 0; i < aQueryParts.length; i++) {
+          var oParams = new URLSearchParams(aQueryParts[i]);
+          var sAgentId = oParams.get("agentId");
+          if (sAgentId) {
+            return decodeURIComponent(sAgentId);
+          }
+        }
+
+        return "";
+      },
+
       onInit: function () {
         var e = this;
         this.oBundle = this.getOwnerComponent()
@@ -32,11 +63,11 @@ sap.ui.define(
 
         var complete_url = window.location.href;
 
-        var matchAgentId = complete_url.match(/[?&]agentId=([^&#]*)/);
-        if (matchAgentId && matchAgentId[1]) {
-          var sAgentId = matchAgentId[1];
+        var sAgentId = this._getInitialAgentIdFromUrl();
+        if (sAgentId) {
           this._sInitialAgentId = sAgentId;
           var oSelection = this.getModel("selectionModel");
+          oSelection.setProperty("/InitialAgentId", sAgentId);
 
           // 1. Önce ID'yi atayalım (kullanıcı beklerken ekranda ID görünsün)
           oSelection.setProperty("/SicilId", sAgentId);
@@ -959,6 +990,7 @@ sap.ui.define(
 
             // SiparisList
             var jsonSiparis = new sap.ui.model.json.JSONModel();
+            siparisData = that._normalizeSiparisData(siparisData);
             jsonSiparis.setData(siparisData);
             that.getView().setModel(jsonSiparis, "SiparisList");
 
@@ -1306,7 +1338,7 @@ sap.ui.define(
         oDataModel.read("/SiparisSet", {
           urlParameters: {
             $select:
-              "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli",
+              "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,TpmProd,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli",
           },
           filters: [
             new sap.ui.model.Filter(
@@ -1326,7 +1358,9 @@ sap.ui.define(
               var jsonData = new sap.ui.model.json.JSONModel();
               jsonData.setSizeLimit(10000000);
               jsonData.setData(
-                oData && oData.results ? oData : { results: [] },
+                that._normalizeSiparisData(
+                  oData && oData.results ? oData : { results: [] },
+                ),
               );
               that.getView().setModel(jsonData, "SiparisList");
 
@@ -1416,6 +1450,7 @@ sap.ui.define(
           SevkiyatVisible: false,
           Kunnr: "",
           Name: "",
+          InitialAgentId: "",
           SicilId: "",
           SicilAd: "",
           SicilName2: "",
@@ -1864,7 +1899,7 @@ sap.ui.define(
           readPromise(
             "/SiparisSet",
             filters,
-            "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli",
+            "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,TpmProd,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli",
           ),
           readPromise(
             "/OdemeSet",
@@ -1891,6 +1926,7 @@ sap.ui.define(
             var cariData = results[2] || {};
 
             var jsonSiparis = new sap.ui.model.json.JSONModel();
+            siparisData = that._normalizeSiparisData(siparisData);
             jsonSiparis.setData(siparisData);
             that.getView().setModel(jsonSiparis, "SiparisList");
 
@@ -4248,7 +4284,10 @@ sap.ui.define(
         var Email = oBindingContext.getProperty("Email");
         var Name = oBindingContext.getProperty("Name");
         var sicilId =
-          this._sInitialAgentId || l.getProperty("/SicilName2");
+          this._sInitialAgentId ||
+          l.getProperty("/InitialAgentId") ||
+          l.getProperty("/SicilName2") ||
+          l.getProperty("/SicilId");
 
         var that = this;
         var oModel =
@@ -4392,6 +4431,71 @@ sap.ui.define(
 
       onMessagePopoverPress: function (e) {
         this._getMessagePopover().openBy(e.getSource());
+      },
+
+      _isTpmProduct: function (vValue) {
+        if (vValue === true || vValue === 1) {
+          return true;
+        }
+
+        if (typeof vValue === "string") {
+          var sValue = vValue.trim().toUpperCase();
+          return sValue === "X" || sValue === "TRUE" || sValue === "1";
+        }
+
+        return false;
+      },
+
+      _normalizeSiparisData: function (oData) {
+        if (!oData || !oData.results) {
+          return oData || { results: [] };
+        }
+
+        oData.results.forEach(
+          function (oItem) {
+            oItem.TpmProdFlag = [
+              oItem.TpmProd,
+              oItem.TPMPROD,
+              oItem.Tpmprod,
+              oItem.Tpm_Prod,
+              oItem.TPM_PROD,
+            ].some(this._isTpmProduct.bind(this));
+          }.bind(this),
+        );
+
+        return oData;
+      },
+
+      _applyTpmProductRowStyles: function (oTable) {
+        var oLineItemsTable = oTable || this.byId("lineItemsList");
+
+        if (!oLineItemsTable || !oLineItemsTable.getItems) {
+          return;
+        }
+
+        oLineItemsTable.getItems().forEach(
+          function (oItem) {
+            var oContext = oItem.getBindingContext("SiparisList");
+            var bTpmProduct = false;
+
+            if (oContext) {
+              bTpmProduct =
+                oContext.getProperty("TpmProdFlag") === true ||
+                this._isTpmProduct(oContext.getProperty("TpmProd"));
+            }
+
+            oItem.toggleStyleClass("tpmProdRow", bTpmProduct);
+          }.bind(this),
+        );
+      },
+
+      onUpdateFinished: function (oEvent) {
+        var oSource = oEvent && oEvent.getSource && oEvent.getSource();
+        var oLineItemsTable = this.byId("lineItemsList");
+
+        if (oSource === oLineItemsTable) {
+          this._applyTpmProductRowStyles(oLineItemsTable);
+        }
       },
 
       onSearch3: function (e) {

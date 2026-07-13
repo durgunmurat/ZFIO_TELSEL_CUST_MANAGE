@@ -8,6 +8,6 @@
  "abap_package":"ZFIO",
  "abap_bsp":"ZTELSEL_KOKPIT",
  "abap_bsp_text":"Telsel Müsteri Kokpiti",
- "abap_transport":"FRDK901296",
+ "abap_transport":"FRDK901301",
  "abap_language": "EN" 
 }

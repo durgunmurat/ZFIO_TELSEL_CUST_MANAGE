@@ -71,10 +71,10 @@
                                     icon="sap-icon://display"
                                     visible="{selectionModel>/MusteriVisible}"
                                 />
-                               <Button 
-                                    id="_idBtnListNew" 
+                                <Button
+                                    id="_idBtnListNew"
                                     enabled="false"
-                                    press="onPressMalzemeListesiNew" 
+                                    press="onPressMalzemeListesiNew"
                                     visible="false"
                                 />
                             </HBox>
@@ -180,7 +180,7 @@
                                     </VBox>
                                 </FlexBox>
                             </CustomListItem>
-                            
+
                             <CustomListItem id="_idCLI2">
                                 <FlexBox id="_IDGenFlexBox2">
                                     <VBox
@@ -369,6 +369,16 @@
                                     id="tableHeader"
                                     text="{worklistView>/worklistTableTitle}"
                                 />
+                                
+
+                                <Button id="_IDGenButton"
+                                    text="Panodan Aktar"
+                                    icon="sap-icon://paste"
+                                    press=".onPasteFromClipboardBtnPress"
+                                    type="Emphasized"
+                                    tooltip="Excel'den kopyaladığınız (Ürün Kodu, Miktar) verilerini aktarır"
+                                />
+
                                 <ToolbarSpacer id="_IDGenToolbarSpacer2" />
 
                                 <ComboBox
@@ -377,9 +387,7 @@
                                     id="_IDGenComboBox2"
                                     enabled="{= ${selectionModel>/AgEnabled} }"
                                     placeholder="Ürün Kategorisi"
-                                    items="{
-                            path: 'UrunGrpList>/results'
-                        }"
+                                    items="{path: 'UrunGrpList>/results' }"
                                 >
                                     <core:Item
                                         id="_IDGenItem2"
@@ -470,7 +478,7 @@
                             class="smallLabel2"
                             id="column1"
                             visible="true"
-                            width="25%"
+                            width="{= ${selectionModel>/MinSipAdtVisible} ? '20%' : '25%' }"
                             hAlign="Center"
                         >
                             <Text
@@ -550,7 +558,7 @@
                         <Column
                             class="smallLabel2"
                             id="column6"
-                            width="15%"
+                            width="{= ${selectionModel>/MinSipAdtVisible} ? '13%' : '15%' }"
                             visible="{= !${selectionModel>/OPVisible} === true }"
                         >
                             <Label
@@ -563,7 +571,7 @@
                         <Column
                             class="smallLabel2"
                             id="column14"
-                            width="15%"
+                            width="{= ${selectionModel>/MinSipAdtVisible} ? '13%' : '15%' }"
                             visible="{selectionModel>/OPVisible}"
                         >
                             <Label
@@ -583,6 +591,31 @@
                                 id="label7"
                                 class="smallLabel2"
                             />
+                        </Column>
+                        <Column
+                            class="smallLabel2"
+                            id="column15"
+                            width="7%"
+                            visible="{selectionModel>/MinSipAdtVisible}"
+                            hAlign="Center"
+                        >
+                            <VBox
+                                id="label15"
+                                class="smallLabel2"
+                                width="100%"
+                                alignItems="Center"
+                            >
+                                <Text
+                                    id="label15Line1"
+                                    text="Min.Sip."
+                                    class="smallLabel2"
+                                />
+                                <Text
+                                    id="label15Line2"
+                                    text="Adt"
+                                    class="smallLabel2"
+                                />
+                            </VBox>
                         </Column>
                         <Column
                             class="smallLabel2"
@@ -704,6 +737,12 @@
                                 <Text
                                     text="{SiparisList>Koli}"
                                     id="idKoli"
+                                    visible="true"
+                                    class="smallLabel2"
+                                />
+                                <Text
+                                    text="{SiparisList>MinSipAdt}"
+                                    id="idMinSipAdt"
                                     visible="true"
                                     class="smallLabel2"
                                 />
@@ -985,7 +1024,7 @@
 
                                 <CustomListItem
                                     id="_idCLI11"
-                                    visible="true" 
+                                    visible="true"
                                 >
                                     <FlexBox id="_IDGenFlexBox11">
                                         <VBox id="_IDGenVBox22">
@@ -1095,7 +1134,6 @@
                 headerText="Sipariş Raporu"
                 width="auto"
                 visible="{selectionModel>/UrunPanelVisible}"
-                
             >
                 <f2:DynamicPageHeader id="_IDGenDynamicPageHeader1">
                     <f2:content>
@@ -1105,7 +1143,7 @@
                             useToolbar="false"
                             search="getReportHeader"
                             filterChange=".onFilterChange"
-                            afterVariantLoad=".onAfterVariantLoad" 
+                            afterVariantLoad=".onAfterVariantLoad"
                         >
                             <fb:filterGroupItems>
                                 <fb:FilterGroupItem
@@ -1240,7 +1278,6 @@
                     headerText="Siparişler ( Başlık )"
                     itemPress="getReportItem"
                     mode="SingleSelectLeft"
-                    
                 >
                     <columns>
                         <Column id="idSipNoCol">

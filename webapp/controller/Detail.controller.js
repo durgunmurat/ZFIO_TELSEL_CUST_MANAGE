@@ -58,6 +58,11 @@ sap.ui.define(
         this.date = new Date();
         this.date.setDate(this.date.getDate());
 
+        var oTable = this.byId("lineItemsList");
+        oTable.addEventDelegate({
+          onpaste: this.onClipboardPaste.bind(this),
+        });
+
         this.onSetSelectionModel();
         this.onSetDetailModel();
 
@@ -1338,7 +1343,7 @@ sap.ui.define(
         oDataModel.read("/SiparisSet", {
           urlParameters: {
             $select:
-              "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,TpmProd,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli",
+              "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,TpmProd,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli,MinSipAdt",
           },
           filters: [
             new sap.ui.model.Filter(
@@ -1432,6 +1437,7 @@ sap.ui.define(
           Tel: "",
           Kanal: "",
           KanalMudur: "",
+          MinSipAdtVisible: false,
           Operasyon: "",
           OperasyonMudur: "",
           Organizasyon: "",
@@ -1899,7 +1905,7 @@ sap.ui.define(
           readPromise(
             "/SiparisSet",
             filters,
-            "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,TpmProd,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli",
+            "Matnr,Maktx,Menge,Meins,SiparisTutar,FirstDay,SecondDay,ThirdDay,Onerilen,UrunGrp,UrunGrpTxt,Vbeln,Pen,TpmProd,AylikHedef,HedefGerc,FirstDayAdet,SecondDayAdet,Koli,MinSipAdt",
           ),
           readPromise(
             "/OdemeSet",
@@ -4231,7 +4237,6 @@ sap.ui.define(
           .byId("idMusteriList")
           .getBinding("items");
         musteriList.filter(new sap.ui.model.Filter(i, true));
-        musteriList.refresh();
         // }
       },
       onValueHelpCloseMusteri: function (e) {
@@ -4242,7 +4247,7 @@ sap.ui.define(
       },
 
       onValueHelpSelectionMusteri: function (e) {
-        a = this.getModel("selectionModel");
+        var a = this.getModel("selectionModel");
 
         var oList = sap.ui.getCore().byId("idMusteriList"),
           oBinding = oList.getBinding("items");
@@ -4447,8 +4452,22 @@ sap.ui.define(
       },
 
       _normalizeSiparisData: function (oData) {
+        var oSelection = this.getModel("selectionModel");
+
         if (!oData || !oData.results) {
+          if (oSelection) {
+            oSelection.setProperty("/MinSipAdtVisible", false);
+          }
           return oData || { results: [] };
+        }
+
+        var bMinSipAdtVisible = oData.results.some(function (oItem) {
+          var fMinSipAdt = parseFloat(oItem.MinSipAdt);
+          return !isNaN(fMinSipAdt) && fMinSipAdt > 0;
+        });
+
+        if (oSelection) {
+          oSelection.setProperty("/MinSipAdtVisible", bMinSipAdtVisible);
         }
 
         oData.results.forEach(
@@ -4663,7 +4682,179 @@ sap.ui.define(
           return t;
         }
       },
+      onClipboardPaste: function (oEvent) {
+        // // Tarayıcının standart yapıştırma işlemini durdur
+        // oEvent.preventDefault();
+        // // Panodaki veriyi al
+        // var sClipboardText = (
+        //   oEvent.originalEvent || oEvent
+        // ).clipboardData.getData("text/plain");
+        // if (!sClipboardText) {
+        //   return;
+        // }
+        // // Excel'den gelen veriyi satırlara böl
+        // var aRows = sClipboardText.split(/\r\n|\n/);
+        // // Tablonun bağlı olduğu modeli al
+        // var oModel = this.getView().getModel("myViewModel"); // Model adınızı buraya yazın
+        // var aTableData = oModel.getProperty("/UrunListesi"); // Binding path'inizi buraya yazın
+        // var iUpdatedRowCount = 0;
+      },
 
+      onPasteFromClipboardBtnPress: async function () {
+        // 1. Güvenlik için sayfanın odakta olduğundan emin ol
+        if (!document.hasFocus()) {
+          window.focus();
+          // Chrome'un odağı algılaması için çok kısa bir bekleme süresi tanıyın
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        }
+
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+          MessageBox.warning(
+            "Tarayıcınız Pano (Clipboard) API'sini desteklemiyor veya HTTP (güvensiz) bağlantıdasınız.",
+          );
+          return;
+        }
+
+        try {
+          // 2. Panoyu oku
+          const sClipboardText = await navigator.clipboard.readText();
+
+          if (!sClipboardText) {
+            MessageToast.show("Pano boş veya kopyalanmış metin bulunamadı.");
+            return;
+          }
+
+          // Context (this) kaybını önlemek için fonksiyonu normal çağırın
+          this._processPastedData(sClipboardText);
+        } catch (err) {
+          console.error("Clipboard okuma hatası:", err);
+
+          if (err.name === "NotAllowedError") {
+            MessageBox.warning(
+              "Panoya erişilemedi. Lütfen sayfanın boş bir yerine tıklayıp (odağı sayfaya alıp) tekrar deneyin.",
+            );
+          } else {
+            MessageBox.error("Pano okuma hatası: " + err.message);
+          }
+        }
+      },
+
+      //       onPasteFromClipboardBtnPress: function () {
+      // // 1. Güvenlik için sayfanın odakta olduğundan emin ol
+      //     if (!document.hasFocus()) {
+      //         window.focus();
+      //     }
+
+      //     if (navigator.clipboard && navigator.clipboard.readText) {
+      //         // 2. Panoyu oku
+      //         navigator.clipboard.readText()
+      //             .then(function (sClipboardText) {
+      //                 if (!sClipboardText) {
+      //                     MessageToast.show("Pano boş veya kopyalanmış metin bulunamadı.");
+      //                     return;
+      //                 }
+
+      //                 this._processPastedData(sClipboardText);
+
+      //             }.bind(this))
+      //             .catch(function (err) {
+      //                 // Hata "Document is not focused" ise kullanıcıyı uyar
+      //                 if (err.name === "NotAllowedError") {
+      //                     MessageBox.warning("Panoya erişilemedi. Lütfen sayfanın boş bir yerine tıklayıp (odağı sayfaya alıp) tekrar deneyin.");
+      //                 } else {
+      //                     MessageBox.error("Pano okuma hatası: " + err.message);
+      //                 }
+      //                 console.error("Clipboard okuma hatası:", err);
+      //             });
+      //     } else {
+      //         MessageBox.warning("Tarayıcınız Pano (Clipboard) API'sini desteklemiyor veya güvensiz bir bağlantıdasınız.");
+      //     }
+      //         // // Tarayıcının Clipboard API'yi destekleyip desteklemediğini kontrol et
+      //         // if (navigator.clipboard && navigator.clipboard.readText) {
+      //         //   // Panodaki metni asenkron olarak oku
+      //         //   navigator.clipboard
+      //         //     .readText()
+      //         //     .then(
+      //         //       function (sClipboardText) {
+      //         //         if (!sClipboardText) {
+      //         //           MessageToast.show(
+      //         //             "Pano boş veya kopyalanmış metin bulunamadı.",
+      //         //           );
+      //         //           return;
+      //         //         }
+
+      //         //         // Okunan veriyi işlemek üzere asıl fonksiyona gönder
+      //         //         this._processPastedData(sClipboardText);
+      //         //       }.bind(this),
+      //         //     )
+      //         //     .catch(function (err) {
+      //         //       // Kullanıcı pano erişimine izin vermemiş olabilir
+      //         //       MessageBox.error(
+      //         //         "Panoya erişim reddedildi veya bir hata oluştu. Lütfen tarayıcı izinlerinizi kontrol edin.",
+      //         //       );
+      //         //       console.error("Clipboard okuma hatası:", err);
+      //         //     });
+      //         // } else {
+      //         //   MessageBox.warning(
+      //         //     "Tarayıcınız Pano (Clipboard) API'sini desteklemiyor veya güvensiz (HTTP) bir bağlantıdasınız.",
+      //         //   );
+      //         // }
+      //       },
+      _processPastedData: function (sClipboardText) {
+        // Excel'den gelen veriyi satırlara böl
+        var aRows = sClipboardText.split(/\r\n|\n/);
+
+        // Tablonun bağlı olduğu modeli al
+        var oModel = this.getView().getModel("SiparisList"); // Model adınızı buraya yazın
+        var aTableData = oModel.getProperty("/results"); 
+
+        if (!aTableData) {
+          return;
+        }
+
+        var iUpdatedRowCount = 0;
+
+        // Panodan gelen her bir satır için döngü
+        aRows.forEach(function (sRow) {
+          if (!sRow.trim()) return; // Boş satırları atla
+
+          // Satırı sütunlara böl (Excel'de hücreler arası Tab (\t) ile ayrılır)
+          var aCells = sRow.split("\t");
+
+          // Kullanıcı en az 2 sütun (Ürün Kodu ve Miktar) kopyalamış mı?
+          if (aCells.length >= 2) {
+            var sPastedUrunKodu = aCells[0].trim();
+            var sPastedMiktar = aCells[1].trim();
+
+            // Tablo verisi içinde bu ürün kodunu bul
+            var oMatchingRow = aTableData.find(function (oRow) {
+              // Tip uyuşmazlığını önlemek için integer üzerinden kıyaslama
+              return parseInt(oRow.Matnr, 10) === parseInt(sPastedUrunKodu, 10);
+            });
+
+            // Eğer eşleşen ürün bulunduysa sipariş alanını güncelle
+            if (oMatchingRow) {
+              // Virgüllü ondalık sayıları JS'in anlayacağı noktaya çevir (Örn: 12,5 -> 12.5)
+              oMatchingRow.Menge =
+                parseFloat(sPastedMiktar.replace(",", ".")) || 0;
+              iUpdatedRowCount++;
+            }
+          }
+        });
+        // Değişikliklerin ekrana yansıması için modeli yenile
+        oModel.setProperty("/lineItemsList", aTableData);
+
+        // Sonucu kullanıcıya bildir
+        if (iUpdatedRowCount > 0) {
+          MessageToast.show(
+            iUpdatedRowCount + " adet ürün siparişi başarıyla aktarıldı.",
+          );
+        } else {
+          MessageToast.show(
+            "Panodaki ürün kodları tablodaki ürünlerle eşleşmedi.",
+          );
+        }
+      },
       /**
        * Event handler for refresh event. Keeps filter, sort
        * and group settings and refreshes the list binding.

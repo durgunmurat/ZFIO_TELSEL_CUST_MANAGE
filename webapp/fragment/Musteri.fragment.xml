@@ -34,7 +34,7 @@
 					<Label id="idFilterLabel" />
 				</OverflowToolbar>
 			</infoToolbar>
-			<StandardListItem id="_IDGenStandardListItem2" title="{= parseFloat(${idMusteri}) }"
+			<StandardListItem id="idMusteriListItem" title="{= parseFloat(${idMusteri}) }"
 				description="{Name}" />
 		</List>
 
